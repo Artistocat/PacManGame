@@ -30,18 +30,15 @@
     <Reference Include="Microsoft.Xna.Framework.Content.Pipeline.VideoImporters, Version=4.0.0.0, Culture=neutral, PublicKeyToken=842cf8be1de50553, processorArchitecture=MSIL" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="download.png">
-      <Name>download</Name>
+    <Compile Include="powerpellet.JPG">
+      <Name>powerpellet</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
-    <Compile Include="pacman board.jpg">
-      <Name>pacman board</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-    <Compile Include="tiles.png">
-      <Name>tiles</Name>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="white box.jpg">
+      <Name>white box</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
