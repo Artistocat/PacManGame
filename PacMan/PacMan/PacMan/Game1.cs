@@ -9,7 +9,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 
-namespace PacMan
+namespace Pacman
 {
     /// <summary>
     /// This is the main type for your game
@@ -18,11 +18,20 @@ namespace PacMan
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        //Testing stuff
+
+        Texture2D boardt;
+        Rectangle boardr;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+
+            graphics.PreferredBackBufferWidth = 672;
+            graphics.PreferredBackBufferHeight = 864;
+            graphics.ApplyChanges();
+
+            this.Window.AllowUserResizing = true;
         }
 
         /// <summary>
@@ -35,6 +44,10 @@ namespace PacMan
         {
             // TODO: Add your initialization logic here
 
+            int screenWidth = graphics.GraphicsDevice.Viewport.Width;
+            int screenHeight = graphics.GraphicsDevice.Viewport.Height;
+
+            boardt = Content.Load<Texture2D>("pacman board");
             base.Initialize();
         }
 
@@ -44,9 +57,10 @@ namespace PacMan
         /// </summary>
         protected override void LoadContent()
         {
+            IsMouseVisible = true;
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-
+            boardr = new Rectangle(0, 72, 672, 744);
             // TODO: use this.Content to load your game content here
         }
 
@@ -67,8 +81,8 @@ namespace PacMan
         protected override void Update(GameTime gameTime)
         {
             // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
+            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            this.Exit();
 
             // TODO: Add your update logic here
 
@@ -81,8 +95,11 @@ namespace PacMan
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
 
+            spriteBatch.Begin();
+            spriteBatch.Draw(boardt, boardr, Color.White);
+            spriteBatch.End();
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
