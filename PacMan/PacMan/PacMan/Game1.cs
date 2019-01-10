@@ -1,4 +1,4 @@
-using System;
+using System;//kelbys mum 
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -64,7 +64,7 @@ namespace Pacman
             boardr = new Rectangle(0, 72, 672, 744);
             // TODO: use this.Content to load your game content here
         }
-
+        // Bich lasagna - Kane
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
         /// all content.
