@@ -1,6 +1,6 @@
 using System;
 
-namespace PacMan
+namespace Pacman
 {
 #if WINDOWS || XBOX
     static class Program
@@ -18,4 +18,5 @@ namespace PacMan
     }
 #endif
 }
+
 
