@@ -20,7 +20,7 @@ namespace PacMan
         int pelletNum;
         Rectangle rect;
         Texture2D texture;
-        
+
 
         /*Notes:
          * pellet size is 6x6
@@ -29,12 +29,12 @@ namespace PacMan
          */
 
 
-        public Pellet(double a,double b, int n)
+        public Pellet(double a, double b, int n)
         {
             x = a;
             y = b;
             pelletNum = n;
-            rect = new Rectangle((int)-1000,(int)-1000,6,6);
+            rect = new Rectangle((int)-1000, (int)-1000, 6, 6);
 
         }
 
@@ -42,6 +42,12 @@ namespace PacMan
         {
             rect.X = (int)x;
             rect.Y = (int)y;
+        }
+
+        public int MethodExample()
+        {
+            p = new Pellet(this.x, this.y);
+            return -1;
         }
 
 
