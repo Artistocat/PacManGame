@@ -45,7 +45,7 @@ namespace PacMan
 
         public int MethodExample()
         {
-            p = new Pellet(this.x,this.y);
+            p = new Pellet(this.x, this.y);
             return -1;
         }
 
