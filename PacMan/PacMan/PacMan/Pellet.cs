@@ -11,11 +11,12 @@ using Microsoft.Xna.Framework.Media;
 
 namespace PacMan
 {
-    class Pellet
+    public class Pellet
     {
         Boolean isPowerPellet;
         Boolean isEaten;
         double x, y;
+        Pellet p;
         int pelletNum;
         Rectangle rect;
         Texture2D texture;
@@ -43,11 +44,11 @@ namespace PacMan
             rect.Y = (int)y;
         }
 
-        public int MethodExample()
-        {
-            p = new Pellet(this.x, this.y);
-            return -1;
-        }
+        //public int MethodExample()
+        //{
+        //    p = new Pellet(this.x, this.y);
+        //    return -1;
+        //}
 
 
     }
