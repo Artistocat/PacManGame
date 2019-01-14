@@ -8,6 +8,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using PacMan;
 
 namespace Pacman
 {
@@ -19,8 +20,13 @@ namespace Pacman
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        SpriteFont arcadeNormal;
+
         Texture2D boardt;
         Rectangle boardr;
+
+        String text;
+        Vector2 pos;
 
         public Game1()
         {
@@ -49,6 +55,9 @@ namespace Pacman
             int screenHeight = graphics.GraphicsDevice.Viewport.Height;
 
             boardt = Content.Load<Texture2D>("pacman board");
+
+            text = "Test Text hererererere.....";
+
             base.Initialize();
         }
 
@@ -62,7 +71,10 @@ namespace Pacman
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             boardr = new Rectangle(0, 72, 672, 744);
+
             // TODO: use this.Content to load your game content here
+            arcadeNormal = Content.Load<SpriteFont>("SpriteFont1");
+
         }
         // Bich lasagna - Kane
         /// <summary>
@@ -100,13 +112,14 @@ namespace Pacman
 
             spriteBatch.Begin();
             spriteBatch.Draw(boardt, boardr, Color.White);
+            spriteBatch.DrawString(arcadeNormal,text,pos,Color.White);
             spriteBatch.End();
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
         }
 
-        public void makePellet(double a, double b, int n)
+        public void MakePellet(double a, double b, int n)
         {
             //At start of every round game, pellet objects are made
             //
@@ -114,9 +127,14 @@ namespace Pacman
             //addPellettTexture here
         }
 
-        public void addPelletTexture(Pellet myPellet)
-        {
+        //public void AddPelletTexture(Pellet myPellet)
+        //{
             
+        //}
+
+        public void AddPelletTexture(Pellet myPellet)
+        {
+
         }
 
 
