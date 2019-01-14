@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace PacMan
 {
-    class Pacboi
+    public class Pacboi
     {
         public Texture2D puck;
         public Rectangle rec;
