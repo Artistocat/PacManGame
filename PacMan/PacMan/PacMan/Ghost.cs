@@ -54,8 +54,8 @@ namespace PacMan
 
         private void UpdateTarget(Pacboi pacman)
         {
-            int x = pacman.getX();
-            int y = pacman.getY();
+            int pacX = pacman.rec.X;
+            int pacY = pacman.rec.Y;
 
         }
 
