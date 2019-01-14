@@ -16,10 +16,11 @@ namespace PacMan
         Boolean isPowerPellet;
         Boolean isEaten;
         double x, y;
+        Pellet p;
         int pelletNum;
         Rectangle rect;
         Texture2D texture;
-        
+
 
         /*Notes:
          * pellet size is 6x6
@@ -28,12 +29,12 @@ namespace PacMan
          */
 
 
-        public Pellet(double a,double b, int n)
+        public Pellet(double a, double b, int n)
         {
             x = a;
             y = b;
             pelletNum = n;
-            rect = new Rectangle((int)-1000,(int)-1000,6,6);
+            rect = new Rectangle((int)-1000, (int)-1000, 6, 6);
 
         }
 

@@ -1,4 +1,4 @@
-using System;//kelbys mum 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -28,6 +28,8 @@ namespace Pacman
         String text;
         Vector2 pos;
 
+        Pacboi boi;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -50,6 +52,8 @@ namespace Pacman
         {
 
             // TODO: Add your initialization logic here
+            boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(0, 0, 15, 15),
+                new Rectangle(33, 14, 15, 15), new Vector2(0, 0));
 
             int screenWidth = graphics.GraphicsDevice.Viewport.Width;
             int screenHeight = graphics.GraphicsDevice.Viewport.Height;
@@ -76,7 +80,6 @@ namespace Pacman
             arcadeNormal = Content.Load<SpriteFont>("SpriteFont1");
 
         }
-        // Bich lasagna - Kane
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
         /// all content.
@@ -93,12 +96,15 @@ namespace Pacman
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            KeyboardState kb = Keyboard.GetState();
             // Allows the game to exit
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
             this.Exit();
 
             // TODO: Add your update logic here
 
+            //if(kb.IsKeyDown(Keys.A)
+            //    Pacboi.
             base.Update(gameTime);
         }
 
@@ -112,7 +118,6 @@ namespace Pacman
 
             spriteBatch.Begin();
             spriteBatch.Draw(boardt, boardr, Color.White);
-            spriteBatch.DrawString(arcadeNormal,text,pos,Color.White);
             spriteBatch.End();
             // TODO: Add your drawing code here
 
@@ -127,17 +132,9 @@ namespace Pacman
             //addPellettTexture here
         }
 
-        //public void AddPelletTexture(Pellet myPellet)
-        //{
-            
-        //}
-
-        public void AddPelletTexture(Pellet myPellet)
+        public void addPelletTexture(Pellet myPellet)
         {
 
         }
-
-
-
     }
 }
