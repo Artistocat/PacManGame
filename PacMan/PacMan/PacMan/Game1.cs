@@ -1,4 +1,4 @@
-using System;//kelbys mum 
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -20,9 +20,17 @@ namespace Pacman
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        SpriteFont arcadeNormal;
+
         Texture2D boardt;
         Rectangle boardr;
         MapSquares board;
+
+        String text;
+        Vector2 pos;
+
+        Pacboi boi;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -45,6 +53,8 @@ namespace Pacman
         {
 
             // TODO: Add your initialization logic here
+            boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(0, 0, 15, 15),
+                new Rectangle(33, 14, 15, 15), new Vector2(0, 0));
 
             int screenWidth = graphics.GraphicsDevice.Viewport.Width;
             int screenHeight = graphics.GraphicsDevice.Viewport.Height;
@@ -53,6 +63,9 @@ namespace Pacman
 
 
             boardt = Content.Load<Texture2D>("pacman board");
+
+            text = "Test Text hererererere.....";
+
             base.Initialize();
         }
 
@@ -66,9 +79,11 @@ namespace Pacman
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             boardr = new Rectangle(0, 72, 672, 744);
+
             // TODO: use this.Content to load your game content here
+            arcadeNormal = Content.Load<SpriteFont>("SpriteFont1");
+
         }
-        // Bich lasagna - Kane
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
         /// all content.
@@ -85,12 +100,15 @@ namespace Pacman
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            KeyboardState kb = Keyboard.GetState();
             // Allows the game to exit
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
             this.Exit();
 
             // TODO: Add your update logic here
 
+            //if(kb.IsKeyDown(Keys.A)
+            //    Pacboi.
             base.Update(gameTime);
         }
 
@@ -118,12 +136,9 @@ namespace Pacman
             //addPellettTexture here
         }
 
-        public void AddPelletTexture(Pellet myPellet)
+        public void addPelletTexture(Pellet myPellet)
         {
 
         }
-
-
-
     }
 }

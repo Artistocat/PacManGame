@@ -11,17 +11,24 @@ using Microsoft.Xna.Framework.Media;
 
 namespace PacMan
 {
-    class Pacboi
+    public class Pacboi
     {
-        public Texture2D ;
-        public Rectangle puck;
+        public Texture2D puck;
+        public Rectangle rec;
+        public Rectangle source;
+        public Vector2 velocities = new Vector2(0, 0);
+        public Color colour;
         public Pacboi()
         {
 
         }
-        public Pacboi(int x, int y, int xVel, int yVel)
+        public Pacboi(Texture2D t, Rectangle r, Rectangle s, Vector2 vel)
         {
-            
+            puck = t;
+            rec = r;
+            source = s;
+            velocities = vel;
+            colour = Color.White;
         }
     }
 }

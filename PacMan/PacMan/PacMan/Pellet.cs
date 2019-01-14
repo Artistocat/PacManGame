@@ -11,7 +11,7 @@ using Microsoft.Xna.Framework.Media;
 
 namespace PacMan
 {
-    public class Pellet
+   public class Pellet
     {
         Boolean isPowerPellet;
         Boolean isEaten;
@@ -43,12 +43,7 @@ namespace PacMan
             rect.X = (int)x;
             rect.Y = (int)y;
         }
-
-        //public int MethodExample()
-        //{
-        //    p = new Pellet(this.x, this.y);
-        //    return -1;
-        //}
+        
 
 
     }
