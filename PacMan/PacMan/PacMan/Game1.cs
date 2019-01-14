@@ -47,8 +47,8 @@ namespace Pacman
         {
 
             // TODO: Add your initialization logic here
-            boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(0, 0, 15, 15),
-                new Rectangle(33, 14, 15, 15), new Vector2(0, 0));
+            boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(300, 400, 45, 45),
+                new Rectangle(3, 0, 15, 15), new Vector2(0, 0));
 
             int screenWidth = graphics.GraphicsDevice.Viewport.Width;
             int screenHeight = graphics.GraphicsDevice.Viewport.Height;
@@ -92,8 +92,10 @@ namespace Pacman
 
             // TODO: Add your update logic here
 
-            //if(kb.IsKeyDown(Keys.A)
-            //    Pacboi.
+            if (kb.IsKeyDown(Keys.A))
+            {
+                boi.source.Y = 15;
+            }
             base.Update(gameTime);
         }
 
