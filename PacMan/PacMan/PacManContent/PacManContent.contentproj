@@ -44,6 +44,23 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="download.png">
+      <Name>download</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="pacman board.jpg">
+      <Name>pacman board</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="tiles.png">
+      <Name>tiles</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="spritesheet.png">
       <Name>spritesheet</Name>
       <Importer>TextureImporter</Importer>
