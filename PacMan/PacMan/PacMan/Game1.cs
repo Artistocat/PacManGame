@@ -23,6 +23,8 @@ namespace Pacman
         Texture2D boardt;
         Rectangle boardr;
 
+        Pacboi boi;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -45,6 +47,8 @@ namespace Pacman
         {
 
             // TODO: Add your initialization logic here
+            boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(0, 0, 15, 15),
+                new Rectangle(33, 14, 15, 15), new Vector2(0, 0));
 
             int screenWidth = graphics.GraphicsDevice.Viewport.Width;
             int screenHeight = graphics.GraphicsDevice.Viewport.Height;
@@ -81,12 +85,15 @@ namespace Pacman
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            KeyboardState kb = Keyboard.GetState();
             // Allows the game to exit
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
             this.Exit();
 
             // TODO: Add your update logic here
 
+            //if(kb.IsKeyDown(Keys.A)
+            //    Pacboi.
             base.Update(gameTime);
         }
 
@@ -100,6 +107,7 @@ namespace Pacman
 
             spriteBatch.Begin();
             spriteBatch.Draw(boardt, boardr, Color.White);
+            spriteBatch.Draw(boi.puck, boi.rec, boi.source, boi.colour);
             spriteBatch.End();
             // TODO: Add your drawing code here
 
