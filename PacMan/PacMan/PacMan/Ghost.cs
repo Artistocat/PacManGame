@@ -25,8 +25,9 @@ namespace PacMan
         //88 * 3 pixels per second
         //each second is 60 fps
         //4.4 pixels per frame
+        //each square is 
         const float speed = (float)4.4;
-        const int Inky = 0, Blinky = 1, Pinky = 2, Clyde = 3;
+        const int INKY = 0, BLINKY = 1, PINKY = 2, CLYDE = 3;
         
 
         public Ghost(int x, int y, int name)
@@ -56,7 +57,28 @@ namespace PacMan
         {
             int pacX = pacman.rec.X;
             int pacY = pacman.rec.Y;
+            int squareX = pacX / 24;
+            int squareY = pacY / 24;
 
+            if (name == Ghost.INKY)
+            {
+
+            }
+
+            if (name == Ghost.BLINKY)
+            {
+
+            }
+
+            if (name == Ghost.PINKY)
+            {
+
+            }
+
+            if (name == Ghost.CLYDE)
+            {
+
+            }
         }
 
 
