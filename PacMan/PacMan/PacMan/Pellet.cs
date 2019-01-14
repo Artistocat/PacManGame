@@ -44,11 +44,11 @@ namespace PacMan
             rect.Y = (int)y;
         }
 
-        public int MethodExample()
-        {
-            p = new Pellet(this.x, this.y);
-            return -1;
-        }
+        //public int MethodExample()
+        //{
+        //    p = new Pellet(this.x, this.y);
+        //    return -1;
+        //}
 
 
     }

@@ -22,7 +22,7 @@ namespace Pacman
 
         Texture2D boardt;
         Rectangle boardr;
-
+        MapSquares board;
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -48,6 +48,9 @@ namespace Pacman
 
             int screenWidth = graphics.GraphicsDevice.Viewport.Width;
             int screenHeight = graphics.GraphicsDevice.Viewport.Height;
+
+            
+
 
             boardt = Content.Load<Texture2D>("pacman board");
             base.Initialize();
