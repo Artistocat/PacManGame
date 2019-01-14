@@ -14,21 +14,23 @@ namespace PacMan
     public class MapSquares
     {
         int size = 24;
-        Boolean[,] dead = new Boolean[28,36];
+        Boolean dead;
+        Vector2
         public MapSquares()
         {
-            for (int r = 0; r < 28; r++)
-            {
-                for(int c = 0; c < 36; c++)
-                {
-                    dead[r,c] = false;
-                }
-            }
-            
+            //for (int r = 0; r < 28; r++)
+            //{
+            //    for(int c = 0; c < 36; c++)
+            //    {
+            //        dead[r,c] = false;
+            //    }
+            //}
+            dead = false;
         }
-        public MapSquares(Boolean ded, Vector2 loc)
+        public MapSquares(Boolean ded, Vector2 p)
         {
-            dead[(int)loc.X,(int)loc.Y] = ded;
+            //dead[(int)loc.X,(int)loc.Y] = ded;
+            dead = ded;
         }
     }
 }

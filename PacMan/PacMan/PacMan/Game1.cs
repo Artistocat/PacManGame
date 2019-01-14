@@ -20,8 +20,14 @@ namespace Pacman
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        SpriteFont arcadeNormal;
+
         Texture2D boardt;
         Rectangle boardr;
+        MapSquares board;
+
+        String text;
+        Vector2 pos;
 
         Pacboi boi;
 
@@ -53,7 +59,13 @@ namespace Pacman
             int screenWidth = graphics.GraphicsDevice.Viewport.Width;
             int screenHeight = graphics.GraphicsDevice.Viewport.Height;
 
+            
+
+
             boardt = Content.Load<Texture2D>("pacman board");
+
+            text = "Test Text hererererere.....";
+
             base.Initialize();
         }
 
@@ -67,7 +79,10 @@ namespace Pacman
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             boardr = new Rectangle(0, 72, 672, 744);
+
             // TODO: use this.Content to load your game content here
+            arcadeNormal = Content.Load<SpriteFont>("SpriteFont1");
+
         }
         /// <summary>
         /// UnloadContent will be called once per game and is the place to unload
@@ -109,7 +124,6 @@ namespace Pacman
 
             spriteBatch.Begin();
             spriteBatch.Draw(boardt, boardr, Color.White);
-            spriteBatch.Draw(boi.puck, boi.rec, boi.source, boi.colour);
             spriteBatch.End();
             // TODO: Add your drawing code here
 
@@ -124,7 +138,7 @@ namespace Pacman
             //addPellettTexture here
         }
 
-        public void testGhost(Ghost myGhost)
+        public void addPelletTexture(Pellet myPellet)
         {
 
         }
