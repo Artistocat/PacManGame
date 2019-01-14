@@ -38,7 +38,7 @@ namespace PacMan
             velocity = new Vector2(0, 0);
         }
 
-        public void Update()
+        public void Update(Pacboi pacman)
         {
             counter++;
             x += velocity.X;
@@ -48,12 +48,14 @@ namespace PacMan
             if (counter == 24)
             {
                 counter = 0;
-                UpdateTarget();
+                UpdateTarget(pacman);
             }
         }
 
-        private void UpdateTarget()
+        private void UpdateTarget(Pacboi pacman)
         {
+            int x = pacman.getX();
+            int y = pacman.getY();
 
         }
 
