@@ -107,7 +107,7 @@ namespace Pacman
             base.Draw(gameTime);
         }
 
-        public void makePellet(double a, double b, int n)
+        public void MakePellet(double a, double b, int n)
         {
             //At start of every round game, pellet objects are made
             //
@@ -115,7 +115,7 @@ namespace Pacman
             //addPellettTexture here
         }
 
-        public void addPelletTexture(Pellet myPellet)
+        public void AddPelletTexture(Pellet myPellet)
         {
 
         }
