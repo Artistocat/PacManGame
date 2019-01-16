@@ -101,30 +101,31 @@ namespace Pacman
         protected override void Update(GameTime gameTime)
         {
             KeyboardState kb = Keyboard.GetState();
+            GamePadState gp = GamePad.GetState(PlayerIndex.One);
             // Allows the game to exit
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
             this.Exit();
 
             // TODO: Add your update logic here
 
-            if (kb.IsKeyDown(Keys.A))
+            if (kb.IsKeyDown(Keys.A) || gp.DPad.Left == ButtonState.Pressed)
             {
-                boi.velocities.X = -2;
+                boi.velocities.X = -4;
                 boi.velocities.Y = 0;
             }
-            if (kb.IsKeyDown(Keys.D))
+            if (kb.IsKeyDown(Keys.D) || gp.DPad.Right == ButtonState.Pressed)
             {
-                boi.velocities.X = 2;
+                boi.velocities.X = 4;
                 boi.velocities.Y = 0;
             }
-            if (kb.IsKeyDown(Keys.W))
+            if (kb.IsKeyDown(Keys.W) || gp.DPad.Up == ButtonState.Pressed)
             {
-                boi.velocities.Y = -2;
+                boi.velocities.Y = -4;
                 boi.velocities.X = 0;
             }
-            if (kb.IsKeyDown(Keys.S))
+            if (kb.IsKeyDown(Keys.S) || gp.DPad.Down == ButtonState.Pressed)
             {
-                boi.velocities.Y = 2;
+                boi.velocities.Y = 4;
                 boi.velocities.X = 0;
             }
 
