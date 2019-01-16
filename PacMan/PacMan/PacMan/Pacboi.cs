@@ -51,20 +51,7 @@ namespace PacMan
             {
                 source.Y = 16;
             }
-            //switch(counter)
-            //{
-            //    case 0:
-            //        source.X = 35;
-            //        source.Y = 0;
-            //        break;
-            //    case counter >= 4:
-            //        source.X = 19;
-            //        break;
-            //    case 8:
-            //        source.X = 3;
-            //        counter = 0;
-            //        break;
-            //}
+
             if (counter > 4 && counter <= 8)
                 source.X = 19;
             else if (counter > 8 && counter <= 12)
@@ -80,6 +67,21 @@ namespace PacMan
             rec.X += (int) velocities.X;
             rec.Y += (int) velocities.Y;
             counter++;
+        }
+
+        public void death()
+        {
+            counter = 0;
+            source.Y = 0;
+
+            if (counter > 2 && counter <= 4)
+                source.X = 51;
+            else if (counter > 4 && counter <= 6)
+                source.X = 67;
+            else if (counter > 6 && counter <= 8)
+                source.X = 83;
+            else if (counter > 8 && counter <= 10)
+                source.X = 99;
         }
     }
 }
