@@ -15,7 +15,7 @@ namespace PacMan
     {
         int size = 24;
         Boolean dead;
-        Vector2
+        //Vector2
         public MapSquares()
         {
             //for (int r = 0; r < 28; r++)
