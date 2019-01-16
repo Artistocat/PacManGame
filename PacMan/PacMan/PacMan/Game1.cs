@@ -54,7 +54,7 @@ namespace Pacman
 
             // TODO: Add your initialization logic here
             boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(300, 400, 45, 45),
-                new Rectangle(3, 0, 15, 15), new Vector2(0, 0));
+                new Rectangle(3, 0, 16, 16), new Vector2(0, 0));
 
             int screenWidth = graphics.GraphicsDevice.Viewport.Width;
             int screenHeight = graphics.GraphicsDevice.Viewport.Height;
@@ -109,8 +109,26 @@ namespace Pacman
 
             if (kb.IsKeyDown(Keys.A))
             {
-                boi.source.Y = 15;
+                boi.velocities.X = -2;
+                boi.velocities.Y = 0;
             }
+            if (kb.IsKeyDown(Keys.D))
+            {
+                boi.velocities.X = 2;
+                boi.velocities.Y = 0;
+            }
+            if (kb.IsKeyDown(Keys.W))
+            {
+                boi.velocities.Y = -2;
+                boi.velocities.X = 0;
+            }
+            if (kb.IsKeyDown(Keys.S))
+            {
+                boi.velocities.Y = 2;
+                boi.velocities.X = 0;
+            }
+
+            boi.Update();
             base.Update(gameTime);
         }
 
@@ -124,6 +142,7 @@ namespace Pacman
 
             spriteBatch.Begin();
             spriteBatch.Draw(boardt, boardr, Color.White);
+            spriteBatch.Draw(boi.tex, boi.rec, boi.source, boi.colour);
             spriteBatch.End();
             // TODO: Add your drawing code here
 
