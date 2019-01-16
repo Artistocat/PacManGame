@@ -31,6 +31,8 @@ namespace Pacman
 
         Pacboi boi;
 
+        Ghost[] ghosts;
+
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -59,8 +61,13 @@ namespace Pacman
             int screenWidth = graphics.GraphicsDevice.Viewport.Width;
             int screenHeight = graphics.GraphicsDevice.Viewport.Height;
 
-            
-
+            ghosts = new Ghost[]
+            {
+                new Ghost(0, 0, Name.Inky),
+                new Ghost(0, 0, Name.Blinky),
+                new Ghost(0, 0, Name.Pinky), 
+                new Ghost(0, 0, Name.Clyde)
+            };
 
             boardt = Content.Load<Texture2D>("pacman board");
 
