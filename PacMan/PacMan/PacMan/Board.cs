@@ -25,10 +25,6 @@ namespace PacMan
             {
                 for (int c = 0; c < 36; c++)
                 {
-                    if (r == 0 || r == 27)
-                        space[r,c] = new MapSquares(true, new Vector2(r, c));
-                    if (c == 0 || c == 1 || c == 2 || c == 3 || c == 35 || c == 34 || c == 33)
-                        space[r,c] = new MapSquares(true, new Vector2(r, c));
                 }
             }
         }
