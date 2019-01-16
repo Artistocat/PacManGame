@@ -25,8 +25,11 @@ namespace Pacman
         Texture2D boardt;
         Rectangle boardr;
 
-        String text;
-        Vector2 pos;
+        String topText;
+        Vector2 posOfTopText;
+        Pellet[] pellets;
+        double[] pelletPositionsX;
+        double[] pelletPositionsY;
 
         Pacboi boi;
 
@@ -60,7 +63,45 @@ namespace Pacman
 
             boardt = Content.Load<Texture2D>("pacman board");
 
-            text = "Test Text hererererere.....";
+            //Isaiahs Stuff \______________________
+            pellets = new Pellet[244];
+            pelletPositionsX = new double[] { 50, 100, 150};
+            pelletPositionsY = new double[] { 50, 100, 150 };
+            topText = "1UP     HIGH SCORE";
+            posOfTopText = new Vector2(100, 0);
+
+            //dem
+            //224
+            //288
+            //672
+            //864
+
+            //if its a normal or power pellet
+            Boolean isPowerPelletTrue = false;
+            for (int i = 0; i < pelletPositionsX.Length; i++)
+            {
+                if (pelletPositionsX[i] == 24 || pelletPositionsX[i] == 816 || pelletPositionsY[i] == 144 || pelletPositionsY[i] == 624)
+                {
+                    isPowerPelletTrue = true;
+                }
+                else
+                {
+                    isPowerPelletTrue = false;
+                }
+                //makes the pellet objects
+                pellets[i] = MakePellet(pelletPositionsX[i], pelletPositionsY[i], i, isPowerPelletTrue);
+            }
+            //______________________________________
+
+
+
+
+
+
+
+
+
+
 
             base.Initialize();
         }
@@ -78,6 +119,21 @@ namespace Pacman
 
             // TODO: use this.Content to load your game content here
             arcadeNormal = Content.Load<SpriteFont>("SpriteFont1");
+            
+
+
+            //Loop through every pellet object and give texture
+            for (int i = 0; i < pelletPositionsX.Length; i++)
+            {
+                if (pellets[i].getIsPowerPellet())
+                {
+                    pellets[i].texture = Content.Load<Texture2D>("powerpellet");
+                }
+                else
+                {
+                    pellets[i].texture = Content.Load<Texture2D>("white box");
+                }
+            }
 
         }
         /// <summary>
@@ -118,23 +174,32 @@ namespace Pacman
 
             spriteBatch.Begin();
             spriteBatch.Draw(boardt, boardr, Color.White);
+            spriteBatch.DrawString(arcadeNormal,topText,posOfTopText,Color.White);
+            //draws every pellet
+            for (int i = 0; i < pelletPositionsX.Length; i++)
+            {
+                spriteBatch.Draw(pellets[i].getTexture(),pellets[i].getRect(),Color.White);
+            }
+
+
             spriteBatch.End();
             // TODO: Add your drawing code here
 
             base.Draw(gameTime);
         }
 
-        public void MakePellet(double a, double b, int n)
+        public Pellet MakePellet(double a, double b, int n, Boolean i)
         {
             //At start of every round game, pellet objects are made
             //
-            Pellet asdf = new Pellet(a,b,n);
-            //addPellettTexture here
-        }
+            Pellet asdf = new Pellet(a,b,n,i);
 
-        public void addPelletTexture(Pellet myPellet)
-        {
-
+            return asdf;
         }
+        
+
+
+
+
     }
 }
