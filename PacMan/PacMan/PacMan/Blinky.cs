@@ -18,7 +18,7 @@ namespace PacMan
         {
         }
 
-        protected new void UpdateTarget(Pacboi pacman, Ghost Blinky, Board board)
+        protected override void UpdateTarget(Pacboi pacman, Ghost Blinky, Board board)
         {
             targetSquareLoc.X = pacman.rec.X / 24;
             targetSquareLoc.Y = pacman.rec.Y / 24;
@@ -49,16 +49,8 @@ namespace PacMan
                 }
             }
             dir = closestDir;
+            Console.WriteLine("We got here");
             UpdateVelocity();
-        }
-
-        private double? getDistOff(double xDistOff, double yDistOff, Board board)
-        { 
-            /*if (board[x][y].isDeadSpace)
-            {
-                return null;
-            }*/
-            return Math.Sqrt(xDistOff * xDistOff + (yDistOff) * (yDistOff));
         }
 
         protected new void Scatter()

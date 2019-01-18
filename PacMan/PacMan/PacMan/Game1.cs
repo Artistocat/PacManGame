@@ -77,7 +77,6 @@ namespace Pacman
             boardt = Content.Load<Texture2D>("pacman board");
 
             text = "Test Text hererererere.....";
-            pacMaze.Close();
             base.Initialize();
         }
 
@@ -192,23 +191,30 @@ namespace Pacman
         // This function will take a file's data and separate it by ',' found in the
         // file. This is not my function but I will try to explain it's code.
 
-        private static List<String> GetTiles()
+        private static int[,] GetTiles()
         {
-            string strLine;
-            string[] strArray;
-            char[] charArray = new char[] { ' ' };
-            int I;
+            //string strLine;
+            //string[] strArray;
+            //char[] charArray = new char[] { ' ' };
+            //int I;
 
-            List<String> tiles = new List<String>();
+            int width = 28;
+            int height = 36;
+
+            int[,] mapSquares = new int[28, 36];
 
             // Open the File for program input
             StreamReader myFileC = new StreamReader("pacman.txt");
 
-
-            // Split the row of data into the string array
-            strArray = strLine.Split(charArray);
-
-            for (I = 0; I <= strArray.GetUpperBound(0); I++)
+            for (int i = 0; i < height; i++)
+            {
+                String nextLine = myFileC.ReadLine();
+                for (int j = 0; j < width / 2; j++)
+                {
+                    mapSquares[j, i] = mapSquares[j - 28, i] = int.Parse(nextLine.Substring(j * 2, 1));
+                }
+            }
+            /*for (I = 0; I <= strArray.GetUpperBound(0); I++)
             {
                 tiles.Add(strArray[I]);
             }
@@ -221,9 +227,9 @@ namespace Pacman
                 for (I = 0; I <= strArray.GetUpperBound(0); I++)
 
                 strLine = myFileC.ReadLine();
-            }
+            }*/
             myFileC.Close();
-            return tiles;
+            return mapSquares;
         }
     }
 }
