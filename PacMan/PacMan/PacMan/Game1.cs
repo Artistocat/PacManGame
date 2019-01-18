@@ -28,11 +28,12 @@ namespace Pacman
 
         String text;
         Vector2 pos;
+        Boolean dead = false;
+        KeyboardState Oldkb;
 
         Pacboi boi;
 
         Ghost[] ghosts;
-
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -56,7 +57,7 @@ namespace Pacman
 
             // TODO: Add your initialization logic here
             boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(300, 400, 45, 45),
-                new Rectangle(3, 0, 16, 16), new Vector2(0, 0));
+                new Rectangle(3, 0, 15, 15), new Vector2(0, 0));
 
             int screenWidth = graphics.GraphicsDevice.Viewport.Width;
             int screenHeight = graphics.GraphicsDevice.Viewport.Height;
@@ -72,6 +73,8 @@ namespace Pacman
             boardt = Content.Load<Texture2D>("pacman board");
 
             text = "Test Text hererererere.....";
+
+            Oldkb = Keyboard.GetState();
 
             base.Initialize();
         }
@@ -114,34 +117,55 @@ namespace Pacman
             this.Exit();
 
             // TODO: Add your update logic here
+
+            //Warps (Left and right sides)
             if (boi.rec.X > graphics.GraphicsDevice.Viewport.Width)
                 boi.rec.X = -45;
             if (boi.rec.X < -45)
                 boi.rec.X = graphics.GraphicsDevice.Viewport.Width;
 
+            //Pacman movement
+            if (dead == false)
+            {
+                if (kb.IsKeyDown(Keys.A) || gp.DPad.Left == ButtonState.Pressed)
+                {
+                    boi.velocities.X = -4;
+                    boi.velocities.Y = 0;
+                }
+                if (kb.IsKeyDown(Keys.D) || gp.DPad.Right == ButtonState.Pressed)
+                {
+                    boi.velocities.X = 4;
+                    boi.velocities.Y = 0;
+                }
+                if (kb.IsKeyDown(Keys.W) || gp.DPad.Up == ButtonState.Pressed)
+                {
+                    boi.velocities.Y = -4;
+                    boi.velocities.X = 0;
+                }
+                if (kb.IsKeyDown(Keys.S) || gp.DPad.Down == ButtonState.Pressed)
+                {
+                    boi.velocities.Y = 4;
+                    boi.velocities.X = 0;
+                }
 
-            if (kb.IsKeyDown(Keys.A) || gp.DPad.Left == ButtonState.Pressed)
-            {
-                boi.velocities.X = -4;
-                boi.velocities.Y = 0;
+                boi.Update();
             }
-            if (kb.IsKeyDown(Keys.D) || gp.DPad.Right == ButtonState.Pressed)
+            //Death test
+            if (kb.IsKeyDown(Keys.E) && kb.IsKeyDown(Keys.R) || dead == true)
             {
-                boi.velocities.X = 4;
-                boi.velocities.Y = 0;
+                if(dead == false)
+                {
+                    boi.source.Y = 0;
+                    boi.counter = 0;
+                    dead = true;
+                }
+                boi.death();
+                if (boi.counter >= 150)
+                {
+                    boi.respawn();
+                    dead = false;
+                }
             }
-            if (kb.IsKeyDown(Keys.W) || gp.DPad.Up == ButtonState.Pressed)
-            {
-                boi.velocities.Y = -4;
-                boi.velocities.X = 0;
-            }
-            if (kb.IsKeyDown(Keys.S) || gp.DPad.Down == ButtonState.Pressed)
-            {
-                boi.velocities.Y = 4;
-                boi.velocities.X = 0;
-            }
-
-            boi.Update();
             base.Update(gameTime);
         }
 
