@@ -14,14 +14,16 @@ namespace PacMan
 {
     public class Ghost
     {
-        private float x;
-        private float y;
+        protected float x;
+        protected float y;
         private Rectangle rect;
         private Name name;
-        private Vector2 velocity;
-        private Vector2 targetSquareLoc;
+        protected Vector2 velocity;
+        protected Vector2 targetSquareLoc;
         private int counter;
-        private bool scatter;
+        protected bool scatter;
+        private Rectangle sourceRect;
+        protected Direction dir;
 
         //88 * 3 pixels per second
         //each second is 60 fps
@@ -30,17 +32,19 @@ namespace PacMan
         //28 x 36
         const float speed = (float)4.4;
 
-        public Ghost(int x, int y, Name n)
+        public Ghost(int x, int y, Name n, Rectangle source)
         {
             rect.X = x;
             rect.Y = y;
             rect.Width = rect.Height = 45;
             this.name = n;
-            velocity = new Vector2(0, 0);
+            velocity = new Vector2(0, speed);
+            dir = Direction.Down;
             scatter = false;
+            sourceRect = source;
         }
 
-        public void Update(Pacboi pacman, Ghost blinky)
+        public void Update(Pacboi pacman, Ghost blinky, Board board)
         {
             counter++;
             x += velocity.X;
@@ -54,11 +58,11 @@ namespace PacMan
             else if (counter == 24)
             {
                 counter = 0;
-                UpdateTarget(pacman, blinky);
+                UpdateTarget(pacman, blinky, board);
             }
         }
 
-        private void UpdateTarget(Pacboi pacman, Ghost blinky)
+        protected void UpdateTarget(Pacboi pacman, Ghost blinky, Board board)
         {
             int pacX = pacman.rec.X;
             int pacY = pacman.rec.Y;
@@ -113,7 +117,7 @@ namespace PacMan
             targetSquareLoc.Y = squareY;
         }
 
-        private void Scatter()
+        protected void Scatter()
         {
             scatter = true;
             if (name == Name.Inky)
@@ -150,9 +154,22 @@ namespace PacMan
             }
         }
 
+        protected void UpdateVelocity()
+        {
+            velocity.X = 0;
+            velocity.Y = 0;
+            if (dir == Direction.Up) velocity.Y = -speed;
+            if (dir == Direction.Left) velocity.X = -speed;
+            if (dir == Direction.Down) velocity.Y = speed;
+            if (dir == Direction.Right) velocity.X = speed;
+        }
+
         public int getSquareX() { return (int)(x / 24); }
 
         public int getSquareY() { return (int)(y / 24); }
         
+        public Rectangle getRect() { return rect; }
+
+        public Rectangle getSource() { return sourceRect; }
     }
 }

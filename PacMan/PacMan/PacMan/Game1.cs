@@ -27,6 +27,9 @@ namespace Pacman
         Texture2D boardt;
         Rectangle boardr;
         MapSquares board;
+        Board gameBoard;
+
+        Texture2D spritesheet;
 
         String text;
         Vector2 pos;
@@ -57,8 +60,6 @@ namespace Pacman
         {
 
             // TODO: Add your initialization logic here
-            StreamReader pacMaze = new StreamReader("pacman.txt");
-
             boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(300, 400, 45, 45),
                 new Rectangle(3, 0, 16, 16), new Vector2(0, 0));
 
@@ -67,10 +68,10 @@ namespace Pacman
 
             ghosts = new Ghost[]
             {
-                new Ghost(0, 0, Name.Inky),
-                new Ghost(0, 0, Name.Blinky),
-                new Ghost(0, 0, Name.Pinky),
-                new Ghost(0, 0, Name.Clyde)
+                //new Ghost(0, 0, Name.Inky),
+                new Blinky(0, 0, Name.Blinky, new Rectangle(4, 65, 14, 14)),
+                //new Ghost(0, 0, Name.Pinky), 
+                //new Ghost(0, 0, Name.Clyde)
             };
 
             boardt = Content.Load<Texture2D>("pacman board");
@@ -90,6 +91,8 @@ namespace Pacman
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             boardr = new Rectangle(0, 72, 672, 744);
+
+            spritesheet = Content.Load<Texture2D>("spritesheet");
 
             // TODO: use this.Content to load your game content here
             arcadeNormal = Content.Load<SpriteFont>("SpriteFont1");
@@ -145,6 +148,11 @@ namespace Pacman
                 boi.velocities.X = 0;
             }
 
+            foreach(Ghost g in ghosts)
+            {
+                g.Update(boi, ghosts[0], gameBoard);
+            }
+
             boi.Update();
             base.Update(gameTime);
         }
@@ -160,6 +168,9 @@ namespace Pacman
             spriteBatch.Begin();
             spriteBatch.Draw(boardt, boardr, Color.White);
             spriteBatch.Draw(boi.tex, boi.rec, boi.source, boi.colour);
+            foreach (Ghost g in ghosts){
+                spriteBatch.Draw(spritesheet, g.getRect(), g.getSource(), Color.White);
+            }
             spriteBatch.End();
             // TODO: Add your drawing code here
 
