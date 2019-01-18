@@ -16,13 +16,13 @@ namespace PacMan
     {
         protected float x;
         protected float y;
-        private Rectangle rect;
+        protected Rectangle rect;
         private Name name;
         protected Vector2 velocity;
         protected Vector2 targetSquareLoc;
-        private int counter;
+        protected int counter;
         protected bool scatter;
-        private Rectangle sourceRect;
+        protected Rectangle sourceRect;
         protected Direction dir;
 
         //88 * 3 pixels per second
@@ -57,13 +57,15 @@ namespace PacMan
             }
             else if (counter == 24)
             {
+                Console.WriteLine("We did this");
                 counter = 0;
                 UpdateTarget(pacman, blinky, board);
             }
         }
 
-        protected void UpdateTarget(Pacboi pacman, Ghost blinky, Board board)
+        protected virtual void UpdateTarget(Pacboi pacman, Ghost blinky, Board board)
         {
+            Console.WriteLine("We're actually doing this");
             int pacX = pacman.rec.X;
             int pacY = pacman.rec.Y;
             int squareX = pacX / 24;
@@ -146,7 +148,7 @@ namespace PacMan
         }
 
         //TODO
-        private void CheckScatter()
+        protected void CheckScatter()
         {
             if (name == Name.Clyde)
             {
@@ -162,6 +164,15 @@ namespace PacMan
             if (dir == Direction.Left) velocity.X = -speed;
             if (dir == Direction.Down) velocity.Y = speed;
             if (dir == Direction.Right) velocity.X = speed;
+        }
+
+        protected double? getDistOff(double xDistOff, double yDistOff, Board board)
+        {
+            /*if (board[x][y].isDeadSpace)
+            {
+                return null;
+            }*/
+            return Math.Sqrt(xDistOff * xDistOff + (yDistOff) * (yDistOff));
         }
 
         public int getSquareX() { return (int)(x / 24); }

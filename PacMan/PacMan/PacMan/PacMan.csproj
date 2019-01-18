@@ -60,6 +60,7 @@
     <Compile Include="Blinky.cs" />
     <Compile Include="Board.cs" />
     <Compile Include="Direction.cs" />
+    <Compile Include="Inky.cs" />
     <Compile Include="MapSquares.cs" />
     <Compile Include="Name.cs" />
     <Compile Include="Pacboi.cs" />
