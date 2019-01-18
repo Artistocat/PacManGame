@@ -77,7 +77,6 @@ namespace Pacman
             boardt = Content.Load<Texture2D>("pacman board");
 
             text = "Test Text hererererere.....";
-            pacMaze.Close();
             base.Initialize();
         }
 
@@ -206,7 +205,10 @@ namespace Pacman
 
 
             // Split the row of data into the string array
+            strLine = myFileC.ReadLine();
+
             strArray = strLine.Split(charArray);
+
 
             for (I = 0; I <= strArray.GetUpperBound(0); I++)
             {
