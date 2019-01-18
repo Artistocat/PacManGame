@@ -57,8 +57,11 @@
     <Reference Include="System.Net" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Blinky.cs" />
     <Compile Include="Board.cs" />
+    <Compile Include="Direction.cs" />
     <Compile Include="MapSquares.cs" />
+    <Compile Include="Name.cs" />
     <Compile Include="Pacboi.cs" />
     <Compile Include="Ghost.cs" />
     <Compile Include="Pellet.cs" />

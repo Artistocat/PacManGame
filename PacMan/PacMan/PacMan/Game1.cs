@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -24,14 +26,22 @@ namespace Pacman
 
         Texture2D boardt;
         Rectangle boardr;
+        MapSquares board;
+        Board gameBoard;
 
         String topText;
         Vector2 posOfTopText;
         Pellet[] pellets;
         double[] pelletPositionsX;
         double[] pelletPositionsY;
+        Texture2D spritesheet;
+
+        String text;
+        Vector2 pos;
 
         Pacboi boi;
+
+        Ghost[] ghosts;
 
         public Game1()
         {
@@ -55,11 +65,19 @@ namespace Pacman
         {
 
             // TODO: Add your initialization logic here
-            boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(0, 0, 15, 15),
-                new Rectangle(33, 14, 15, 15), new Vector2(0, 0));
+            boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(300, 400, 45, 45),
+                new Rectangle(3, 0, 16, 16), new Vector2(0, 0));
 
             int screenWidth = graphics.GraphicsDevice.Viewport.Width;
             int screenHeight = graphics.GraphicsDevice.Viewport.Height;
+
+            ghosts = new Ghost[]
+            {
+                //new Ghost(0, 0, Name.Inky),
+                new Blinky(0, 0, Name.Blinky, new Rectangle(4, 65, 14, 14)),
+                //new Ghost(0, 0, Name.Pinky), 
+                //new Ghost(0, 0, Name.Clyde)
+            };
 
             boardt = Content.Load<Texture2D>("pacman board");
 
@@ -120,6 +138,8 @@ namespace Pacman
             spriteBatch = new SpriteBatch(GraphicsDevice);
             boardr = new Rectangle(0, 72, 672, 744);
 
+            spritesheet = Content.Load<Texture2D>("spritesheet");
+
             // TODO: use this.Content to load your game content here
             arcadeNormal = Content.Load<SpriteFont>("SpriteFont1");
             
@@ -156,14 +176,45 @@ namespace Pacman
         protected override void Update(GameTime gameTime)
         {
             KeyboardState kb = Keyboard.GetState();
+            GamePadState gp = GamePad.GetState(PlayerIndex.One);
             // Allows the game to exit
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-            this.Exit();
+                this.Exit();
 
             // TODO: Add your update logic here
+            if (boi.rec.X > graphics.GraphicsDevice.Viewport.Width)
+                boi.rec.X = -45;
+            if (boi.rec.X < -45)
+                boi.rec.X = graphics.GraphicsDevice.Viewport.Width;
 
-            //if(kb.IsKeyDown(Keys.A)
-            //    Pacboi.
+
+            if (kb.IsKeyDown(Keys.A) || gp.DPad.Left == ButtonState.Pressed)
+            {
+                boi.velocities.X = -4;
+                boi.velocities.Y = 0;
+            }
+            if (kb.IsKeyDown(Keys.D) || gp.DPad.Right == ButtonState.Pressed)
+            {
+                boi.velocities.X = 4;
+                boi.velocities.Y = 0;
+            }
+            if (kb.IsKeyDown(Keys.W) || gp.DPad.Up == ButtonState.Pressed)
+            {
+                boi.velocities.Y = -4;
+                boi.velocities.X = 0;
+            }
+            if (kb.IsKeyDown(Keys.S) || gp.DPad.Down == ButtonState.Pressed)
+            {
+                boi.velocities.Y = 4;
+                boi.velocities.X = 0;
+            }
+
+            foreach(Ghost g in ghosts)
+            {
+                g.Update(boi, ghosts[0], gameBoard);
+            }
+
+            boi.Update();
             base.Update(gameTime);
         }
 
@@ -185,6 +236,10 @@ namespace Pacman
             }
 
 
+            spriteBatch.Draw(boi.tex, boi.rec, boi.source, boi.colour);
+            foreach (Ghost g in ghosts){
+                spriteBatch.Draw(spritesheet, g.getRect(), g.getSource(), Color.White);
+            }
             spriteBatch.End();
             // TODO: Add your drawing code here
 
@@ -230,7 +285,42 @@ namespace Pacman
                 {
 
                 }
+            Pellet asdf = new Pellet(a, b, n);
+            //addPellettTexture here
+        }
 
+        public void addPelletTexture(Pellet myPellet)
+        {
+
+        }
+        // This function will take a file's data and separate it by ',' found in the
+        // file. This is not my function but I will try to explain it's code.
+
+        private static List<String> GetTiles()
+        {
+            string strLine;
+            string[] strArray;
+            char[] charArray = new char[] { ' ' };
+            int I;
+
+            List<String> tiles = new List<String>();
+
+            // Open the File for program input
+            StreamReader myFileC = new StreamReader("pacman.txt");
+
+
+            // Split the row of data into the string array
+            strArray = strLine.Split(charArray);
+
+            for (I = 0; I <= strArray.GetUpperBound(0); I++)
+            {
+                tiles.Add(strArray[I]);
+            }
+            strLine = myFileC.ReadLine();
+            while (strLine != null)
+            {
+                // Split next row of data into string array
+                strArray = strLine.Split(charArray);
 
                 //next row:
                 if (a == 28)
@@ -242,6 +332,12 @@ namespace Pacman
 
 
 
+                for (I = 0; I <= strArray.GetUpperBound(0); I++)
+
+                strLine = myFileC.ReadLine();
+            }
+            myFileC.Close();
+            return tiles;
         }
 
 
