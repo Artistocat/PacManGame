@@ -118,6 +118,11 @@ namespace Pacman
             this.Exit();
 
             // TODO: Add your update logic here
+            if (boi.rec.X > graphics.GraphicsDevice.Viewport.Width)
+                boi.rec.X = -45;
+            if (boi.rec.X < -45)
+                boi.rec.X = graphics.GraphicsDevice.Viewport.Width;
+
 
             if (kb.IsKeyDown(Keys.A) || gp.DPad.Left == ButtonState.Pressed)
             {

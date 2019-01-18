@@ -14,18 +14,41 @@ namespace PacMan
     public class Board
     {
         public Texture2D screen;
+        public int tile;
+        public Boolean powerPellet;
+        public Boolean pellet;
+        public Boolean dead;
         public MapSquares[,] space = new MapSquares[28, 36];
         public Board()
         {
 
         }
-        public Board(Texture2D t)
+        public Board(int t, Texture2D s)
         {
-            for (int r = 0; r < 28; r++)
+            tile = t;
+            screen = s;
+            switch(t)
             {
-                for (int c = 0; c < 36; c++)
-                {
-                }
+                case 0:
+                    dead = true;
+                    pellet = false;
+                    powerPellet = false;
+                    break;
+                case 1:
+                    dead = false;
+                    pellet = true;
+                    powerPellet = false;
+                    break;
+                case 2:
+                    dead = false;
+                    pellet = false;
+                    powerPellet = true;
+                    break;
+                case 3:
+                    dead = false;
+                    pellet = false;
+                    powerPellet = false;
+                    break;
             }
         }
     }
