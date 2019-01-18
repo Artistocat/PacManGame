@@ -25,6 +25,7 @@ namespace Pacman
         Texture2D boardt;
         Rectangle boardr;
         MapSquares board;
+        Board gameBoard;
 
         Texture2D spritesheet;
 
@@ -147,7 +148,7 @@ namespace Pacman
 
             foreach(Ghost g in ghosts)
             {
-                //g.Update(boi, ghosts[0], board);
+                g.Update(boi, ghosts[0], gameBoard);
             }
 
             boi.Update();
