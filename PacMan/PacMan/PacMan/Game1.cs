@@ -1,4 +1,6 @@
 using System;
+using System.IO;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -55,6 +57,8 @@ namespace Pacman
         {
 
             // TODO: Add your initialization logic here
+            StreamReader pacMaze = new StreamReader("pacman.txt");
+
             boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(300, 400, 45, 45),
                 new Rectangle(3, 0, 16, 16), new Vector2(0, 0));
 
@@ -65,14 +69,14 @@ namespace Pacman
             {
                 new Ghost(0, 0, Name.Inky),
                 new Ghost(0, 0, Name.Blinky),
-                new Ghost(0, 0, Name.Pinky), 
+                new Ghost(0, 0, Name.Pinky),
                 new Ghost(0, 0, Name.Clyde)
             };
 
             boardt = Content.Load<Texture2D>("pacman board");
 
             text = "Test Text hererererere.....";
-
+            pacMaze.Close();
             base.Initialize();
         }
 
@@ -111,7 +115,7 @@ namespace Pacman
             GamePadState gp = GamePad.GetState(PlayerIndex.One);
             // Allows the game to exit
             if (Keyboard.GetState().IsKeyDown(Keys.Escape))
-            this.Exit();
+                this.Exit();
 
             // TODO: Add your update logic here
             if (boi.rec.X > graphics.GraphicsDevice.Viewport.Width)
@@ -166,13 +170,49 @@ namespace Pacman
         {
             //At start of every round game, pellet objects are made
             //
-            Pellet asdf = new Pellet(a,b,n);
+            Pellet asdf = new Pellet(a, b, n);
             //addPellettTexture here
         }
 
         public void addPelletTexture(Pellet myPellet)
         {
 
+        }
+        // This function will take a file's data and separate it by ',' found in the
+        // file. This is not my function but I will try to explain it's code.
+
+        private static List<String> GetTiles()
+        {
+            string strLine;
+            string[] strArray;
+            char[] charArray = new char[] { ' ' };
+            int I;
+
+            List<String> tiles = new List<String>();
+
+            // Open the File for program input
+            StreamReader myFileC = new StreamReader("pacman.txt");
+
+
+            // Split the row of data into the string array
+            strArray = strLine.Split(charArray);
+
+            for (I = 0; I <= strArray.GetUpperBound(0); I++)
+            {
+                tiles.Add(strArray[I]);
+            }
+            strLine = myFileC.ReadLine();
+            while (strLine != null)
+            {
+                // Split next row of data into string array
+                strArray = strLine.Split(charArray);
+
+                for (I = 0; I <= strArray.GetUpperBound(0); I++)
+
+                strLine = myFileC.ReadLine();
+            }
+            myFileC.Close();
+            return tiles;
         }
     }
 }
