@@ -18,8 +18,8 @@ namespace PacMan
         double x, y;
         Pellet p;
         int pelletNum;
-        Rectangle rect;
-        Texture2D texture;
+        public Rectangle rect;
+        public Texture2D texture;
 
 
         /*Notes:
@@ -29,12 +29,13 @@ namespace PacMan
          */
 
 
-        public Pellet(double a, double b, int n)
+        public Pellet(double a, double b, int n, Boolean isBig)
         {
             x = a;
             y = b;
             pelletNum = n;
-            rect = new Rectangle((int)-1000, (int)-1000, 6, 6);
+            isPowerPellet = isBig;
+            rect = new Rectangle((int)a, (int)b, 6, 6);
 
         }
 
@@ -43,8 +44,49 @@ namespace PacMan
             rect.X = (int)x;
             rect.Y = (int)y;
         }
-        
 
+        public void removePellet()
+        {
+            rect.X = (int)-1000;
+            rect.Y = (int)-1000;
+        }
+
+
+        //getters
+        public Boolean getIsPowerPellet()
+        {
+            return isPowerPellet;
+        }
+        
+        public Boolean getIsEaten()
+        {
+            return isEaten;
+        }
+
+        public double getX()
+        {
+            return x;
+        }
+
+        public double getY()
+        {
+            return y;
+        }
+
+        public int getPelletNum()
+        {
+            return pelletNum;
+        }
+
+        public Rectangle getRect()
+        {
+            return rect;
+        }
+
+        public Texture2D getTexture()
+        {
+            return texture;
+        }
 
     }
 }

@@ -29,6 +29,11 @@ namespace Pacman
         MapSquares board;
         Board gameBoard;
 
+        String topText;
+        Vector2 posOfTopText;
+        Pellet[] pellets;
+        double[] pelletPositionsX;
+        double[] pelletPositionsY;
         Texture2D spritesheet;
 
         String text;
@@ -76,7 +81,49 @@ namespace Pacman
 
             boardt = Content.Load<Texture2D>("pacman board");
 
-            text = "Test Text hererererere.....";
+            //Isaiahs Stuff \______________________
+            pellets = new Pellet[244];
+
+            pelletPositionsX = new double[] { 50, 100, 150};
+            pelletPositionsY = new double[] { 50, 100, 150 };
+            setPellets();
+
+            topText = "1UP     HIGH SCORE";
+            posOfTopText = new Vector2(100, 0);
+
+            //dem
+            //224
+            //288
+            //672
+            //864
+
+            //if its a normal or power pellet
+            Boolean isPowerPelletTrue = false;
+            for (int i = 0; i < pelletPositionsX.Length; i++)
+            {
+                if (pelletPositionsX[i] == 24 || pelletPositionsX[i] == 816 || pelletPositionsY[i] == 144 || pelletPositionsY[i] == 624)
+                {
+                    isPowerPelletTrue = true;
+                }
+                else
+                {
+                    isPowerPelletTrue = false;
+                }
+                //makes the pellet objects
+                pellets[i] = MakePellet(pelletPositionsX[i], pelletPositionsY[i], i, isPowerPelletTrue);
+            }
+            //______________________________________
+
+
+
+
+
+
+
+
+
+
+
             base.Initialize();
         }
 
@@ -95,6 +142,21 @@ namespace Pacman
 
             // TODO: use this.Content to load your game content here
             arcadeNormal = Content.Load<SpriteFont>("SpriteFont1");
+            
+
+
+            //Loop through every pellet object and give texture
+            for (int i = 0; i < pelletPositionsX.Length; i++)
+            {
+                if (pellets[i].getIsPowerPellet())
+                {
+                    pellets[i].texture = Content.Load<Texture2D>("powerpellet");
+                }
+                else
+                {
+                    pellets[i].texture = Content.Load<Texture2D>("white box");
+                }
+            }
 
         }
         /// <summary>
@@ -166,6 +228,14 @@ namespace Pacman
 
             spriteBatch.Begin();
             spriteBatch.Draw(boardt, boardr, Color.White);
+            spriteBatch.DrawString(arcadeNormal,topText,posOfTopText,Color.White);
+            //draws every pellet
+            for (int i = 0; i < pelletPositionsX.Length; i++)
+            {
+                spriteBatch.Draw(pellets[i].getTexture(),pellets[i].getRect(),Color.White);
+            }
+
+
             spriteBatch.Draw(boi.tex, boi.rec, boi.source, boi.colour);
             foreach (Ghost g in ghosts){
                 spriteBatch.Draw(spritesheet, g.getRect(), g.getSource(), Color.White);
@@ -176,10 +246,45 @@ namespace Pacman
             base.Draw(gameTime);
         }
 
-        public void MakePellet(double a, double b, int n)
+        public Pellet MakePellet(double a, double b, int n, Boolean i)
         {
             //At start of every round game, pellet objects are made
             //
+            Pellet asdf = new Pellet(a,b,n,i);
+
+            return asdf;
+        }
+        
+        public void setPellets()
+        {
+            //Pellet[] pellets;
+            //double[] pelletPositionsX;
+            //double[] pelletPositionsY;
+
+
+
+            for(int a = 0; a < 36; a++)
+            {
+                // a = rows
+                int b = 0; // collumns
+
+                //28
+                //36
+
+                //conditions
+                //Updates the x y values for the pellets
+
+                if (a == 0)
+                {
+                    if(b != 15 || b != 14)
+                    {
+                        //dont add pellet
+                    }
+                }
+                if(a == 1)
+                {
+
+                }
             Pellet asdf = new Pellet(a, b, n);
             //addPellettTexture here
         }
@@ -224,6 +329,16 @@ namespace Pacman
                 // Split next row of data into string array
                 strArray = strLine.Split(charArray);
 
+                //next row:
+                if (a == 28)
+                {
+                    a = 0;
+                    b++;
+                }
+            }
+
+
+
                 for (I = 0; I <= strArray.GetUpperBound(0); I++)
 
                 strLine = myFileC.ReadLine();
@@ -231,5 +346,8 @@ namespace Pacman
             myFileC.Close();
             return mapSquares;
         }
+
+
+
     }
 }
