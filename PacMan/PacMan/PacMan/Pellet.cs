@@ -51,6 +51,7 @@ namespace PacMan
             rect.Y = (int)-1000;
         }
 
+
         //getters
         public Boolean getIsPowerPellet()
         {

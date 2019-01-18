@@ -65,8 +65,11 @@ namespace Pacman
 
             //Isaiahs Stuff \______________________
             pellets = new Pellet[244];
+
             pelletPositionsX = new double[] { 50, 100, 150};
             pelletPositionsY = new double[] { 50, 100, 150 };
+            setPellets();
+
             topText = "1UP     HIGH SCORE";
             posOfTopText = new Vector2(100, 0);
 
@@ -197,7 +200,49 @@ namespace Pacman
             return asdf;
         }
         
+        public void setPellets()
+        {
+            //Pellet[] pellets;
+            //double[] pelletPositionsX;
+            //double[] pelletPositionsY;
 
+
+
+            for(int a = 0; a < 36; a++)
+            {
+                // a = rows
+                int b = 0; // collumns
+
+                //28
+                //36
+
+                //conditions
+                //Updates the x y values for the pellets
+
+                if (a == 0)
+                {
+                    if(b != 15 || b != 14)
+                    {
+                        //dont add pellet
+                    }
+                }
+                if(a == 1)
+                {
+
+                }
+
+
+                //next row:
+                if (a == 28)
+                {
+                    a = 0;
+                    b++;
+                }
+            }
+
+
+
+        }
 
 
 
