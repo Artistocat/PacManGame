@@ -33,7 +33,6 @@ namespace PacMan
         }
         public void Update()
         {
-            
 
             if (velocities.Y > 0)
             {
@@ -52,11 +51,11 @@ namespace PacMan
                 source.Y = 16;
             }
 
-            if (counter > 4 && counter <= 8)
+            if (counter > 5 && counter <= 10)
                 source.X = 19;
-            else if (counter > 8 && counter <= 12)
+            else if (counter > 10 && counter <= 15)
                 source.X = 3;
-            else if (counter > 12)
+            else if (counter > 15)
                 counter = 0;
             else
             {
