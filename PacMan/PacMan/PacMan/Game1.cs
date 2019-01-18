@@ -143,7 +143,9 @@ namespace Pacman
 
             // TODO: use this.Content to load your game content here
             arcadeNormal = Content.Load<SpriteFont>("SpriteFont1");
-            
+            int[,] tester = new int[28, 26];
+            tester = GetTiles();
+
 
 
             //Loop through every pellet object and give texture
@@ -264,7 +266,7 @@ namespace Pacman
 
 
 
-            for(int a = 0; a < 36; a++)
+            for (int a = 0; a < 36; a++)
             {
                 // a = rows
                 int b = 0; // collumns
@@ -277,15 +279,16 @@ namespace Pacman
 
                 if (a == 0)
                 {
-                    if(b != 15 || b != 14)
+                    if (b != 15 || b != 14)
                     {
                         //dont add pellet
                     }
                 }
-                if(a == 1)
+                if (a == 1)
                 {
 
                 }
+            }
             Pellet asdf = new Pellet(a, b, n);
             //addPellettTexture here
         }
@@ -310,16 +313,10 @@ namespace Pacman
             int[,] mapSquares = new int[28, 36];
 
             // Open the File for program input
-            StreamReader myFileC = new StreamReader("pacman.txt");
+            StreamReader myFileC = new StreamReader("Pacman.txt");
 
 
             // Split the row of data into the string array
-            strLine = myFileC.ReadLine();
-
-            strArray = strLine.Split(charArray);
-
-
-            for (I = 0; I <= strArray.GetUpperBound(0); I++)
             for (int i = 0; i < height; i++)
             {
                 String nextLine = myFileC.ReadLine();

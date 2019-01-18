@@ -16,7 +16,11 @@ namespace PacMan
         {
             int xFrontPac = pacman.rec.X / 24;
             int yFrontPac = pacman.rec.Y / 24;
-            //if ()
+            Vector2 pacV = pacman.velocities;
+            if (pacV.X > 0) xFrontPac += 2;
+            if (pacV.X < 0) xFrontPac -= 2;
+            if (pacV.Y > 0) yFrontPac += 2;
+            if (pacV.Y < 0) yFrontPac -= 2;
         }
 
     }
