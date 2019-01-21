@@ -77,6 +77,7 @@ namespace Pacman
                 new Blinky(20, 20),
                 new Pinky(20, 20), 
                 new Clyde(20, 20)
+
             };
 
             boardt = Content.Load<Texture2D>("pacman board");
