@@ -73,10 +73,10 @@ namespace Pacman
 
             ghosts = new Ghost[]
             {
-                //new Ghost(0, 0, Name.Inky),
-                new Blinky(0, 0, Name.Blinky, new Rectangle(4, 65, 14, 14)),
-                //new Ghost(0, 0, Name.Pinky), 
-                //new Ghost(0, 0, Name.Clyde)
+                //new Inky(20, 20), //Fix this guy
+                new Blinky(20, 20),
+                new Pinky(20, 20), 
+                new Clyde(20, 20)
             };
 
             boardt = Content.Load<Texture2D>("pacman board");
@@ -289,7 +289,7 @@ namespace Pacman
 
                 }
             }
-            Pellet asdf = new Pellet(a, b, n);
+            //Pellet asdf = new Pellet(a, b, n);
             //addPellettTexture here
         }
 
@@ -322,7 +322,7 @@ namespace Pacman
                 String nextLine = myFileC.ReadLine();
                 for (int j = 0; j < width / 2; j++)
                 {
-                    mapSquares[j, i] = mapSquares[j - 28, i] = int.Parse(nextLine.Substring(j * 2, 1));
+                    mapSquares[j, i] = mapSquares[width - 28, i] = int.Parse(nextLine.Substring(j * 2, 1));
                 }
             }
             /*for (I = 0; I <= strArray.GetUpperBound(0); I++)

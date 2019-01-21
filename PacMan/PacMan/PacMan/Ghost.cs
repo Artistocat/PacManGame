@@ -14,8 +14,8 @@ namespace PacMan
 {
     public class Ghost
     {
-        protected float x;
-        protected float y;
+        public double x;
+        public double y;
         protected Rectangle rect;
         private Name name;
         protected Vector2 velocity;
@@ -30,10 +30,12 @@ namespace PacMan
         //4.4 pixels per frame
         //each square is 
         //28 x 36
-        const float speed = (float)4.4;
+        const float speed = (float)4;
 
         public Ghost(int x, int y, Name n, Rectangle source)
         {
+            this.x = x;
+            this.y = y;
             rect.X = x;
             rect.Y = y;
             rect.Width = rect.Height = 45;
@@ -46,6 +48,12 @@ namespace PacMan
 
         public void Update(Pacboi pacman, Ghost blinky, Board board)
         {
+            /*if (x == 0)
+            {
+                Console.WriteLine("It broke");
+                return;
+            }*/
+            //Console.WriteLine("We good " + x);
             counter++;
             x += velocity.X;
             y += velocity.Y;
@@ -57,7 +65,6 @@ namespace PacMan
             }
             else if (counter == 24)
             {
-                Console.WriteLine("We did this");
                 counter = 0;
                 UpdateTarget(pacman, blinky, board);
             }
@@ -117,6 +124,38 @@ namespace PacMan
 
             targetSquareLoc.X = squareX;
             targetSquareLoc.Y = squareY;
+        }
+
+        protected void UpdateDirection(Board board)
+        {
+
+            double xDistOff = targetSquareLoc.X - x / 24;
+            double yDistOff = targetSquareLoc.Y - y / 24;
+
+            double?[] distsOff = new double?[4];
+            Direction closestDir = Direction.Up;
+
+            //Up
+            distsOff[0] = getDistOff(xDistOff, yDistOff - 1, board);
+
+            //Left
+            distsOff[1] = getDistOff(xDistOff - 1, yDistOff, board);
+
+            //Down
+            distsOff[2] = getDistOff(xDistOff, yDistOff + 1, board);
+
+            //Right
+            distsOff[3] = getDistOff(xDistOff + 1, yDistOff, board);
+
+            for (int i = 1; i < distsOff.Length; i++)
+            {
+                if (distsOff[i] != null && distsOff[i] > distsOff[(int)closestDir])
+                {
+                    closestDir = (Direction)i;
+                }
+            }
+            dir = closestDir;
+            UpdateVelocity();
         }
 
         protected void Scatter()
