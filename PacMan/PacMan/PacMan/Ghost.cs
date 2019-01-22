@@ -21,6 +21,7 @@ namespace PacMan
         protected Vector2 velocity;
         protected Vector2 targetSquareLoc;
         protected int counter;
+        protected int animateCounter;
         protected bool scatter;
         protected Rectangle sourceRect;
         protected Direction dir;
@@ -48,13 +49,8 @@ namespace PacMan
 
         public void Update(Pacboi pacman, Ghost blinky, Board board)
         {
-            /*if (x == 0)
-            {
-                Console.WriteLine("It broke");
-                return;
-            }*/
-            //Console.WriteLine("We good " + x);
             counter++;
+            animateCounter++;
             x += velocity.X;
             y += velocity.Y;
             rect.X = (int)x;
@@ -68,62 +64,72 @@ namespace PacMan
                 counter = 0;
                 UpdateTarget(pacman, blinky, board);
             }
+
+            if (animateCounter < 8)
+            {
+                //First one
+            }
+            else
+            {
+                //second one
+            }
+
         }
 
         protected virtual void UpdateTarget(Pacboi pacman, Ghost blinky, Board board)
         {
-            Console.WriteLine("We're actually doing this");
-            int pacX = pacman.rec.X;
-            int pacY = pacman.rec.Y;
-            int squareX = pacX / 24;
-            int squareY = pacY / 24;
-            Vector2 pacV = pacman.velocities;
+            //Console.WriteLine("We're actually doing this");
+            //int pacX = pacman.rec.X;
+            //int pacY = pacman.rec.Y;
+            //int squareX = pacX / 24;
+            //int squareY = pacY / 24;
+            //Vector2 pacV = pacman.velocities;
 
-            if (name == Name.Inky)
-            {
-                int xFrontPac = squareX;
-                int yFrontPac = squareY;
-                if (pacV.X > 0) xFrontPac += 2;
-                if (pacV.X < 0) xFrontPac -= 2;
-                if (pacV.Y > 0) yFrontPac += 2;
-                if (pacV.Y < 0) yFrontPac -= 2;
+            //if (name == Name.Inky)
+            //{
+            //    int xFrontPac = squareX;
+            //    int yFrontPac = squareY;
+            //    if (pacV.X > 0) xFrontPac += 2;
+            //    if (pacV.X < 0) xFrontPac -= 2;
+            //    if (pacV.Y > 0) yFrontPac += 2;
+            //    if (pacV.Y < 0) yFrontPac -= 2;
 
-                int xBlinkyDistFrontPac = xFrontPac - blinky.getSquareX();
-                int yBlinkyDistFrontPac = yFrontPac - blinky.getSquareY();
-                squareX = xFrontPac - xBlinkyDistFrontPac;
-                squareY = yFrontPac - yBlinkyDistFrontPac;
+            //    int xBlinkyDistFrontPac = xFrontPac - blinky.getSquareX();
+            //    int yBlinkyDistFrontPac = yFrontPac - blinky.getSquareY();
+            //    squareX = xFrontPac - xBlinkyDistFrontPac;
+            //    squareY = yFrontPac - yBlinkyDistFrontPac;
 
-            }
+            //}
 
-            if (name == Name.Blinky)
-            {
-                //Target is just where pacboi is
-            }
+            //if (name == Name.Blinky)
+            //{
+            //    //Target is just where pacboi is
+            //}
 
-            if (name == Name.Pinky)
-            {
-                int distFrontPac = 4;
-                if (pacV.X > 0) squareX += distFrontPac;
-                if (pacV.X < 0) squareX -= distFrontPac;
-                if (pacV.Y > 0) squareY += distFrontPac;
-                if (pacV.Y < 0) squareY -= distFrontPac;
-            }
+            //if (name == Name.Pinky)
+            //{
+            //    int distFrontPac = 4;
+            //    if (pacV.X > 0) squareX += distFrontPac;
+            //    if (pacV.X < 0) squareX -= distFrontPac;
+            //    if (pacV.Y > 0) squareY += distFrontPac;
+            //    if (pacV.Y < 0) squareY -= distFrontPac;
+            //}
 
-            if (name == Name.Clyde)
-            {
-                int xGrid = (int) (x / 24);
-                int yGrid = (int) (y / 24);
-                double xDistFromPac = squareX - xGrid;
-                double yDistFromPac = squareY - yGrid;
-                double distFromPac = Math.Sqrt(xDistFromPac * xDistFromPac + yDistFromPac * yDistFromPac);
-                if (distFromPac <= 8)
-                {
-                    Scatter();
-                }
-            }
+            //if (name == Name.Clyde)
+            //{
+            //    int xGrid = (int) (x / 24);
+            //    int yGrid = (int) (y / 24);
+            //    double xDistFromPac = squareX - xGrid;
+            //    double yDistFromPac = squareY - yGrid;
+            //    double distFromPac = Math.Sqrt(xDistFromPac * xDistFromPac + yDistFromPac * yDistFromPac);
+            //    if (distFromPac <= 8)
+            //    {
+            //        Scatter();
+            //    }
+            //}
 
-            targetSquareLoc.X = squareX;
-            targetSquareLoc.Y = squareY;
+            //targetSquareLoc.X = squareX;
+            //targetSquareLoc.Y = squareY;
         }
 
         protected void UpdateDirection(Board board)
@@ -194,7 +200,7 @@ namespace PacMan
                 scatter = false; //TODO
             }
         }
-
+        
         protected void UpdateVelocity()
         {
             velocity.X = 0;
