@@ -334,7 +334,8 @@ namespace Pacman
                 String nextLine = myFileC.ReadLine();
                 for (int j = 0; j < width / 2; j++)
                 {
-                    mapSquares[j, i] = mapSquares[width - 28, i] = int.Parse(nextLine.Substring(j * 2, 1));
+                    mapSquares[j, i] = int.Parse(nextLine.Substring(j * 2, 1));
+                    mapSquares[width - j, i] = mapSquares[j, i];
                 }
             }
             myFileC.Close();
