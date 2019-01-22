@@ -252,14 +252,16 @@ namespace Pacman
                 spriteBatch.Draw(map.screen, map.screenSize, Color.White);
             else
             {
+                //refreshing the map
                 spriteBatch.Draw(map.screen, map.screenSize, Color.White);
-
-                spriteBatch.Draw(boi.tex, boi.rec, boi.source, boi.colour);
+                //each ghost drawing
                 foreach (Ghost g in ghosts)
                 {
                     spriteBatch.Draw(spritesheet, g.getRect(), g.getSource(), Color.White);
                 }
-
+                //pacman drawing
+                spriteBatch.Draw(boi.tex, boi.rec, boi.source, boi.colour);
+                //pellet drawing
                 for (int r = 0; r < 28; r++)
                 {
                     for (int c = 0; c < 36; c++)
