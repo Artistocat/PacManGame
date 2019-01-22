@@ -219,10 +219,6 @@ namespace PacMan
 
         protected double? getDistOff(double xDistOff, double yDistOff, Board board)
         {
-            if (board.space[getSquareX(), getSquareY()].dead)
-            {
-                return null;
-            }
             return Math.Sqrt(xDistOff * xDistOff + (yDistOff) * (yDistOff));
         }
 

@@ -78,10 +78,10 @@ namespace Pacman
 
             ghosts = new Ghost[]
             {
-                new Inky(300, 300),
-                new Blinky(300, 300),
-                new Pinky(300, 300), 
-                new Clyde(300, 300)
+                new Inky(24 * 12, 24 * 17),
+                new Blinky(24 * 14, 24 * 14),
+                new Pinky(24 * 14, 24 * 17), 
+                new Clyde(24 * 16, 24 * 17)
             };
 
             score = 0;
@@ -216,7 +216,7 @@ namespace Pacman
 
             foreach(Ghost g in ghosts)
             {
-                g.Update(boi, ghosts[1], gameBoard);
+                g.Update(boi, ghosts[1], map);
             }
 
             boi.Update();
