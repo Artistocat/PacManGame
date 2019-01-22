@@ -22,7 +22,8 @@ namespace PacMan
         public MapSquares[,] space = new MapSquares[28, 36];
         public Board()
         {
-
+            screen = null;
+            screenSize = new Rectangle(0,0,0,0);
         }
         public Board(Texture2D s,Rectangle ss, int[,] b)
         {
