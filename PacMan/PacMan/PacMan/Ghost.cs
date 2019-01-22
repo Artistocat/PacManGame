@@ -219,7 +219,7 @@ namespace PacMan
 
         protected double? getDistOff(double xDistOff, double yDistOff, Board board)
         {
-            if (board.space[getSquareX(), getSquareY()].dead)
+            if (board.space[getSquareX(), getSquareY()].Gdead)
             {
                 return null;
             }

@@ -216,7 +216,7 @@ namespace Pacman
 
             foreach(Ghost g in ghosts)
             {
-                g.Update(boi, ghosts[1], gameBoard);
+                g.Update(boi, ghosts[1], map);
             }
 
             boi.Update();
