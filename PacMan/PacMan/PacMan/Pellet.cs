@@ -26,6 +26,7 @@ namespace PacMan
          * powerpellet size is 12x12
          * 
          */
+        /// kelby's pellet constructer that works with the board class.. not the best but it functions. do work on it a bit to be able to edit it a bit.
         public Pellet(int x, int y, Boolean isPower)
         {
             if(isPower == true)
