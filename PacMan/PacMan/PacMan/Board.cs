@@ -14,6 +14,7 @@ namespace PacMan
     public class Board
     {
         public Texture2D screen;
+        public Rectangle screenSize;
         //public int tile;
         //public Boolean powerPellet;
         //public Boolean pellet;
@@ -23,9 +24,10 @@ namespace PacMan
         {
 
         }
-        public Board(Texture2D s, int[,] b)
+        public Board(Texture2D s,Rectangle ss, int[,] b)
         {
             screen = s;
+            screenSize = ss;
             for (int r = 0; r < 28; r++)
             {
                 for (int c = 0; c < 36; c++)

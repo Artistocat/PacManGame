@@ -87,7 +87,7 @@ namespace Pacman
             score = 0;
 
             mapsquare = GetTiles();
-            map = new Board(Content.Load<Texture2D>("pacman board"), mapsquare);
+            map = new Board(Content.Load<Texture2D>("pacman board"), new Rectangle(0, 72, 672, 744), mapsquare);
 
             text = "Test Text hererererere.....";
             //Isaiahs Stuff \______________________
@@ -134,7 +134,6 @@ namespace Pacman
             IsMouseVisible = true;
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            boardr = new Rectangle(0, 72, 672, 744);
 
             spritesheet = Content.Load<Texture2D>("spritesheet");
             
@@ -233,7 +232,7 @@ namespace Pacman
             GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
-            spriteBatch.Draw(map.screen, boardr, Color.White);
+            spriteBatch.Draw(map.screen, map.screenSize, Color.White);
             spriteBatch.DrawString(arcadeNormal,topText,posOfTopText,Color.White);
 
             //for(int r = 0; r <28;r++)
