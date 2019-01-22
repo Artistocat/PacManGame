@@ -78,10 +78,10 @@ namespace Pacman
 
             ghosts = new Ghost[]
             {
-                new Inky(24 * 12, 24 * 17),
-                new Blinky(24 * 14, 24 * 14),
-                new Pinky(24 * 14, 24 * 17), 
-                new Clyde(24 * 16, 24 * 17)
+                new Inky(24 * 12 + 12, 24 * 17 + 12),
+                new Blinky(24 * 14 + 12, 24 * 14 + 12),
+                new Pinky(24 * 14 + 12, 24 * 17 + 12), 
+                new Clyde(24 * 16 + 12, 24 * 17 + 12)
             };
 
             score = 0;
