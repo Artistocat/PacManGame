@@ -65,6 +65,7 @@ namespace PacMan
                 UpdateTarget(pacman, blinky, board);
             }
 
+            sourceRect.X = 4;
             if (animateCounter < 8)
             {
                 //First one
@@ -72,7 +73,12 @@ namespace PacMan
             else
             {
                 //second one
+                sourceRect.X += 16;
             }
+            if (dir == Direction.Left) sourceRect.X += 32;
+            if (dir == Direction.Up) sourceRect.X += 64;
+            if (dir == Direction.Down) sourceRect.X += 96;
+            if (animateCounter == 16) animateCounter = 0;
 
         }
 
