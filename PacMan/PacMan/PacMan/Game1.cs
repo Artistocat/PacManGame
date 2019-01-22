@@ -203,12 +203,25 @@ namespace Pacman
             if (map.start == false)
                 map.screen = Content.Load<Texture2D>("pacman board");
 
-            for (int i = 0; i < pellets.Length; i++)
+            //for (int i = 0; i < pellets.Length; i++)
+            //{
+            //    if (pellets[i] != null && pellets[i].rect.Intersects(boi.rec))
+            //    {
+            //        score += 10;
+            //        pellets[i] = null;
+            //    }
+            //}
+            ///aaron - this next forloop does the same thing as the one above, it makes pacman eat the pellets. may need to be improved tho cause
+            ///rn i just yeet the pellets away
+            for(int r = 0; r < 28; r++)
             {
-                if (pellets[i] != null && pellets[i].rect.Intersects(boi.rec))
+                for(int c = 0; c<36;c++)
                 {
-                    score += 10;
-                    pellets[i] = null;
+                    if(tester[r,c].rect.Intersects(boi.rec))
+                    {
+                        score += 10;
+                        tester[r, c].rect = new Rectangle(111110, 111110, 1, 1);
+                    }
                 }
             }
 
