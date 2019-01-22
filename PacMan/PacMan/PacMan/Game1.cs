@@ -68,7 +68,10 @@ namespace Pacman
         /// </summary>
         protected override void Initialize()
         {
-            boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(300, 400, 45, 45),
+            //pacboi's starting location based off of map tiles
+            //25.625 y
+            //13 x
+            boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(312, 615, 45, 45),
                 new Rectangle(3, 0, 16, 16), new Vector2(0, 0));
 
             int screenWidth = graphics.GraphicsDevice.Viewport.Width;
@@ -76,10 +79,16 @@ namespace Pacman
 
             ghosts = new Ghost[]
             {
-                new Inky(24 * 12 + 12, 24 * 17 + 12),
-                new Blinky(24 * 14 + 12, 24 * 14 + 12),
-                new Pinky(24 * 14 + 12, 24 * 17 + 12), 
-                new Clyde(24 * 16 + 12, 24 * 17 + 12)
+                ///aaron, i commented out your old pos and put in new ones, see if you like them more or less. we still need to implement the detection of whether
+                ///or not its legal space or dead space.
+                //new Inky(24 * 12 + 12, 24 * 17 + 12),
+                new Inky(24 * 11, 24 * 17 - 6),
+                //new Blinky(24 * 14 + 12, 24 * 14 + 12),
+                new Blinky(24 * 13, 24 * 14 - 6),
+                //new Pinky(24 * 14 + 12, 24 * 17 + 12), 
+                new Pinky(24 * 13, 24 * 17 - 6),
+                //new Clyde(24 * 16 + 12, 24 * 17 + 12)
+                new Clyde(24 * 15, 24 * 17 - 6)
             };
 
             score = 0;
@@ -228,11 +237,11 @@ namespace Pacman
                 boi.velocities.Y = 4;
                 boi.velocities.X = 0;
             }
-
-            foreach(Ghost g in ghosts)
-            {
-                g.Update(boi, ghosts[1], map);
-            }
+            ///aaron - commenting this out just to place the ghosts correctly rn
+            //foreach (Ghost g in ghosts)
+            //{
+            //    g.Update(boi, ghosts[1], map);
+            //}
 
             boi.Update();
             base.Update(gameTime);
