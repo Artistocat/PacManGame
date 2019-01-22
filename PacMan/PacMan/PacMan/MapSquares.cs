@@ -27,7 +27,8 @@ namespace PacMan
             //        dead[r,c] = false;
             //    }
             //}
-
+            pellet = false;
+            powerPellet = false;
             dead = false;
         }
         public MapSquares(int t)
