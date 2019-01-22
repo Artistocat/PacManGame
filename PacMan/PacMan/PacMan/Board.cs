@@ -23,14 +23,14 @@ namespace PacMan
         {
 
         }
-        public Board(Texture2D s, MapSquares[,] b)
+        public Board(Texture2D s, int[,] b)
         {
             screen = s;
             for (int r = 0; r < 28; r++)
             {
                 for (int c = 0; c < 36; c++)
                 {
-                    space[r, c] = b[r,c];
+                    space[r, c] = new MapSquares(b[r,c]);
                 }
             }
         }

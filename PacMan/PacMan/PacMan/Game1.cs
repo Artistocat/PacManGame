@@ -39,7 +39,8 @@ namespace Pacman
         int[] pelletPositionsY;
         Texture2D spritesheet;
 
-        int[,] test = new int[28,36];
+        int[,] mapsquare = new int[28,36];
+        Board map;
  
         String text;
         Vector2 pos;
@@ -85,7 +86,8 @@ namespace Pacman
 
             score = 0;
 
-            test = GetTiles();
+            mapsquare = GetTiles();
+            map = new Board(Content.Load<Texture2D>("pacman board"), mapsquare);
 
             text = "Test Text hererererere.....";
             //Isaiahs Stuff \______________________
@@ -133,8 +135,6 @@ namespace Pacman
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             boardr = new Rectangle(0, 72, 672, 744);
-
-            boardt = Content.Load<Texture2D>("pacman board");
 
             spritesheet = Content.Load<Texture2D>("spritesheet");
             
@@ -233,21 +233,17 @@ namespace Pacman
             GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
-            spriteBatch.Draw(boardt, boardr, Color.White);
+            spriteBatch.Draw(map.screen, boardr, Color.White);
             spriteBatch.DrawString(arcadeNormal,topText,posOfTopText,Color.White);
 
-            for(int r = 0; r <28;r++)
-            {
-                for(int c = 0; c < 36; c++)
-                {
-                    spriteBatch.DrawString(arcadeNormal, "" + test[r,c], new Vector2(15 * r, 15 * c) , Color.White);
-                }
-            }
-            //draws every pellet
-            /*for (int i = 0; i < pelletPositionsX.Length; i++)
-            {
-                spriteBatch.Draw(whiteBoxTexture,pellets[i].getRect(),Color.White);
-            }*/
+            //for(int r = 0; r <28;r++)
+            //{
+            //    for(int c = 0; c < 36; c++)
+            //    {
+            //        spriteBatch.DrawString(arcadeNormal, "" + test[r,c], new Vector2(15 * r, 15 * c) , Color.White);
+            //    }
+            //}
+
 
             foreach (Pellet p in pellets)
             {
