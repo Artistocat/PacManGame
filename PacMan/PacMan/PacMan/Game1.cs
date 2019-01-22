@@ -247,22 +247,34 @@ namespace Pacman
             GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
-            if(map.start == true)
+            // this entire if else statement sets up whether or not its the start screen or not.
+            if (map.start == true)
                 spriteBatch.Draw(map.screen, map.screenSize, Color.White);
             else
+            {
                 spriteBatch.Draw(map.screen, map.screenSize, Color.White);
+
+                spriteBatch.Draw(boi.tex, boi.rec, boi.source, boi.colour);
+                foreach (Ghost g in ghosts)
+                {
+                    spriteBatch.Draw(spritesheet, g.getRect(), g.getSource(), Color.White);
+                }
+
+                for (int r = 0; r < 28; r++)
+                {
+                    for (int c = 0; c < 36; c++)
+                    {
+                        if (tester[r, c].isPowerPellet == false)
+                            spriteBatch.Draw(whiteBoxTexture, tester[r, c].rect, Color.White);
+                        else
+                            spriteBatch.Draw(powerPelletTexture, tester[r, c].rect, Color.White);
+                    }
+                }
+
+            }
             spriteBatch.DrawString(arcadeNormal,topText,posOfTopText,Color.White);
 
-            for (int r = 0; r < 28; r++)
-            {
-                for (int c = 0; c < 36; c++)
-                {
-                    if (tester[r, c].isPowerPellet == false)
-                        spriteBatch.Draw(whiteBoxTexture, tester[r, c].rect, Color.White);
-                    else
-                        spriteBatch.Draw(powerPelletTexture, tester[r,c].rect, Color.White);
-                }
-            }
+            
 
 
             //foreach (Pellet p in pellets)
@@ -276,10 +288,10 @@ namespace Pacman
             //    }
             //}
 
-            spriteBatch.Draw(boi.tex, boi.rec, boi.source, boi.colour);
-            foreach (Ghost g in ghosts){
-                spriteBatch.Draw(spritesheet, g.getRect(), g.getSource(), Color.White);
-            }
+            //spriteBatch.Draw(boi.tex, boi.rec, boi.source, boi.colour);
+            //foreach (Ghost g in ghosts){
+            //    spriteBatch.Draw(spritesheet, g.getRect(), g.getSource(), Color.White);
+            //}
             spriteBatch.End();
 
             base.Draw(gameTime);
