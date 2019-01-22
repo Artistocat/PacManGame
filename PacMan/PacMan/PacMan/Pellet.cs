@@ -14,42 +14,39 @@ namespace PacMan
    public class Pellet
     {
         Boolean isPowerPellet;
-        Boolean isEaten;
-        double x, y;
-        Pellet p;
+        //Boolean isEaten;
+        int x, y;
+        //Pellet p;
         int pelletNum;
         public Rectangle rect;
-        public Texture2D texture;
-
+        //public Texture2D texture;
 
         /*Notes:
          * pellet size is 6x6
          * powerpellet size is 12x12
          * 
          */
-
-
-        public Pellet(double a, double b, int n, Boolean isBig)
+        public Pellet(int x, int y, int n, Boolean isPower)
         {
-            x = a;
-            y = b;
+            this.x = x;
+            this.y = y;
             pelletNum = n;
-            isPowerPellet = isBig;
-            rect = new Rectangle((int)a, (int)b, 6, 6);
+            isPowerPellet = isPower;
+            rect = new Rectangle((int)x, (int)y, 6, 6);
 
         }
 
-        public void placePellet()
-        {
-            rect.X = (int)x;
-            rect.Y = (int)y;
-        }
+        //public void placePellet()
+        //{
+        //    rect.X = (int)x;
+        //    rect.Y = (int)y;
+        //}
 
-        public void removePellet()
-        {
-            rect.X = (int)-1000;
-            rect.Y = (int)-1000;
-        }
+        //public void removePellet()
+        //{
+        //    rect.X = (int)-1000;
+        //    rect.Y = (int)-1000;
+        //}
 
 
         //getters
@@ -58,10 +55,10 @@ namespace PacMan
             return isPowerPellet;
         }
         
-        public Boolean getIsEaten()
-        {
-            return isEaten;
-        }
+        //public Boolean getIsEaten()
+        //{
+        //    return isEaten;
+        //}
 
         public double getX()
         {
@@ -83,10 +80,10 @@ namespace PacMan
             return rect;
         }
 
-        public Texture2D getTexture()
-        {
-            return texture;
-        }
+        //public Texture2D getTexture()
+        //{
+        //    return texture;
+        //}
 
     }
 }

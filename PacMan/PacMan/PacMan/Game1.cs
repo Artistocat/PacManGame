@@ -24,6 +24,9 @@ namespace Pacman
 
         SpriteFont arcadeNormal;
 
+        Texture2D whiteBoxTexture;
+        Texture2D powerPelletTexture;
+
         Texture2D boardt;
         Rectangle boardr;
         MapSquares board;
@@ -32,12 +35,13 @@ namespace Pacman
         String topText;
         Vector2 posOfTopText;
         Pellet[] pellets;
-        double[] pelletPositionsX;
-        double[] pelletPositionsY;
+        int[] pelletPositionsX;
+        int[] pelletPositionsY;
         Texture2D spritesheet;
 
         String text;
         Vector2 pos;
+        int score;
 
         Pacboi boi;
 
@@ -63,8 +67,6 @@ namespace Pacman
         /// </summary>
         protected override void Initialize()
         {
-
-            // TODO: Add your initialization logic here
             boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(300, 400, 45, 45),
                 new Rectangle(3, 0, 16, 16), new Vector2(0, 0));
 
@@ -73,21 +75,20 @@ namespace Pacman
 
             ghosts = new Ghost[]
             {
-                //new Inky(20, 20), //Fix this guy
+                new Inky(20, 20),
                 new Blinky(20, 20),
                 new Pinky(20, 20), 
                 new Clyde(20, 20)
-
             };
 
-            boardt = Content.Load<Texture2D>("pacman board");
+            score = 0;
 
             text = "Test Text hererererere.....";
             //Isaiahs Stuff \______________________
             pellets = new Pellet[244];
 
-            pelletPositionsX = new double[] { 50, 100, 150};
-            pelletPositionsY = new double[] { 50, 100, 150 };
+            pelletPositionsX = new int[] { 50, 100, 150};
+            pelletPositionsY = new int[] { 50, 100, 150 };
             setPellets();
 
             topText = "1UP     HIGH SCORE";
@@ -103,29 +104,18 @@ namespace Pacman
             Boolean isPowerPelletTrue = false;
             for (int i = 0; i < pelletPositionsX.Length; i++)
             {
-                if (pelletPositionsX[i] == 24 || pelletPositionsX[i] == 816 || pelletPositionsY[i] == 144 || pelletPositionsY[i] == 624)
-                {
-                    isPowerPelletTrue = true;
-                }
-                else
-                {
-                    isPowerPelletTrue = false;
-                }
+                //if (pelletPositionsX[i] == 24 || pelletPositionsX[i] == 816 || pelletPositionsY[i] == 144 || pelletPositionsY[i] == 624)
+                //{
+                //    isPowerPelletTrue = true;
+                //}
+                //else
+                //{
+                //    isPowerPelletTrue = false;
+                //}
                 //makes the pellet objects
-                pellets[i] = MakePellet(pelletPositionsX[i], pelletPositionsY[i], i, isPowerPelletTrue);
+                pellets[i] = new Pellet(pelletPositionsX[i], pelletPositionsY[i], i, isPowerPelletTrue);
             }
             //______________________________________
-
-
-
-
-
-
-
-
-
-
-
             base.Initialize();
         }
 
@@ -140,27 +130,29 @@ namespace Pacman
             spriteBatch = new SpriteBatch(GraphicsDevice);
             boardr = new Rectangle(0, 72, 672, 744);
 
-            spritesheet = Content.Load<Texture2D>("spritesheet");
+            boardt = Content.Load<Texture2D>("pacman board");
 
-            // TODO: use this.Content to load your game content here
+            spritesheet = Content.Load<Texture2D>("spritesheet");
+            
             arcadeNormal = Content.Load<SpriteFont>("SpriteFont1");
             int[,] tester = new int[28, 26];
             tester = GetTiles();
 
-
+            whiteBoxTexture = Content.Load<Texture2D>("white box");
+            powerPelletTexture = Content.Load<Texture2D>("powerpellet");
 
             //Loop through every pellet object and give texture
-            for (int i = 0; i < pelletPositionsX.Length; i++)
-            {
-                if (pellets[i].getIsPowerPellet())
-                {
-                    pellets[i].texture = Content.Load<Texture2D>("powerpellet");
-                }
-                else
-                {
-                    pellets[i].texture = Content.Load<Texture2D>("white box");
-                }
-            }
+            //for (int i = 0; i < pelletPositionsX.Length; i++)
+            //{
+            //    if (pellets[i].getIsPowerPellet())
+            //    {
+            //        pellets[i].texture = Content.Load<Texture2D>("powerpellet");
+            //    }
+            //    else
+            //    {
+            //        pellets[i].texture = Content.Load<Texture2D>("white box");
+            //    }
+            //}
 
         }
         /// <summary>
@@ -181,16 +173,22 @@ namespace Pacman
         {
             KeyboardState kb = Keyboard.GetState();
             GamePadState gp = GamePad.GetState(PlayerIndex.One);
-            // Allows the game to exit
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (kb.IsKeyDown(Keys.Escape))
                 this.Exit();
 
-            // TODO: Add your update logic here
+            for (int i = 0; i < pellets.Length; i++)
+            {
+                if (pellets[i] != null && pellets[i].rect.Intersects(boi.rec))
+                {
+                    score += 10;
+                    pellets[i] = null;
+                }
+            }
+            
             if (boi.rec.X > graphics.GraphicsDevice.Viewport.Width)
                 boi.rec.X = -45;
             if (boi.rec.X < -45)
                 boi.rec.X = graphics.GraphicsDevice.Viewport.Width;
-
 
             if (kb.IsKeyDown(Keys.A) || gp.DPad.Left == ButtonState.Pressed)
             {
@@ -215,7 +213,7 @@ namespace Pacman
 
             foreach(Ghost g in ghosts)
             {
-                g.Update(boi, ghosts[0], gameBoard);
+                g.Update(boi, ghosts[1], gameBoard);
             }
 
             boi.Update();
@@ -234,38 +232,45 @@ namespace Pacman
             spriteBatch.Draw(boardt, boardr, Color.White);
             spriteBatch.DrawString(arcadeNormal,topText,posOfTopText,Color.White);
             //draws every pellet
-            for (int i = 0; i < pelletPositionsX.Length; i++)
+            /*for (int i = 0; i < pelletPositionsX.Length; i++)
             {
-                spriteBatch.Draw(pellets[i].getTexture(),pellets[i].getRect(),Color.White);
-            }
+                spriteBatch.Draw(whiteBoxTexture,pellets[i].getRect(),Color.White);
+            }*/
 
+            foreach (Pellet p in pellets)
+            {
+                if (p != null)
+                {
+                    if (p.getIsPowerPellet())
+                        spriteBatch.Draw(powerPelletTexture, p.getRect(), Color.White);
+                    else
+                        spriteBatch.Draw(whiteBoxTexture, p.getRect(), Color.White);
+                }
+            }
 
             spriteBatch.Draw(boi.tex, boi.rec, boi.source, boi.colour);
             foreach (Ghost g in ghosts){
                 spriteBatch.Draw(spritesheet, g.getRect(), g.getSource(), Color.White);
             }
             spriteBatch.End();
-            // TODO: Add your drawing code here
 
             base.Draw(gameTime);
         }
 
-        public Pellet MakePellet(double a, double b, int n, Boolean i)
+        /*public Pellet MakePellet(double a, double b, int n, Boolean i)
         {
             //At start of every round game, pellet objects are made
             //
             Pellet asdf = new Pellet(a,b,n,i);
 
             return asdf;
-        }
+        }*/
         
         public void setPellets()
         {
             //Pellet[] pellets;
             //double[] pelletPositionsX;
             //double[] pelletPositionsY;
-
-
 
             for (int a = 0; a < 36; a++)
             {
@@ -294,10 +299,10 @@ namespace Pacman
             //addPellettTexture here
         }
 
-        public void addPelletTexture(Pellet myPellet)
+        /*public void addPelletTexture(Pellet myPellet)
         {
 
-        }
+        }*/
         // This function will take a file's data and separate it by ',' found in the
         // file. This is not my function but I will try to explain it's code.
 

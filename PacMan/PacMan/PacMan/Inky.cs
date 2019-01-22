@@ -24,8 +24,7 @@ namespace PacMan
             int yBlinkyDistFrontPac = yFrontPac - blinky.getRect().Y / 24;
             targetSquareLoc.X = xFrontPac - xBlinkyDistFrontPac;
             targetSquareLoc.Y = yFrontPac - yBlinkyDistFrontPac;
-            Console.WriteLine("xFrontPac: " + xFrontPac + "yFrontPac: " + yFrontPac + "blinkySquareX: " + blinky.getRect().X + "blinkysquarey: " + blinky.getSquareY());
-            
+
             UpdateDirection(board);
         }
 
