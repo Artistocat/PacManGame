@@ -39,6 +39,8 @@ namespace Pacman
         int[] pelletPositionsY;
         Texture2D spritesheet;
 
+        int[,] test = new int[28,36];
+ 
         String text;
         Vector2 pos;
         int score;
@@ -82,6 +84,8 @@ namespace Pacman
             };
 
             score = 0;
+
+            test = GetTiles();
 
             text = "Test Text hererererere.....";
             //Isaiahs Stuff \______________________
@@ -231,6 +235,14 @@ namespace Pacman
             spriteBatch.Begin();
             spriteBatch.Draw(boardt, boardr, Color.White);
             spriteBatch.DrawString(arcadeNormal,topText,posOfTopText,Color.White);
+
+            for(int r = 0; r <28;r++)
+            {
+                for(int c = 0; c < 36; c++)
+                {
+                    spriteBatch.DrawString(arcadeNormal, "" + test[r,c], new Vector2(15 * r, 15 * c) , Color.White);
+                }
+            }
             //draws every pellet
             /*for (int i = 0; i < pelletPositionsX.Length; i++)
             {
@@ -308,21 +320,15 @@ namespace Pacman
 
         private static int[,] GetTiles()
         {
-            //string strLine;
-            //string[] strArray;
-            //char[] charArray = new char[] { ' ' };
-            //int I;
+
 
             int width = 28;
             int height = 36;
 
             int[,] mapSquares = new int[28, 36];
 
-            // Open the File for program input
             StreamReader myFileC = new StreamReader("Pacman.txt");
 
-
-            // Split the row of data into the string array
             for (int i = 0; i < height; i++)
             {
                 String nextLine = myFileC.ReadLine();
@@ -331,30 +337,6 @@ namespace Pacman
                     mapSquares[j, i] = mapSquares[width - 28, i] = int.Parse(nextLine.Substring(j * 2, 1));
                 }
             }
-            /*for (I = 0; I <= strArray.GetUpperBound(0); I++)
-            {
-                tiles.Add(strArray[I]);
-            }
-            strLine = myFileC.ReadLine();
-            while (strLine != null)
-            {
-                // Split next row of data into string array
-                strArray = strLine.Split(charArray);
-
-                //next row:
-                if (a == 28)
-                {
-                    a = 0;
-                    b++;
-                }
-            }
-
-
-
-                for (I = 0; I <= strArray.GetUpperBound(0); I++)
-
-                strLine = myFileC.ReadLine();
-            }*/
             myFileC.Close();
             return mapSquares;
         }
