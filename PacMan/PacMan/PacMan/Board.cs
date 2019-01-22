@@ -15,6 +15,7 @@ namespace PacMan
     {
         public Texture2D screen;
         public Rectangle screenSize;
+        public Boolean start;
         //public int tile;
         //public Boolean powerPellet;
         //public Boolean pellet;
@@ -24,9 +25,11 @@ namespace PacMan
         {
             screen = null;
             screenSize = new Rectangle(0,0,0,0);
+            start = true;
         }
         public Board(Texture2D s,Rectangle ss, int[,] b)
         {
+            start = true;
             screen = s;
             screenSize = ss;
             for (int r = 0; r < 28; r++)
@@ -36,6 +39,10 @@ namespace PacMan
                     space[r, c] = new MapSquares(b[r,c]);
                 }
             }
+        }
+        public void setStart(Boolean s)
+        {
+            start = s;
         }
     }
 }

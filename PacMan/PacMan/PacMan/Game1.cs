@@ -27,11 +27,6 @@ namespace Pacman
         Texture2D whiteBoxTexture;
         Texture2D powerPelletTexture;
 
-        Texture2D boardt;
-        Rectangle boardr;
-        MapSquares board;
-        Board gameBoard;
-
         String topText;
         Vector2 posOfTopText;
         Pellet[] pellets;
@@ -87,7 +82,7 @@ namespace Pacman
             score = 0;
 
             mapsquare = GetTiles();
-            map = new Board(Content.Load<Texture2D>("pacman board"), new Rectangle(0, 72, 672, 744), mapsquare);
+            map = new Board(Content.Load<Texture2D>("pacmenu"), new Rectangle(0, 72, 672, 744), mapsquare);
 
             text = "Test Text hererererere.....";
             //Isaiahs Stuff \______________________
@@ -176,8 +171,14 @@ namespace Pacman
         {
             KeyboardState kb = Keyboard.GetState();
             GamePadState gp = GamePad.GetState(PlayerIndex.One);
-            if (kb.IsKeyDown(Keys.Escape))
+            if (kb.IsKeyDown(Keys.Escape) || gp.Buttons.Back == ButtonState.Pressed)
                 this.Exit();
+            if (map.start == true)
+                if (kb.IsKeyDown(Keys.Space) || gp.Buttons.Start == ButtonState.Pressed)
+                    map.start = false;
+
+            if (map.start == false)
+                map.screen = Content.Load<Texture2D>("pacman board");
 
             for (int i = 0; i < pellets.Length; i++)
             {
@@ -232,7 +233,10 @@ namespace Pacman
             GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
-            spriteBatch.Draw(map.screen, map.screenSize, Color.White);
+            if(map.start == true)
+                spriteBatch.Draw(map.screen, map.screenSize, Color.White);
+            else
+                spriteBatch.Draw(map.screen, map.screenSize, Color.White);
             spriteBatch.DrawString(arcadeNormal,topText,posOfTopText,Color.White);
 
             //for(int r = 0; r <28;r++)
