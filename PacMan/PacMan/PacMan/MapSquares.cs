@@ -16,7 +16,8 @@ namespace PacMan
         int size = 24;
         public Boolean powerPellet;
         public Boolean pellet;
-        public Boolean dead;
+        public Boolean Pdead;
+        public Boolean Gdead;
         //Vector2
         public MapSquares()
         {
@@ -29,32 +30,44 @@ namespace PacMan
             //}
             pellet = false;
             powerPellet = false;
-            dead = false;
+            Pdead = false;
+            Gdead = false;
         }
         public MapSquares(int t)
         {
             switch (t)
             {
                 case 0:
-                    dead = true;
+                    Pdead = true;
+                    Gdead = true;
                     pellet = false;
                     powerPellet = false;
                     break;
                 case 1:
-                    dead = false;
+                    Pdead = false;
+                    Gdead = false;
                     pellet = true;
                     powerPellet = false;
                     break;
                 case 2:
-                    dead = false;
+                    Pdead = false;
+                    Gdead = false;
                     pellet = false;
                     powerPellet = true;
                     break;
                 case 3:
-                    dead = false;
+                    Pdead = false;
+                    Gdead = false;
                     pellet = false;
                     powerPellet = false;
                     break;
+                case 4:
+                    Pdead = true;
+                    Gdead = false;
+                    pellet = false;
+                    powerPellet = false;
+                    break;
+
             }
             //dead[(int)loc.X,(int)loc.Y] = ded;
         }
