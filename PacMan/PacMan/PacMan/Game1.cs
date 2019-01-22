@@ -30,6 +30,9 @@ namespace Pacman
         String topText;
         Vector2 posOfTopText;
         Pellet[] pellets;
+
+        Pellet[,] tester = new Pellet[28, 36];
+
         int[] pelletPositionsX;
         int[] pelletPositionsY;
         Texture2D spritesheet;
@@ -116,6 +119,19 @@ namespace Pacman
                 //makes the pellet objects
                 pellets[i] = new Pellet(pelletPositionsX[i], pelletPositionsY[i], i, isPowerPelletTrue);
             }
+            for (int r = 0; r < 28; r++)
+            {
+                for (int c = 0; c < 36; c++)
+                {
+                    if (map.space[r, c].pellet == true)
+                        tester[r, c] = new Pellet(r, c, false);
+                    else if(map.space[r, c].powerPellet == true)
+                        tester[r, c] = new Pellet(r, c, true);
+                    else
+                        tester[r, c] = new Pellet(10000, 100000,false);
+
+                }
+            }
             //______________________________________
             base.Initialize();
         }
@@ -133,8 +149,6 @@ namespace Pacman
             spritesheet = Content.Load<Texture2D>("spritesheet");
             
             arcadeNormal = Content.Load<SpriteFont>("SpriteFont1");
-            int[,] tester = new int[28, 26];
-            tester = GetTiles();
 
             whiteBoxTexture = Content.Load<Texture2D>("white box");
             powerPelletTexture = Content.Load<Texture2D>("powerpellet");
@@ -188,7 +202,7 @@ namespace Pacman
                     pellets[i] = null;
                 }
             }
-            
+
             if (boi.rec.X > graphics.GraphicsDevice.Viewport.Width)
                 boi.rec.X = -45;
             if (boi.rec.X < -45)
@@ -239,25 +253,28 @@ namespace Pacman
                 spriteBatch.Draw(map.screen, map.screenSize, Color.White);
             spriteBatch.DrawString(arcadeNormal,topText,posOfTopText,Color.White);
 
-            //for(int r = 0; r <28;r++)
-            //{
-            //    for(int c = 0; c < 36; c++)
-            //    {
-            //        spriteBatch.DrawString(arcadeNormal, "" + test[r,c], new Vector2(15 * r, 15 * c) , Color.White);
-            //    }
-            //}
-
-
-            foreach (Pellet p in pellets)
+            for (int r = 0; r < 28; r++)
             {
-                if (p != null)
+                for (int c = 0; c < 36; c++)
                 {
-                    if (p.getIsPowerPellet())
-                        spriteBatch.Draw(powerPelletTexture, p.getRect(), Color.White);
+                    if (tester[r, c].isPowerPellet == false)
+                        spriteBatch.Draw(whiteBoxTexture, tester[r, c].rect, Color.White);
                     else
-                        spriteBatch.Draw(whiteBoxTexture, p.getRect(), Color.White);
+                        spriteBatch.Draw(powerPelletTexture, tester[r,c].rect, Color.White);
                 }
             }
+
+
+            //foreach (Pellet p in pellets)
+            //{
+            //    if (p != null)
+            //    {
+            //        if (p.getIsPowerPellet())
+            //            spriteBatch.Draw(powerPelletTexture, p.getRect(), Color.White);
+            //        else
+            //            spriteBatch.Draw(whiteBoxTexture, p.getRect(), Color.White);
+            //    }
+            //}
 
             spriteBatch.Draw(boi.tex, boi.rec, boi.source, boi.colour);
             foreach (Ghost g in ghosts){

@@ -13,7 +13,7 @@ namespace PacMan
 {
    public class Pellet
     {
-        Boolean isPowerPellet;
+        public Boolean isPowerPellet;
         //Boolean isEaten;
         int x, y;
         //Pellet p;
@@ -26,6 +26,15 @@ namespace PacMan
          * powerpellet size is 12x12
          * 
          */
+        public Pellet(int x, int y, Boolean isPower)
+        {
+            if(isPower == true)
+                rect = new Rectangle(x * 24, y * 24, 24, 24);
+            else
+                rect = new Rectangle(x * 24 + 9, y * 24 + 9, 6, 6);
+            isPowerPellet = isPower;
+        }
+
         public Pellet(int x, int y, int n, Boolean isPower)
         {
             this.x = x;
