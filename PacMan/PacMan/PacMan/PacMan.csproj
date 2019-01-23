@@ -59,12 +59,15 @@
   <ItemGroup>
     <Compile Include="Blinky.cs" />
     <Compile Include="Board.cs" />
+    <Compile Include="Clyde.cs" />
     <Compile Include="Direction.cs" />
+    <Compile Include="Inky.cs" />
     <Compile Include="MapSquares.cs" />
     <Compile Include="Name.cs" />
     <Compile Include="Pacboi.cs" />
     <Compile Include="Ghost.cs" />
     <Compile Include="Pellet.cs" />
+    <Compile Include="Pinky.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
@@ -73,6 +76,9 @@
     <Content Include="Game.ico" />
     <Content Include="GameThumbnail.png">
       <XnaPlatformSpecific>true</XnaPlatformSpecific>
+    </Content>
+    <Content Include="Pacman.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>

@@ -13,53 +13,47 @@ namespace PacMan
 {
    public class Pellet
     {
-        Boolean isPowerPellet;
-        Boolean isPowerMode;
-        Boolean isEaten;
-        double x, y;
-        Pellet p;
+        public Boolean isPowerPellet;
+        int x, y;
         int pelletNum;
         public Rectangle rect;
-        public Texture2D texture;
 
-        
-         //pellet size is 6x6
-         //powerpellet size is 12x12
-
-
-        public Pellet(double a, double b, int n, Boolean isBig)
+        /*Notes:
+         * pellet size is 6x6
+         * powerpellet size is 12x12
+         * 
+         */
+        /// kelby's pellet constructer that works with the board class.. not the best but it functions. do work on it a bit to be able to edit it a bit.
+        public Pellet(int x, int y, Boolean isPower)
         {
-            x = a;
-            y = b;
+            if(isPower == true)
+                rect = new Rectangle(x * 24, y * 24, 24, 24);
+            else
+                rect = new Rectangle(x * 24 + 9, y * 24 + 9, 6, 6);
+            isPowerPellet = isPower;
+        }
+
+        public Pellet(int x, int y, int n, Boolean isPower)
+        {
+            this.x = x;
+            this.y = y;
             pelletNum = n;
-            isPowerPellet = isBig;
-            rect = new Rectangle((int)a, (int)b, 6, 6);
+            isPowerPellet = isPower;
+            rect = new Rectangle((int)x, (int)y, 6, 6);
 
         }
 
-        public void getsEaten()
-        {
-            isEaten = true;
-            x = -1000;
+        //public void placePellet()
+        //{
+        //    rect.X = (int)x;
+        //    rect.Y = (int)y;
+        //}
 
-            if (isPowerPellet)
-            {
-                isPowerMode = true;
-            }
-
-        }
-
-        public void placePellet()
-        {
-            rect.X = (int)x;
-            rect.Y = (int)y;
-        }
-
-        public void removePellet()
-        {
-            rect.X = (int)-1000;
-            rect.Y = (int)-1000;
-        }
+        //public void removePellet()
+        //{
+        //    rect.X = (int)-1000;
+        //    rect.Y = (int)-1000;
+        //}
 
 
         //getters
@@ -68,10 +62,10 @@ namespace PacMan
             return isPowerPellet;
         }
         
-        public Boolean getIsEaten()
-        {
-            return isEaten;
-        }
+        //public Boolean getIsEaten()
+        //{
+        //    return isEaten;
+        //}
 
         public double getX()
         {
@@ -93,10 +87,10 @@ namespace PacMan
             return rect;
         }
 
-        public Texture2D getTexture()
-        {
-            return texture;
-        }
+        //public Texture2D getTexture()
+        //{
+        //    return texture;
+        //}
 
     }
 }
