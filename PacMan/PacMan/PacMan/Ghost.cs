@@ -131,7 +131,7 @@ namespace PacMan
 
         private Direction GetClosestDir(HashSet<Direction> validDirs, double?[] distsOff)
         {
-            if (validDirs.Count == 1) return validDirs.ElementAt(0);
+            if (validDirs.Count <= 1) return validDirs.ElementAt(0);
             if (distsOff[(int)validDirs.ElementAt(0)] > distsOff[(int)validDirs.ElementAt(1)])
             {
                 validDirs.Remove(validDirs.ElementAt(1));
