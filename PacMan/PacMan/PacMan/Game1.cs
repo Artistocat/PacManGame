@@ -65,6 +65,17 @@ namespace Pacman
         {
 
             // TODO: Add your initialization logic here
+            int[,] test = new int[28, 36];
+            test = GetTiles();
+
+            for (int i = 0; i < 28; i++)
+            {
+                for (int j = 0; j < 36; j++)
+                {
+                    Console.Write(test[i, j]);
+                }
+                Console.WriteLine();
+            }
             boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(300, 400, 45, 45),
                 new Rectangle(3, 0, 16, 16), new Vector2(0, 0));
 
@@ -241,6 +252,7 @@ namespace Pacman
             foreach (Ghost g in ghosts){
                 spriteBatch.Draw(spritesheet, g.getRect(), g.getSource(), Color.White);
             }
+
             spriteBatch.End();
             // TODO: Add your drawing code here
 
@@ -264,7 +276,7 @@ namespace Pacman
 
 
 
-            for(int a = 0; a < 36; a++)
+            for (int a = 0; a < 36; a++)
             {
                 // a = rows
                 int b = 0; // collumns
@@ -277,16 +289,17 @@ namespace Pacman
 
                 if (a == 0)
                 {
-                    if(b != 15 || b != 14)
+                    if (b != 15 || b != 14)
                     {
                         //dont add pellet
                     }
                 }
-                if(a == 1)
+                if (a == 1)
                 {
 
                 }
-            Pellet asdf = new Pellet(a, b, n);
+            }
+            //Pellet asdf = new Pellet(a, b, n);
             //addPellettTexture here
         }
 
@@ -310,16 +323,13 @@ namespace Pacman
             int[,] mapSquares = new int[28, 36];
 
             // Open the File for program input
-            StreamReader myFileC = new StreamReader("pacman.txt");
+            StreamReader myFileC = new StreamReader(Content.Load<TextReader>("Pacman");
 
 
             // Split the row of data into the string array
-            strLine = myFileC.ReadLine();
-
-            strArray = strLine.Split(charArray);
 
 
-            for (I = 0; I <= strArray.GetUpperBound(0); I++)
+
             for (int i = 0; i < height; i++)
             {
                 String nextLine = myFileC.ReadLine();
