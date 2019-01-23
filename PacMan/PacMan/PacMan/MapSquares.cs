@@ -13,7 +13,7 @@ namespace PacMan
 {
     public class MapSquares
     {
-        //int size = 24;
+        int size = 24;
         public Boolean powerPellet;
         public Boolean pellet;
         public Boolean Pdead;

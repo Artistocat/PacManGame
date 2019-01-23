@@ -17,6 +17,7 @@ namespace PacMan
         public double x;
         public double y;
         protected Rectangle rect;
+        //protected Rectangle centerRect;
         private Name name;
         protected Vector2 velocity;
         protected Vector2 targetSquareLoc;
@@ -40,6 +41,7 @@ namespace PacMan
             rect.X = x;
             rect.Y = y;
             rect.Width = rect.Height = 45;
+            //centerRect = new Rectangle(x + 10, y + 10, 24, 24);
             this.name = n;
             velocity = new Vector2(0, speed);
             scatter = false;
@@ -52,13 +54,17 @@ namespace PacMan
             animateCounter++;
             x += velocity.X;
             y += velocity.Y;
+            if (x + rect.Width < 0) x += board.screenSize.Width;
+            if (x > board.screenSize.Width) x -= board.screenSize.Width;
             rect.X = (int)x;
             rect.Y = (int)y;
+            //centerRect.X = (int)x;
+            //centerRect.Y = (int)y;
             if (scatter)
             {
                 CheckScatter();
             }
-            else if (counter == 12)
+            else if (counter == 6)
             {
                 counter = 0;
                 UpdateTarget(pacman, blinky, board);
@@ -131,13 +137,16 @@ namespace PacMan
 
         private Direction GetClosestDir(HashSet<Direction> validDirs, double?[] distsOff)
         {
-            if (validDirs.Count <= 1) return validDirs.ElementAt(0);
-            if (distsOff[(int)validDirs.ElementAt(0)] > distsOff[(int)validDirs.ElementAt(1)])
+            try
             {
-                validDirs.Remove(validDirs.ElementAt(1));
-                return GetClosestDir(validDirs, distsOff);
-            }
-            validDirs.Remove(validDirs.ElementAt(0));
+                if (validDirs.Count == 1) return validDirs.ElementAt(0);
+                if (distsOff[(int)validDirs.ElementAt(0)] > distsOff[(int)validDirs.ElementAt(1)])
+                {
+                    validDirs.Remove(validDirs.ElementAt(1));
+                    return GetClosestDir(validDirs, distsOff);
+                }
+                validDirs.Remove(validDirs.ElementAt(0));
+            } catch (ArgumentOutOfRangeException e) { return dir; }
             return GetClosestDir(validDirs, distsOff);
         }
 
@@ -209,6 +218,7 @@ namespace PacMan
                 {
                     return null;
                 }
+
             } catch (IndexOutOfRangeException e)
             {
                 return null;

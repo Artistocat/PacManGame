@@ -14,12 +14,9 @@ namespace PacMan
    public class Pellet
     {
         public Boolean isPowerPellet;
-        //Boolean isEaten;
         int x, y;
-        //Pellet p;
         int pelletNum;
         public Rectangle rect;
-        //public Texture2D texture;
 
         /*Notes:
          * pellet size is 6x6
