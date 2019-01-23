@@ -44,12 +44,13 @@ namespace Pacman
  
         String text;
         Vector2 pos;
+        Boolean dead = false;
+        KeyboardState Oldkb;
         int score;
 
         Pacboi boi;
 
         Ghost[] ghosts;
-
         public Game1()
         {
             graphics = new GraphicsDeviceManager(this);
@@ -84,12 +85,11 @@ namespace Pacman
                 Console.WriteLine();
             }
             boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(300, 400, 45, 45),
+                new Rectangle(3, 0, 15, 15), new Vector2(0, 0));
             //pacboi's starting location based off of map tiles
             //25.625 y
             //13 x
             pacMoved = false;
-            boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(312, 615, 45, 45),
-                new Rectangle(3, 0, 16, 16), new Vector2(0, 0));
 
             int screenWidth = graphics.GraphicsDevice.Viewport.Width;
             int screenHeight = graphics.GraphicsDevice.Viewport.Height;
@@ -159,6 +159,8 @@ namespace Pacman
                 ////new Clyde(24 * 16 + 12, 24 * 17 + 12)
                 //new Clyde(24 * 15 - 12, 24 * 17 - 12)
             };
+
+            Oldkb = Keyboard.GetState();
 
             base.Initialize();
         }
@@ -232,35 +234,37 @@ namespace Pacman
                 }
             }
 
+            // TODO: Add your update logic here
+
+            //Warps (Left and right sides)
             if (boi.rec.X > graphics.GraphicsDevice.Viewport.Width)
                 boi.rec.X = -45;
             if (boi.rec.X < -45)
                 boi.rec.X = graphics.GraphicsDevice.Viewport.Width;
 
-            if (kb.IsKeyDown(Keys.A) || gp.DPad.Left == ButtonState.Pressed)
+            //Pacman movement
+            if (dead == false)
             {
-                boi.velocities.X = -4;
-                boi.velocities.Y = 0;
-                pacMoved = true;
-            }
-            if (kb.IsKeyDown(Keys.D) || gp.DPad.Right == ButtonState.Pressed)
-            {
-                boi.velocities.X = 4;
-                boi.velocities.Y = 0;
-                pacMoved = true;
-            }
-            if (kb.IsKeyDown(Keys.W) || gp.DPad.Up == ButtonState.Pressed)
-            {
-                boi.velocities.Y = -4;
-                boi.velocities.X = 0;
-                pacMoved = true;
-            }
-            if (kb.IsKeyDown(Keys.S) || gp.DPad.Down == ButtonState.Pressed)
-            {
-                boi.velocities.Y = 4;
-                boi.velocities.X = 0;
-                pacMoved = true;
-            }
+                if (kb.IsKeyDown(Keys.A) || gp.DPad.Left == ButtonState.Pressed)
+                {
+                    boi.velocities.X = -4;
+                    boi.velocities.Y = 0;
+                }
+                if (kb.IsKeyDown(Keys.D) || gp.DPad.Right == ButtonState.Pressed)
+                {
+                    boi.velocities.X = 4;
+                    boi.velocities.Y = 0;
+                }
+                if (kb.IsKeyDown(Keys.W) || gp.DPad.Up == ButtonState.Pressed)
+                {
+                    boi.velocities.Y = -4;
+                    boi.velocities.X = 0;
+                }
+                if (kb.IsKeyDown(Keys.S) || gp.DPad.Down == ButtonState.Pressed)
+                {
+                    boi.velocities.Y = 4;
+                    boi.velocities.X = 0;
+                }
 
             foreach (Ghost g in ghosts)
             {
@@ -271,6 +275,24 @@ namespace Pacman
             }
 
             boi.Update();
+                boi.Update();
+            }
+            //Death test
+            if (kb.IsKeyDown(Keys.E) && kb.IsKeyDown(Keys.R) || dead == true)
+            {
+                if(dead == false)
+                {
+                    boi.source.Y = 0;
+                    boi.counter = 0;
+                    dead = true;
+                }
+                boi.death();
+                if (boi.counter >= 150)
+                {
+                    boi.respawn();
+                    dead = false;
+                }
+            }
             base.Update(gameTime);
         }
 

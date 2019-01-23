@@ -18,7 +18,7 @@ namespace PacMan
         public Rectangle source;
         public Vector2 velocities = new Vector2(0, 0);
         public Color colour;
-        int counter = 0;
+        public int counter = 0;
         public Pacboi()
         {
 
@@ -68,19 +68,47 @@ namespace PacMan
             counter++;
         }
 
+        public void respawn()
+        {
+            rec.X = 300;
+            rec.Y = 480;
+        }
+
         public void death()
         {
-            counter = 0;
-            source.Y = 0;
+            if (counter < 10)
+                source.X = 35;
+            else if (counter < 20)
+                source.X = 35 + 16;
+            else if (counter < 30)
+                source.X = 35 + (16 * 2);
+            else if (counter < 40)
+                source.X = 35 + (16 * 3);
+            else if (counter < 50)
+                source.X = 35 + (16 * 4);
+            else if (counter < 60)
+                source.X = 35 + (16 * 5);
+            else if (counter < 70)
+                source.X = 35 + (16 * 6);
+            else if (counter < 80)
+                source.X = 35 + (16 * 7);
+            else if (counter < 90)
+                source.X = 35 + (16 * 8);
+            else if (counter < 100)
+                source.X = 35 + (16 * 9);
+            else if (counter < 110)
+                source.X = 35 + (16 * 10);
+            else if (counter < 120)
+            {
+                source.X = 35 + (16 * 11);
+                source.Y = 3;
+            }
+            counter++;
+        }
 
-            if (counter > 2 && counter <= 4)
-                source.X = 51;
-            else if (counter > 4 && counter <= 6)
-                source.X = 67;
-            else if (counter > 6 && counter <= 8)
-                source.X = 83;
-            else if (counter > 8 && counter <= 10)
-                source.X = 99;
+        public void lives()
+        {
+
         }
     }
 }
