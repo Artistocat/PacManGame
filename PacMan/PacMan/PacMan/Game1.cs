@@ -47,7 +47,7 @@ namespace Pacman
         Boolean dead = false;
         KeyboardState Oldkb;
         int score;
-
+        Rectangle lifesource;
         Pacboi boi;
 
         Ghost[] ghosts;
@@ -73,9 +73,10 @@ namespace Pacman
         {
 
             // TODO: Add your initialization logic here
-            boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(300, 400, 45, 45),
+            boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(312, 615, 45, 45),
                 new Rectangle(3, 0, 15, 15), new Vector2(0, 0));
-            //pacboi's starting location based off of map tiles
+            lifesource = new Rectangle(132, 17, 15, 15);
+            //pacboi's starting location based off of map tiles    
             //25.625 y
             //13 x
             pacMoved = false;
@@ -270,6 +271,7 @@ namespace Pacman
             {
                 if(dead == false)
                 {
+                    boi.lives--;
                     boi.source.Y = 0;
                     boi.counter = 0;
                     dead = true;
@@ -322,6 +324,13 @@ namespace Pacman
                     }
                 }
 
+            }
+            //lives
+            int l = 0;
+            while(l < boi.lives)
+            {
+                l ++;
+                spriteBatch.Draw(boi.tex, new Rectangle((l * 48) + (2 * 24), 34 * 24, 48, 48), lifesource, Color.White);
             }
             spriteBatch.DrawString(arcadeNormal,topText,posOfTopText,Color.White);
 
