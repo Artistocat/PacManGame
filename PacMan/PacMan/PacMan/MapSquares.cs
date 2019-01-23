@@ -13,10 +13,12 @@ namespace PacMan
 {
     public class MapSquares
     {
-        int size = 24;
+        //int size = 24;
         public Boolean powerPellet;
         public Boolean pellet;
-        public Boolean dead;
+        public Boolean Pdead;
+        public Boolean Gdead;
+        public Rectangle rect;
         //Vector2
         public MapSquares()
         {
@@ -27,33 +29,47 @@ namespace PacMan
             //        dead[r,c] = false;
             //    }
             //}
-
-            dead = false;
+            pellet = false;
+            powerPellet = false;
+            Pdead = false;
+            Gdead = false;
         }
-        public MapSquares(int t)
+        public MapSquares(int t, int x, int y)
         {
+            rect = new Rectangle(x, y, 24, 24);
             switch (t)
             {
                 case 0:
-                    dead = true;
+                    Pdead = true;
+                    Gdead = true;
                     pellet = false;
                     powerPellet = false;
                     break;
                 case 1:
-                    dead = false;
+                    Pdead = false;
+                    Gdead = false;
                     pellet = true;
                     powerPellet = false;
                     break;
                 case 2:
-                    dead = false;
+                    Pdead = false;
+                    Gdead = false;
                     pellet = false;
                     powerPellet = true;
                     break;
                 case 3:
-                    dead = false;
+                    Pdead = false;
+                    Gdead = false;
                     pellet = false;
                     powerPellet = false;
                     break;
+                case 4:
+                    Pdead = true;
+                    Gdead = false;
+                    pellet = false;
+                    powerPellet = false;
+                    break;
+
             }
             //dead[(int)loc.X,(int)loc.Y] = ded;
         }

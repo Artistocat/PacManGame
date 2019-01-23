@@ -14,13 +14,14 @@ namespace PacMan
 {
     public class Ghost
     {
-        protected float x;
-        protected float y;
+        public double x;
+        public double y;
         protected Rectangle rect;
         private Name name;
         protected Vector2 velocity;
         protected Vector2 targetSquareLoc;
         protected int counter;
+        protected int animateCounter;
         protected bool scatter;
         protected Rectangle sourceRect;
         protected Direction dir;
@@ -30,16 +31,17 @@ namespace PacMan
         //4.4 pixels per frame
         //each square is 
         //28 x 36
-        const float speed = (float)4.4;
+        const float speed = (float)4;
 
         public Ghost(int x, int y, Name n, Rectangle source)
         {
+            this.x = x;
+            this.y = y;
             rect.X = x;
             rect.Y = y;
             rect.Width = rect.Height = 45;
             this.name = n;
             velocity = new Vector2(0, speed);
-            dir = Direction.Down;
             scatter = false;
             sourceRect = source;
         }
@@ -47,6 +49,7 @@ namespace PacMan
         public void Update(Pacboi pacman, Ghost blinky, Board board)
         {
             counter++;
+            animateCounter++;
             x += velocity.X;
             y += velocity.Y;
             rect.X = (int)x;
@@ -55,68 +58,87 @@ namespace PacMan
             {
                 CheckScatter();
             }
-            else if (counter == 24)
+            else if (counter == 12)
             {
-                Console.WriteLine("We did this");
                 counter = 0;
                 UpdateTarget(pacman, blinky, board);
             }
+
+            sourceRect.X = 4;
+            if (animateCounter < 8)
+            {
+                //First one
+            }
+            else
+            {
+                //second one
+                sourceRect.X += 16;
+            }
+            if (dir == Direction.Left) sourceRect.X += 32;
+            if (dir == Direction.Up) sourceRect.X += 64;
+            if (dir == Direction.Down) sourceRect.X += 96;
+            if (animateCounter == 16) animateCounter = 0;
+
         }
 
         protected virtual void UpdateTarget(Pacboi pacman, Ghost blinky, Board board)
         {
-            Console.WriteLine("We're actually doing this");
-            int pacX = pacman.rec.X;
-            int pacY = pacman.rec.Y;
-            int squareX = pacX / 24;
-            int squareY = pacY / 24;
-            Vector2 pacV = pacman.velocities;
+        }
 
-            if (name == Name.Inky)
+        protected void UpdateDirection(Board board)
+        {
+
+            double xDistOff = targetSquareLoc.X - x / 24;
+            double yDistOff = targetSquareLoc.Y - y / 24;
+
+            double?[] distsOff = new double?[4];
+            Direction closestDir = Direction.Up;
+
+            //Up
+            distsOff[0] = getDistOff(xDistOff, yDistOff - 1, board, Direction.Up);
+
+            //Left
+            distsOff[1] = getDistOff(xDistOff - 1, yDistOff, board, Direction.Left);
+
+            //Down
+            distsOff[2] = getDistOff(xDistOff, yDistOff + 1, board, Direction.Down);
+
+            //Right
+            distsOff[3] = getDistOff(xDistOff + 1, yDistOff, board, Direction.Right);
+
+            //for (int i = 0; i < distsOff.Length; i++)
+            //{
+            //    if (distsOff[i] != null && distsOff[i] > distsOff[(int)closestDir])
+            //    {
+            //        closestDir = (Direction)i;
+            //    }
+            //    if (distsOff[i] == null)
+            //        Console.WriteLine("bad direction");
+            //}
+
+            HashSet<Direction> validDirs = new HashSet<Direction>();
+            for (int i = 0; i < distsOff.Length; i++)
             {
-                int xFrontPac = squareX;
-                int yFrontPac = squareY;
-                if (pacV.X > 0) xFrontPac += 2;
-                if (pacV.X < 0) xFrontPac -= 2;
-                if (pacV.Y > 0) yFrontPac += 2;
-                if (pacV.Y < 0) yFrontPac -= 2;
-
-                int xBlinkyDistFrontPac = xFrontPac - blinky.getSquareX();
-                int yBlinkyDistFrontPac = yFrontPac - blinky.getSquareY();
-                squareX = xFrontPac - xBlinkyDistFrontPac;
-                squareY = yFrontPac - yBlinkyDistFrontPac;
-
+                if (distsOff[i] != null)
+                    validDirs.Add((Direction)(i));
             }
 
-            if (name == Name.Blinky)
-            {
-                //Target is just where pacboi is
-            }
+            closestDir = GetClosestDir(validDirs, distsOff);
 
-            if (name == Name.Pinky)
-            {
-                int distFrontPac = 4;
-                if (pacV.X > 0) squareX += distFrontPac;
-                if (pacV.X < 0) squareX -= distFrontPac;
-                if (pacV.Y > 0) squareY += distFrontPac;
-                if (pacV.Y < 0) squareY -= distFrontPac;
-            }
+            dir = closestDir;
+            UpdateVelocity();
+        }
 
-            if (name == Name.Clyde)
+        private Direction GetClosestDir(HashSet<Direction> validDirs, double?[] distsOff)
+        {
+            if (validDirs.Count == 1) return validDirs.ElementAt(0);
+            if (distsOff[(int)validDirs.ElementAt(0)] > distsOff[(int)validDirs.ElementAt(1)])
             {
-                int xGrid = (int) (x / 24);
-                int yGrid = (int) (y / 24);
-                double xDistFromPac = squareX - xGrid;
-                double yDistFromPac = squareY - yGrid;
-                double distFromPac = Math.Sqrt(xDistFromPac * xDistFromPac + yDistFromPac * yDistFromPac);
-                if (distFromPac <= 8)
-                {
-                    Scatter();
-                }
+                validDirs.Remove(validDirs.ElementAt(1));
+                return GetClosestDir(validDirs, distsOff);
             }
-
-            targetSquareLoc.X = squareX;
-            targetSquareLoc.Y = squareY;
+            validDirs.Remove(validDirs.ElementAt(0));
+            return GetClosestDir(validDirs, distsOff);
         }
 
         protected void Scatter()
@@ -155,7 +177,7 @@ namespace PacMan
                 scatter = false; //TODO
             }
         }
-
+        
         protected void UpdateVelocity()
         {
             velocity.X = 0;
@@ -166,13 +188,33 @@ namespace PacMan
             if (dir == Direction.Right) velocity.X = speed;
         }
 
-        protected double? getDistOff(double xDistOff, double yDistOff, Board board)
+        protected double? getDistOff(double xDistOff, double yDistOff, Board board, Direction newDir)
         {
-            /*if (board[x][y].isDeadSpace)
+            if (dir == Direction.Up && newDir == Direction.Down ||
+                dir == Direction.Left && newDir == Direction.Right ||
+                dir == Direction.Down && newDir == Direction.Up ||
+                dir == Direction.Right && newDir == Direction.Left)
+                return null;
+
+            int newSquareX = getSquareX();
+            int newSquareY = getSquareY();
+            if (newDir == Direction.Up) newSquareY -= 1;
+            if (newDir == Direction.Left) newSquareX -= 1;
+            if (newDir == Direction.Down) newSquareY += 1;
+            if (newDir == Direction.Right) newSquareX += 1;
+
+            try
+            {
+                if (board.space[newSquareX, newSquareY].Gdead)
+                {
+                    return null;
+                }
+            } catch (IndexOutOfRangeException e)
             {
                 return null;
-            }*/
-            return Math.Sqrt(xDistOff * xDistOff + (yDistOff) * (yDistOff));
+            }
+
+            return Math.Sqrt(xDistOff * xDistOff + yDistOff * yDistOff);
         }
 
         public int getSquareX() { return (int)(x / 24); }
