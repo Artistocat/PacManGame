@@ -22,24 +22,31 @@ namespace Pacman
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        bool pacMoved;
+
         SpriteFont arcadeNormal;
 
-        Texture2D boardt;
-        Rectangle boardr;
-        MapSquares board;
-        Board gameBoard;
+        Texture2D whiteBoxTexture;
+        Texture2D powerPelletTexture;
 
         String topText;
         Vector2 posOfTopText;
         Pellet[] pellets;
-        double[] pelletPositionsX;
-        double[] pelletPositionsY;
+
+        Pellet[,] tester = new Pellet[28, 36];
+
+        int[] pelletPositionsX;
+        int[] pelletPositionsY;
         Texture2D spritesheet;
 
+        int[,] mapsquare = new int[28,36];
+        Board map;
+ 
         String text;
         Vector2 pos;
         Boolean dead = false;
         KeyboardState Oldkb;
+        int score;
 
         Pacboi boi;
 
@@ -68,26 +75,25 @@ namespace Pacman
             // TODO: Add your initialization logic here
             boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(300, 400, 45, 45),
                 new Rectangle(3, 0, 15, 15), new Vector2(0, 0));
+            //pacboi's starting location based off of map tiles
+            //25.625 y
+            //13 x
+            pacMoved = false;
 
             int screenWidth = graphics.GraphicsDevice.Viewport.Width;
             int screenHeight = graphics.GraphicsDevice.Viewport.Height;
 
-            ghosts = new Ghost[]
-            {
-                //new Ghost(0, 0, Name.Inky),
-                new Blinky(0, 0, Name.Blinky, new Rectangle(4, 65, 14, 14)),
-                //new Ghost(0, 0, Name.Pinky), 
-                //new Ghost(0, 0, Name.Clyde)
-            };
+            score = 0;
 
-            boardt = Content.Load<Texture2D>("pacman board");
+            mapsquare = GetTiles();
+            map = new Board(Content.Load<Texture2D>("pacmenu"), new Rectangle(0, 72, 672, 744), mapsquare);
 
             text = "Test Text hererererere.....";
             //Isaiahs Stuff \______________________
             pellets = new Pellet[244];
 
-            pelletPositionsX = new double[] { 50, 100, 150};
-            pelletPositionsY = new double[] { 50, 100, 150 };
+            pelletPositionsX = new int[] { 50, 100, 150};
+            pelletPositionsY = new int[] { 50, 100, 150 };
             setPellets();
 
             topText = "1UP     HIGH SCORE";
@@ -103,28 +109,45 @@ namespace Pacman
             Boolean isPowerPelletTrue = false;
             for (int i = 0; i < pelletPositionsX.Length; i++)
             {
-                if (pelletPositionsX[i] == 24 || pelletPositionsX[i] == 816 || pelletPositionsY[i] == 144 || pelletPositionsY[i] == 624)
-                {
-                    isPowerPelletTrue = true;
-                }
-                else
-                {
-                    isPowerPelletTrue = false;
-                }
+                //if (pelletPositionsX[i] == 24 || pelletPositionsX[i] == 816 || pelletPositionsY[i] == 144 || pelletPositionsY[i] == 624)
+                //{
+                //    isPowerPelletTrue = true;
+                //}
+                //else
+                //{
+                //    isPowerPelletTrue = false;
+                //}
                 //makes the pellet objects
-                pellets[i] = MakePellet(pelletPositionsX[i], pelletPositionsY[i], i, isPowerPelletTrue);
+                pellets[i] = new Pellet(pelletPositionsX[i], pelletPositionsY[i], i, isPowerPelletTrue);
+            }
+            for (int r = 0; r < 28; r++)
+            {
+                for (int c = 0; c < 36; c++)
+                {
+                    if (map.space[r, c].pellet == true)
+                        tester[r, c] = new Pellet(r, c, false);
+                    else if(map.space[r, c].powerPellet == true)
+                        tester[r, c] = new Pellet(r, c, true);
+                    else
+                        tester[r, c] = new Pellet(10000, 100000,false);
+
+                }
             }
             //______________________________________
 
-
-
-
-
-
-
-
-
-
+            ghosts = new Ghost[]
+            {
+                ///aaron, i commented out your old pos and put in new ones, see if you like them more or less. we still need to implement the detection of whether
+                ///or not its legal space or dead space.
+                ////new Inky(24 * 12 + 12, 24 * 17 + 12),
+                //new Inky(24 * 11, 24 * 17 ),
+                //new Blinky(24 * 14 + 12, 24 * 14 + 12),
+                new Blinky(24 * 13 - 12, 24 * 14 - 12),
+                //new Pinky(24 * 14 + 12, 24 * 17 + 12), 
+                //new Pinky(24 * 13 - 12, 24 * 17 - 12),
+                ////new Clyde(24 * 16 + 12, 24 * 17 + 12)
+                //new Clyde(24 * 15 - 12, 24 * 17 - 12)
+            };
 
             Oldkb = Keyboard.GetState();
 
@@ -140,27 +163,26 @@ namespace Pacman
             IsMouseVisible = true;
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            boardr = new Rectangle(0, 72, 672, 744);
 
             spritesheet = Content.Load<Texture2D>("spritesheet");
-
-            // TODO: use this.Content to load your game content here
-            arcadeNormal = Content.Load<SpriteFont>("SpriteFont1");
             
+            arcadeNormal = Content.Load<SpriteFont>("SpriteFont1");
 
+            whiteBoxTexture = Content.Load<Texture2D>("white box");
+            powerPelletTexture = Content.Load<Texture2D>("powerpellet");
 
             //Loop through every pellet object and give texture
-            for (int i = 0; i < pelletPositionsX.Length; i++)
-            {
-                if (pellets[i].getIsPowerPellet())
-                {
-                    pellets[i].texture = Content.Load<Texture2D>("powerpellet");
-                }
-                else
-                {
-                    pellets[i].texture = Content.Load<Texture2D>("white box");
-                }
-            }
+            //for (int i = 0; i < pelletPositionsX.Length; i++)
+            //{
+            //    if (pellets[i].getIsPowerPellet())
+            //    {
+            //        pellets[i].texture = Content.Load<Texture2D>("powerpellet");
+            //    }
+            //    else
+            //    {
+            //        pellets[i].texture = Content.Load<Texture2D>("white box");
+            //    }
+            //}
 
         }
         /// <summary>
@@ -181,9 +203,25 @@ namespace Pacman
         {
             KeyboardState kb = Keyboard.GetState();
             GamePadState gp = GamePad.GetState(PlayerIndex.One);
-            // Allows the game to exit
-            if (Keyboard.GetState().IsKeyDown(Keys.Escape))
+            if (kb.IsKeyDown(Keys.Escape) || gp.Buttons.Back == ButtonState.Pressed)
                 this.Exit();
+            if (map.start == true)
+                if (kb.IsKeyDown(Keys.Space) || gp.Buttons.Start == ButtonState.Pressed)
+                    map.start = false;
+
+            if (map.start == false)
+                map.screen = Content.Load<Texture2D>("pacman board");
+            for(int r = 0; r < 28; r++)
+            {
+                for(int c = 0; c<36;c++)
+                {
+                    if(tester[r,c] != null && tester[r,c].rect.Intersects(boi.rec))
+                    {
+                        score += 10;
+                        tester[r, c] = null;
+                    }
+                }
+            }
 
             // TODO: Add your update logic here
 
@@ -217,9 +255,12 @@ namespace Pacman
                     boi.velocities.X = 0;
                 }
 
-            foreach(Ghost g in ghosts)
+            foreach (Ghost g in ghosts)
             {
-                g.Update(boi, ghosts[0], gameBoard);
+                if (pacMoved)
+                    g.Update(boi, ghosts[0], map); 
+                if (g.getRect().Intersects(boi.rec))
+                    Console.WriteLine("Lose a life");
             }
 
             boi.Update();
@@ -253,33 +294,69 @@ namespace Pacman
             GraphicsDevice.Clear(Color.Black);
 
             spriteBatch.Begin();
-            spriteBatch.Draw(boardt, boardr, Color.White);
-            spriteBatch.DrawString(arcadeNormal,topText,posOfTopText,Color.White);
-            //draws every pellet
-            for (int i = 0; i < pelletPositionsX.Length; i++)
+            // this entire if else statement sets up whether or not its the start screen or not.
+            if (map.start == true)
+                spriteBatch.Draw(map.screen, map.screenSize, Color.White);
+            else
             {
-                spriteBatch.Draw(pellets[i].getTexture(),pellets[i].getRect(),Color.White);
+                //refreshing the map
+                spriteBatch.Draw(map.screen, map.screenSize, Color.White);
+                //each ghost drawing
+                foreach (Ghost g in ghosts)
+                {
+                    spriteBatch.Draw(spritesheet, g.getRect(), g.getSource(), Color.White);
+                }
+                //pacman drawing
+                spriteBatch.Draw(boi.tex, boi.rec, boi.source, boi.colour);
+                //pellet drawing
+                for (int r = 0; r < 28; r++)
+                {
+                    for (int c = 0; c < 36; c++)
+                    {
+                        if (tester[r, c] != null)
+                        {
+                            if (tester[r, c].isPowerPellet == false)
+                                spriteBatch.Draw(whiteBoxTexture, tester[r, c].rect, Color.White);
+                            else
+                                spriteBatch.Draw(powerPelletTexture, tester[r, c].rect, Color.White);
+                        }
+                    }
+                }
+
             }
+            spriteBatch.DrawString(arcadeNormal,topText,posOfTopText,Color.White);
+
+            
 
 
-            spriteBatch.Draw(boi.tex, boi.rec, boi.source, boi.colour);
-            foreach (Ghost g in ghosts){
-                spriteBatch.Draw(spritesheet, g.getRect(), g.getSource(), Color.White);
-            }
+            //foreach (Pellet p in pellets)
+            //{
+            //    if (p != null)
+            //    {
+            //        if (p.getIsPowerPellet())
+            //            spriteBatch.Draw(powerPelletTexture, p.getRect(), Color.White);
+            //        else
+            //            spriteBatch.Draw(whiteBoxTexture, p.getRect(), Color.White);
+            //    }
+            //}
+
+            //spriteBatch.Draw(boi.tex, boi.rec, boi.source, boi.colour);
+            //foreach (Ghost g in ghosts){
+            //    spriteBatch.Draw(spritesheet, g.getRect(), g.getSource(), Color.White);
+            //}
             spriteBatch.End();
-            // TODO: Add your drawing code here
 
             base.Draw(gameTime);
         }
 
-        public Pellet MakePellet(double a, double b, int n, Boolean i)
+        /*public Pellet MakePellet(double a, double b, int n, Boolean i)
         {
             //At start of every round game, pellet objects are made
             //
             Pellet asdf = new Pellet(a,b,n,i);
 
             return asdf;
-        }
+        }*/
         
         public void setPellets()
         {
@@ -287,9 +364,7 @@ namespace Pacman
             //double[] pelletPositionsX;
             //double[] pelletPositionsY;
 
-
-
-            for(int a = 0; a < 36; a++)
+            for (int a = 0; a < 36; a++)
             {
                 // a = rows
                 int b = 0; // collumns
@@ -302,81 +377,46 @@ namespace Pacman
 
                 if (a == 0)
                 {
-                    if(b != 15 || b != 14)
+                    if (b != 15 || b != 14)
                     {
                         //dont add pellet
                     }
                 }
-                if(a == 1)
+                if (a == 1)
                 {
 
                 }
-            Pellet asdf = new Pellet(a, b, n);
+            }
+            //Pellet asdf = new Pellet(a, b, n);
             //addPellettTexture here
         }
 
-        public void addPelletTexture(Pellet myPellet)
+        /*public void addPelletTexture(Pellet myPellet)
         {
 
-        }
+        }*/
         // This function will take a file's data and separate it by ',' found in the
         // file. This is not my function but I will try to explain it's code.
 
         private static int[,] GetTiles()
         {
-            //string strLine;
-            //string[] strArray;
-            //char[] charArray = new char[] { ' ' };
-            //int I;
+
 
             int width = 28;
             int height = 36;
 
             int[,] mapSquares = new int[28, 36];
 
-            // Open the File for program input
-            StreamReader myFileC = new StreamReader("pacman.txt");
+            StreamReader myFileC = new StreamReader("Pacman.txt");
 
-
-            // Split the row of data into the string array
-            strLine = myFileC.ReadLine();
-
-            strArray = strLine.Split(charArray);
-
-
-            for (I = 0; I <= strArray.GetUpperBound(0); I++)
             for (int i = 0; i < height; i++)
             {
                 String nextLine = myFileC.ReadLine();
-                for (int j = 0; j < width / 2; j++)
+                for (int j = 0; j < 14; j++)
                 {
-                    mapSquares[j, i] = mapSquares[j - 28, i] = int.Parse(nextLine.Substring(j * 2, 1));
+                    mapSquares[j, i] = mapSquares[width - 1 - j, i] = int.Parse(nextLine.Substring(j * 2, 1));
                 }
             }
-            /*for (I = 0; I <= strArray.GetUpperBound(0); I++)
-            {
-                tiles.Add(strArray[I]);
-            }
-            strLine = myFileC.ReadLine();
-            while (strLine != null)
-            {
-                // Split next row of data into string array
-                strArray = strLine.Split(charArray);
-
-                //next row:
-                if (a == 28)
-                {
-                    a = 0;
-                    b++;
-                }
-            }
-
-
-
-                for (I = 0; I <= strArray.GetUpperBound(0); I++)
-
-                strLine = myFileC.ReadLine();
-            }*/
             myFileC.Close();
             return mapSquares;
         }
