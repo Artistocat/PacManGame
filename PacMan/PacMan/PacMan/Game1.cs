@@ -37,8 +37,6 @@ namespace Pacman
 
         int[] pelletPositionsX;
         int[] pelletPositionsY;
-        double[] pelletPositionsX;
-        double[] pelletPositionsY;
         Boolean isPowerMode;
         Texture2D spritesheet;
 
@@ -98,7 +96,7 @@ namespace Pacman
 
             pelletPositionsX = new int[] { 50, 100, 150};
             pelletPositionsY = new int[] { 50, 100, 150 };
-            setPellets();
+            //setPellets();
 
             topText = "1UP     HIGH SCORE";
             posOfTopText = new Vector2(100, 0);
@@ -344,14 +342,14 @@ namespace Pacman
             }
             //lives
             int l = 0;
-            while(l < boi.lives)
+            while (l < boi.lives)
             {
-                l ++;
+                l++;
                 spriteBatch.Draw(boi.tex, new Rectangle((l * 48) + (2 * 24), 34 * 24, 48, 48), lifesource, Color.White);
             }
-            spriteBatch.DrawString(arcadeNormal,topText,posOfTopText,Color.White);
+            spriteBatch.DrawString(arcadeNormal, topText, posOfTopText, Color.White);
 
-            
+
 
 
             //foreach (Pellet p in pellets)
@@ -374,52 +372,43 @@ namespace Pacman
             base.Draw(gameTime);
         }
 
-        public Pellet MakePellet(double a, double b, int n, Boolean i)
-        {
-            //At start of every round game, pellet objects are made
-            //
-            Pellet asdf = new Pellet(a,b,n,i);
-
-            return asdf;
-        }
-
-        public void setPellets()
-        {
-            //Pellet[] pellets;
-            //double[] pelletPositionsX;
-            //double[] pelletPositionsY;
+        //public void setPellets()
+        //{
+        //    //Pellet[] pellets;
+        //    //double[] pelletPositionsX;
+        //    //double[] pelletPositionsY;
 
 
-            //call getTiles() and make map
-            //fill up the pelletPositionsX and pelletPositionsY using nested for loops
+        //    //call getTiles() and make map
+        //    //fill up the pelletPositionsX and pelletPositionsY using nested for loops
 
-            //28 a = rows
-            //36 b = collumns
-            //read from the 2D array
-            for(int a = 0; a < 28; a++)
-            {
-                for (int b = 0; b < 36; b++)
-                {
+        //    //28 a = rows
+        //    //36 b = collumns
+        //    //read from the 2D array
+        //    for(int a = 0; a < 28; a++)
+        //    {
+        //        for (int b = 0; b < 36; b++)
+        //        {
 
-                }
-            }
+        //        }
+        //    }
 
 
-                if (a == 0)
-                {
-                    if (b != 15 || b != 14)
-                    {
-                        //dont add pellet
-                    }
-                }
-                if (a == 1)
-                {
+        //        if (a == 0)
+        //        {
+        //            if (b != 15 || b != 14)
+        //            {
+        //                //dont add pellet
+        //            }
+        //        }
+        //        if (a == 1)
+        //        {
 
-                }
-            }
-            //Pellet asdf = new Pellet(a, b, n);
-            //addPellettTexture here
-        }
+        //        }
+        //    }
+        //    //Pellet asdf = new Pellet(a, b, n);
+        //    //addPellettTexture here
+        //}
 
         /*public void addPelletTexture(Pellet myPellet)
         {
