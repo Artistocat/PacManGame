@@ -275,7 +275,6 @@ namespace Pacman
             }
 
             boi.Update();
-                boi.Update();
             }
             //Death test
             if (kb.IsKeyDown(Keys.E) && kb.IsKeyDown(Keys.R) || dead == true)
