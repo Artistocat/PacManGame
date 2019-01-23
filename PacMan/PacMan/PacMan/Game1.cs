@@ -136,14 +136,14 @@ namespace Pacman
             {
                 ///aaron, i commented out your old pos and put in new ones, see if you like them more or less. we still need to implement the detection of whether
                 ///or not its legal space or dead space.
-                //new Inky(24 * 12 + 12, 24 * 17 + 12),
-                new Inky(24 * 11, 24 * 17 ),
+                ////new Inky(24 * 12 + 12, 24 * 17 + 12),
+                //new Inky(24 * 11, 24 * 17 ),
                 //new Blinky(24 * 14 + 12, 24 * 14 + 12),
                 new Blinky(24 * 13 - 12, 24 * 14 - 12),
                 //new Pinky(24 * 14 + 12, 24 * 17 + 12), 
-                new Pinky(24 * 13 - 12, 24 * 17 - 12),
-                //new Clyde(24 * 16 + 12, 24 * 17 + 12)
-                new Clyde(24 * 15 - 12, 24 * 17 - 12)
+                //new Pinky(24 * 13 - 12, 24 * 17 - 12),
+                ////new Clyde(24 * 16 + 12, 24 * 17 + 12)
+                //new Clyde(24 * 15 - 12, 24 * 17 - 12)
             };
 
             base.Initialize();
@@ -251,7 +251,7 @@ namespace Pacman
             foreach (Ghost g in ghosts)
             {
                 if (pacMoved)
-                    g.Update(boi, ghosts[1], map); 
+                    g.Update(boi, ghosts[0], map); 
                 if (g.getRect().Intersects(boi.rec))
                     Console.WriteLine("Lose a life");
             }
