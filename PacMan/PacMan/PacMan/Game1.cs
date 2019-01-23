@@ -37,6 +37,9 @@ namespace Pacman
 
         int[] pelletPositionsX;
         int[] pelletPositionsY;
+        double[] pelletPositionsX;
+        double[] pelletPositionsY;
+        Boolean isPowerMode;
         Texture2D spritesheet;
 
         int[,] mapsquare = new int[28,36];
@@ -264,6 +267,20 @@ namespace Pacman
                     Console.WriteLine("Lose a life");
             }
 
+
+            if(isPowerMode)
+            {
+
+
+
+
+
+
+
+            }
+
+
+
             boi.Update();
             }
             //Death test
@@ -357,31 +374,36 @@ namespace Pacman
             base.Draw(gameTime);
         }
 
-        /*public Pellet MakePellet(double a, double b, int n, Boolean i)
+        public Pellet MakePellet(double a, double b, int n, Boolean i)
         {
             //At start of every round game, pellet objects are made
             //
             Pellet asdf = new Pellet(a,b,n,i);
 
             return asdf;
-        }*/
-        
+        }
+
         public void setPellets()
         {
             //Pellet[] pellets;
             //double[] pelletPositionsX;
             //double[] pelletPositionsY;
 
-            for (int a = 0; a < 36; a++)
+
+            //call getTiles() and make map
+            //fill up the pelletPositionsX and pelletPositionsY using nested for loops
+
+            //28 a = rows
+            //36 b = collumns
+            //read from the 2D array
+            for(int a = 0; a < 28; a++)
             {
-                // a = rows
-                int b = 0; // collumns
+                for (int b = 0; b < 36; b++)
+                {
 
-                //28
-                //36
+                }
+            }
 
-                //conditions
-                //Updates the x y values for the pellets
 
                 if (a == 0)
                 {
