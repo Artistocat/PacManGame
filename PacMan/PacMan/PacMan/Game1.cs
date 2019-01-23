@@ -37,6 +37,9 @@ namespace Pacman
 
         int[] pelletPositionsX;
         int[] pelletPositionsY;
+        double[] pelletPositionsX;
+        double[] pelletPositionsY;
+        Boolean isPowerMode;
         Texture2D spritesheet;
 
         int[,] mapsquare = new int[28,36];
@@ -47,7 +50,7 @@ namespace Pacman
         Boolean dead = false;
         KeyboardState Oldkb;
         int score;
-
+        Rectangle lifesource;
         Pacboi boi;
 
         Ghost[] ghosts;
@@ -73,9 +76,10 @@ namespace Pacman
         {
 
             // TODO: Add your initialization logic here
-            boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(300, 400, 45, 45),
+            boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(312, 615, 45, 45),
                 new Rectangle(3, 0, 15, 15), new Vector2(0, 0));
-            //pacboi's starting location based off of map tiles
+            lifesource = new Rectangle(132, 17, 15, 15);
+            //pacboi's starting location based off of map tiles    
             //25.625 y
             //13 x
             pacMoved = false;
@@ -274,6 +278,7 @@ namespace Pacman
             {
                 if(dead == false)
                 {
+                    boi.lives--;
                     boi.source.Y = 0;
                     boi.counter = 0;
                     dead = true;
@@ -328,6 +333,13 @@ namespace Pacman
                 }
 
             }
+            //lives
+            int l = 0;
+            while(l < boi.lives)
+            {
+                l ++;
+                spriteBatch.Draw(boi.tex, new Rectangle((l * 48) + (2 * 24), 34 * 24, 48, 48), lifesource, Color.White);
+            }
             spriteBatch.DrawString(arcadeNormal,topText,posOfTopText,Color.White);
 
             //foreach (MapSquares ms in map.space)
@@ -366,31 +378,36 @@ namespace Pacman
             base.Draw(gameTime);
         }
 
-        /*public Pellet MakePellet(double a, double b, int n, Boolean i)
+        public Pellet MakePellet(double a, double b, int n, Boolean i)
         {
             //At start of every round game, pellet objects are made
             //
             Pellet asdf = new Pellet(a,b,n,i);
 
             return asdf;
-        }*/
-        
+        }
+
         public void setPellets()
         {
             //Pellet[] pellets;
             //double[] pelletPositionsX;
             //double[] pelletPositionsY;
 
-            for (int a = 0; a < 36; a++)
+
+            //call getTiles() and make map
+            //fill up the pelletPositionsX and pelletPositionsY using nested for loops
+
+            //28 a = rows
+            //36 b = collumns
+            //read from the 2D array
+            for(int a = 0; a < 28; a++)
             {
-                // a = rows
-                int b = 0; // collumns
+                for (int b = 0; b < 36; b++)
+                {
 
-                //28
-                //36
+                }
+            }
 
-                //conditions
-                //Updates the x y values for the pellets
 
                 if (a == 0)
                 {
