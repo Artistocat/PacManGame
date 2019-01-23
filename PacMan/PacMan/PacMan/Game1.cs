@@ -423,10 +423,6 @@ namespace Pacman
 
             int[,] mapSquares = new int[28, 36];
 
-            // Open the File for program input
-            StreamReader myFileC = new StreamReader(Content.Load<TextReader>("Pacman");
-
-
             // Split the row of data into the string array
 
 
