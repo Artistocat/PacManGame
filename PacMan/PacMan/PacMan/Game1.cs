@@ -34,6 +34,7 @@ namespace Pacman
         Pellet[] pellets;
         double[] pelletPositionsX;
         double[] pelletPositionsY;
+        Boolean isPowerMode;
         Texture2D spritesheet;
 
         String text;
@@ -214,6 +215,20 @@ namespace Pacman
                 g.Update(boi, ghosts[0], gameBoard);
             }
 
+
+            if(isPowerMode)
+            {
+
+
+
+
+
+
+
+            }
+
+
+
             boi.Update();
             base.Update(gameTime);
         }
@@ -254,7 +269,7 @@ namespace Pacman
 
             return asdf;
         }
-        
+
         public void setPellets()
         {
             //Pellet[] pellets;
@@ -262,35 +277,23 @@ namespace Pacman
             //double[] pelletPositionsY;
 
 
+            //call getTiles() and make map
+            //fill up the pelletPositionsX and pelletPositionsY using nested for loops
 
-            for(int a = 0; a < 36; a++)
+            //28 a = rows
+            //36 b = collumns
+            //read from the 2D array
+            for(int a = 0; a < 28; a++)
             {
-                // a = rows
-                int b = 0; // collumns
-
-                //28
-                //36
-
-                //conditions
-                //Updates the x y values for the pellets
-
-                if (a == 0)
-                {
-                    if(b != 15 || b != 14)
-                    {
-                        //dont add pellet
-                    }
-                }
-                if(a == 1)
+                for (int b = 0; b < 36; b++)
                 {
 
                 }
-            Pellet asdf = new Pellet(a, b, n);
-            //addPellettTexture here
-        }
+            }
 
-        public void addPelletTexture(Pellet myPellet)
-        {
+
+
+
 
         }
         // This function will take a file's data and separate it by ',' found in the
