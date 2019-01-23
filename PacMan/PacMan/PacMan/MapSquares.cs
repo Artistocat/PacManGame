@@ -13,11 +13,12 @@ namespace PacMan
 {
     public class MapSquares
     {
-        int size = 24;
+        //int size = 24;
         public Boolean powerPellet;
         public Boolean pellet;
         public Boolean Pdead;
         public Boolean Gdead;
+        public Rectangle rect;
         //Vector2
         public MapSquares()
         {
@@ -33,8 +34,9 @@ namespace PacMan
             Pdead = false;
             Gdead = false;
         }
-        public MapSquares(int t)
+        public MapSquares(int t, int x, int y)
         {
+            rect = new Rectangle(x, y, 24, 24);
             switch (t)
             {
                 case 0:

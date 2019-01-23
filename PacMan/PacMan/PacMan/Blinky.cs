@@ -7,6 +7,7 @@ namespace PacMan
     {
         public Blinky(int x, int y) : base(x, y, Name.Blinky, new Rectangle(4, 65, 14, 14))
         {
+            dir = Direction.Left;
         }
 
         protected override void UpdateTarget(Pacboi pacman, Ghost Blinky, Board board)

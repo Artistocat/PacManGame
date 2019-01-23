@@ -36,7 +36,7 @@ namespace PacMan
             {
                 for (int c = 0; c < 36; c++)
                 {
-                    space[r, c] = new MapSquares(b[r,c]);
+                    space[r, c] = new MapSquares(b[r,c], r * 24, c * 24);
                 }
             }
         }

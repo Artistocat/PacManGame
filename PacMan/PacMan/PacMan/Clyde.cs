@@ -10,6 +10,7 @@ namespace PacMan
     {
         public Clyde(int x, int y) : base(x, y, Name.Clyde, new Rectangle(4, 113, 14, 14))
         {
+            dir = Direction.Up;
         }
 
         protected override void UpdateTarget(Pacboi pacman, Ghost blinky, Board board)

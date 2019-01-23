@@ -22,6 +22,8 @@ namespace Pacman
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        bool pacMoved;
+
         SpriteFont arcadeNormal;
 
         Texture2D whiteBoxTexture;
@@ -71,25 +73,12 @@ namespace Pacman
             //pacboi's starting location based off of map tiles
             //25.625 y
             //13 x
+            pacMoved = false;
             boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(312, 615, 45, 45),
                 new Rectangle(3, 0, 16, 16), new Vector2(0, 0));
 
             int screenWidth = graphics.GraphicsDevice.Viewport.Width;
             int screenHeight = graphics.GraphicsDevice.Viewport.Height;
-
-            ghosts = new Ghost[]
-            {
-                ///aaron, i commented out your old pos and put in new ones, see if you like them more or less. we still need to implement the detection of whether
-                ///or not its legal space or dead space.
-                //new Inky(24 * 12 + 12, 24 * 17 + 12),
-                new Inky(24 * 11, 24 * 17 - 6),
-                //new Blinky(24 * 14 + 12, 24 * 14 + 12),
-                new Blinky(24 * 13, 24 * 14 - 6),
-                //new Pinky(24 * 14 + 12, 24 * 17 + 12), 
-                new Pinky(24 * 13, 24 * 17 - 6),
-                //new Clyde(24 * 16 + 12, 24 * 17 + 12)
-                new Clyde(24 * 15, 24 * 17 - 6)
-            };
 
             score = 0;
 
@@ -142,6 +131,21 @@ namespace Pacman
                 }
             }
             //______________________________________
+
+            ghosts = new Ghost[]
+            {
+                ///aaron, i commented out your old pos and put in new ones, see if you like them more or less. we still need to implement the detection of whether
+                ///or not its legal space or dead space.
+                //new Inky(24 * 12 + 12, 24 * 17 + 12),
+                new Inky(24 * 11, 24 * 17 ),
+                //new Blinky(24 * 14 + 12, 24 * 14 + 12),
+                new Blinky(24 * 13 - 12, 24 * 14 - 12),
+                //new Pinky(24 * 14 + 12, 24 * 17 + 12), 
+                new Pinky(24 * 13 - 12, 24 * 17 - 12),
+                //new Clyde(24 * 16 + 12, 24 * 17 + 12)
+                new Clyde(24 * 15 - 12, 24 * 17 - 12)
+            };
+
             base.Initialize();
         }
 
@@ -202,25 +206,14 @@ namespace Pacman
 
             if (map.start == false)
                 map.screen = Content.Load<Texture2D>("pacman board");
-
-            //for (int i = 0; i < pellets.Length; i++)
-            //{
-            //    if (pellets[i] != null && pellets[i].rect.Intersects(boi.rec))
-            //    {
-            //        score += 10;
-            //        pellets[i] = null;
-            //    }
-            //}
-            ///aaron - this next forloop does the same thing as the one above, it makes pacman eat the pellets. may need to be improved tho cause
-            ///rn i just yeet the pellets away
             for(int r = 0; r < 28; r++)
             {
                 for(int c = 0; c<36;c++)
                 {
-                    if(tester[r,c].rect.Intersects(boi.rec))
+                    if(tester[r,c] != null && tester[r,c].rect.Intersects(boi.rec))
                     {
                         score += 10;
-                        tester[r, c].rect = new Rectangle(111110, 111110, 1, 1);
+                        tester[r, c] = null;
                     }
                 }
             }
@@ -234,27 +227,34 @@ namespace Pacman
             {
                 boi.velocities.X = -4;
                 boi.velocities.Y = 0;
+                pacMoved = true;
             }
             if (kb.IsKeyDown(Keys.D) || gp.DPad.Right == ButtonState.Pressed)
             {
                 boi.velocities.X = 4;
                 boi.velocities.Y = 0;
+                pacMoved = true;
             }
             if (kb.IsKeyDown(Keys.W) || gp.DPad.Up == ButtonState.Pressed)
             {
                 boi.velocities.Y = -4;
                 boi.velocities.X = 0;
+                pacMoved = true;
             }
             if (kb.IsKeyDown(Keys.S) || gp.DPad.Down == ButtonState.Pressed)
             {
                 boi.velocities.Y = 4;
                 boi.velocities.X = 0;
+                pacMoved = true;
             }
-            ///aaron - commenting this out just to place the ghosts correctly rn
-            //foreach (Ghost g in ghosts)
-            //{
-            //    g.Update(boi, ghosts[1], map);
-            //}
+
+            foreach (Ghost g in ghosts)
+            {
+                if (pacMoved)
+                    g.Update(boi, ghosts[1], map); 
+                if (g.getRect().Intersects(boi.rec))
+                    Console.WriteLine("Lose a life");
+            }
 
             boi.Update();
             base.Update(gameTime);
@@ -288,10 +288,13 @@ namespace Pacman
                 {
                     for (int c = 0; c < 36; c++)
                     {
-                        if (tester[r, c].isPowerPellet == false)
-                            spriteBatch.Draw(whiteBoxTexture, tester[r, c].rect, Color.White);
-                        else
-                            spriteBatch.Draw(powerPelletTexture, tester[r, c].rect, Color.White);
+                        if (tester[r, c] != null)
+                        {
+                            if (tester[r, c].isPowerPellet == false)
+                                spriteBatch.Draw(whiteBoxTexture, tester[r, c].rect, Color.White);
+                            else
+                                spriteBatch.Draw(powerPelletTexture, tester[r, c].rect, Color.White);
+                        }
                     }
                 }
 

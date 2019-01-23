@@ -7,6 +7,7 @@ namespace PacMan
     {
         public Inky(int x, int y) : base(x, y, Name.Inky, new Rectangle(4, 97, 14, 14))
         {
+            dir = Direction.Up;
         }
 
         //TODO
