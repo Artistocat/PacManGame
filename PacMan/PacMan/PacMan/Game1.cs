@@ -142,7 +142,7 @@ namespace Pacman
                 ////new Inky(24 * 12 + 12, 24 * 17 + 12),
                 //new Inky(24 * 11, 24 * 17 ),
                 //new Blinky(24 * 14 + 12, 24 * 14 + 12),
-                new Blinky(24 * 13 - 12, 24 * 14 - 12),
+                new Blinky(24 * 12, 24 * 12),
                 //new Pinky(24 * 14 + 12, 24 * 17 + 12), 
                 //new Pinky(24 * 13 - 12, 24 * 17 - 12),
                 ////new Clyde(24 * 16 + 12, 24 * 17 + 12)
@@ -238,24 +238,29 @@ namespace Pacman
                 {
                     boi.velocities.X = -4;
                     boi.velocities.Y = 0;
+                    pacMoved = true;
                 }
                 if (kb.IsKeyDown(Keys.D) || gp.DPad.Right == ButtonState.Pressed)
                 {
                     boi.velocities.X = 4;
                     boi.velocities.Y = 0;
+                    pacMoved = true;
                 }
                 if (kb.IsKeyDown(Keys.W) || gp.DPad.Up == ButtonState.Pressed)
                 {
                     boi.velocities.Y = -4;
                     boi.velocities.X = 0;
+                    pacMoved = true;
                 }
                 if (kb.IsKeyDown(Keys.S) || gp.DPad.Down == ButtonState.Pressed)
                 {
                     boi.velocities.Y = 4;
                     boi.velocities.X = 0;
+                    pacMoved = true;
                 }
+                boi.Update();
 
-            foreach (Ghost g in ghosts)
+                foreach (Ghost g in ghosts)
             {
                 if (pacMoved)
                     g.Update(boi, ghosts[0], map); 
@@ -263,7 +268,6 @@ namespace Pacman
                     Console.WriteLine("Lose a life");
             }
 
-            boi.Update();
             }
             //Death test
             if (kb.IsKeyDown(Keys.E) && kb.IsKeyDown(Keys.R) || dead == true)
@@ -303,7 +307,8 @@ namespace Pacman
                 //each ghost drawing
                 foreach (Ghost g in ghosts)
                 {
-                    spriteBatch.Draw(spritesheet, g.getRect(), g.getSource(), Color.White);
+                    Rectangle otherRect = new Rectangle(g.getRect().X - 18, g.getRect().Y - 12, g.getRect().Width, g.getRect().Height);
+                    spriteBatch.Draw(spritesheet, otherRect, g.getSource(), Color.White);
                 }
                 //pacman drawing
                 spriteBatch.Draw(boi.tex, boi.rec, boi.source, boi.colour);
@@ -325,7 +330,20 @@ namespace Pacman
             }
             spriteBatch.DrawString(arcadeNormal,topText,posOfTopText,Color.White);
 
-            
+            //foreach (MapSquares ms in map.space)
+            //{
+            //    spriteBatch.Draw(whiteBoxTexture, ms.rect, Color.Red);
+            //}
+
+            //for (int r = 0; r < 28; r++)
+            //{
+            //    for (int c = 0; c < 36; c++)
+            //    {
+            //        if(map.space[r,c].Pdead == true)
+            //            spriteBatch.Draw(whiteBoxTexture, map.space[r,c].rect, Color.Red);
+            //    }
+            //}
+
 
 
             //foreach (Pellet p in pellets)
@@ -419,8 +437,5 @@ namespace Pacman
             myFileC.Close();
             return mapSquares;
         }
-
-
-
     }
 }
