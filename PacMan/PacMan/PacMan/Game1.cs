@@ -161,7 +161,7 @@ namespace Pacman
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             spritesheet = Content.Load<Texture2D>("spritesheet");
-
+            
             arcadeNormal = Content.Load<SpriteFont>("SpriteFont1");
 
             whiteBoxTexture = Content.Load<Texture2D>("white box");
@@ -259,10 +259,20 @@ namespace Pacman
                 foreach (Ghost g in ghosts)
                 {
                     if (pacMoved)
-                        g.Update(boi, ghosts[1], map);
+                        g.Update(boi, ghosts[1], map); //ghosts[1]
                     if (g.getRect().Intersects(boi.rec))
                         Console.WriteLine("Lose a life");
                 }
+
+
+            if(isPowerMode)
+            {
+
+
+
+
+
+
 
             }
             //Death test
@@ -370,63 +380,14 @@ namespace Pacman
             base.Draw(gameTime);
         }
 
-        //public Pellet MakePellet(double a, double b, int n, Boolean i)
-        //{
-        //    //At start of every round game, pellet objects are made
-        //    //
-        //    Pellet asdf = new Pellet(a, b, n, i);
-
-        //    return asdf;
-        //}
-
-        //public void setPellets()
-        //{
-        //    //Pellet[] pellets;
-        //    //double[] pelletPositionsX;
-        //    //double[] pelletPositionsY;
 
 
-        //    //call getTiles() and make map
-        //    //fill up the pelletPositionsX and pelletPositionsY using nested for loops
 
-        //    //28 a = rows
-        //    //36 b = collumns
-        //    //read from the 2D array
-        //    for (int a = 0; a < 28; a++)
-        //    {
-        //        for (int b = 0; b < 36; b++)
-        //        {
-
-        //        }
-        //    }
-
-
-        //    if (a == 0)
-        //    {
-        //        if (b != 15 || b != 14)
-        //        {
-        //            //dont add pellet
-        //        }
-        //    }
-        //    if (a == 1)
-        //    {
-
-        //    }
-        //}
-        //Pellet asdf = new Pellet(a, b, n);
-        //addPellettTexture here
-        //}
-
-        /*public void addPelletTexture(Pellet myPellet)
-        {
-        }*/
         // This function will take a file's data and separate it by ',' found in the
         // file. This is not my function but I will try to explain it's code.
 
         private static int[,] GetTiles()
         {
-
-
             int width = 28;
             int height = 36;
 
