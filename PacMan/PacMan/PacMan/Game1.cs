@@ -75,7 +75,7 @@ namespace Pacman
 
             // TODO: Add your initialization logic here
             boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(312, 615, 45, 45),
-                new Rectangle(3, 0, 15, 15), new Vector2(0, 0));
+                new Rectangle(3, 0, 15, 15), new Vector2(0, 0), new Rectangle(327,630,14,14));
             lifesource = new Rectangle(132, 17, 15, 15);
             //pacboi's starting location based off of map tiles    
             //25.625 y
@@ -197,6 +197,7 @@ namespace Pacman
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            Boolean test = false;
             KeyboardState kb = Keyboard.GetState();
             GamePadState gp = GamePad.GetState(PlayerIndex.One);
             if (kb.IsKeyDown(Keys.Escape) || gp.Buttons.Back == ButtonState.Pressed)
@@ -256,13 +257,29 @@ namespace Pacman
                 }
                 boi.Update();
 
-                foreach (Ghost g in ghosts)
-                {
-                    if (pacMoved)
-                        g.Update(boi, ghosts[1], map); //ghosts[1]
+            foreach (Ghost g in ghosts)
+            {
+                if (pacMoved)
+                    g.Update(boi, ghosts[1], map); //ghosts[1] 
                     if (g.getRect().Intersects(boi.rec))
+                    {
                         Console.WriteLine("Lose a life");
-                }
+                        ///kelby added following. testing death
+                        if (dead == false)
+                        {
+                            boi.lives--;
+                            boi.source.Y = 0;
+                            boi.counter = 0;
+                            dead = true;
+                        }
+                        boi.death();
+                        if (boi.counter >= 150)
+                        {
+                            boi.respawn();
+                            dead = false;
+                        }
+                    }
+            }
 
 
                 if (isPowerMode)
@@ -276,25 +293,61 @@ namespace Pacman
 
                 }
 
-                //Death test
-                if (kb.IsKeyDown(Keys.E) && kb.IsKeyDown(Keys.R) || dead == true)
-                {
-                    if (dead == false)
+            for (int r = 0; r < 28; r++)
+            {
+                for (int c = 0; c < 36; c++)
                     {
-                        boi.lives--;
-                        boi.source.Y = 0;
-                        boi.counter = 0;
-                        dead = true;
+                        if (map.space[r, c].Pdead)
+                            if (map.space[r, c].rect.Intersects(boi.hitbox))
+                                test = true;
+
                     }
-                    boi.death();
-                    if (boi.counter >= 150)
-                    {
-                        boi.respawn();
-                        dead = false;
-                    }
-                }
-                base.Update(gameTime);
             }
+                
+                if (test == false)
+                    boi.Update();
+                //else
+                //{
+                //    if (boi.velocities.Y > 0)
+                //    {
+                //        boi.rec.Y -= 4;
+                //        boi.hitbox.Y -= 4;
+                //    }
+                //    if (boi.velocities.Y < 0)
+                //    {
+                //        boi.rec.Y += 4;
+                //        boi.hitbox.Y += 4;
+                //    }
+                //    if (boi.velocities.X > 0)
+                //    {
+                //        boi.rec.X -= 4;
+                //        boi.hitbox.X -= 4;
+                //    }
+                //    if (boi.velocities.X < 0)
+                //    {
+                //        boi.rec.X += 4;
+                //        boi.hitbox.X += 4;
+                //    }
+                //}
+            }
+            //Death test
+            if (kb.IsKeyDown(Keys.E) && kb.IsKeyDown(Keys.R) || dead == true)
+            {
+                if(dead == false)
+                {
+                    boi.lives--;
+                    boi.source.Y = 0;
+                    boi.counter = 0;
+                    dead = true;
+                }
+                boi.death();
+                if (boi.counter >= 150)
+                {
+                    boi.respawn();
+                    dead = false;
+                }
+            }
+            base.Update(gameTime);
         }
 
         /// <summary>
@@ -320,6 +373,8 @@ namespace Pacman
                     {
                         if (tester[r, c] != null)
                         {
+                            if(map.space[r,c].Pdead == true)
+                                //spriteBatch.Draw(whiteBoxTexture, new Rectangle(r *24,c*24,24,24), Color.Green);
                             if (tester[r, c].isPowerPellet == false)
                                 spriteBatch.Draw(whiteBoxTexture, tester[r, c].rect, Color.White);
                             else
@@ -346,19 +401,6 @@ namespace Pacman
             }
             spriteBatch.DrawString(arcadeNormal, topText, posOfTopText, Color.White);
 
-            //foreach (MapSquares ms in map.space)
-            //{
-            //    spriteBatch.Draw(whiteBoxTexture, ms.rect, Color.Red);
-            //}
-
-            //for (int r = 0; r < 28; r++)
-            //{
-            //    for (int c = 0; c < 36; c++)
-            //    {
-            //        if(map.space[r,c].Pdead == true)
-            //            spriteBatch.Draw(whiteBoxTexture, map.space[r,c].rect, Color.Red);
-            //    }
-            //}
 
 
 
