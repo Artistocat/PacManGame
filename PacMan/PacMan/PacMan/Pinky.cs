@@ -30,7 +30,7 @@ namespace PacMan
             UpdateDirection(board);
         }
 
-        protected new void Scatter()
+        public override void Scatter()
         {
             scatter = true;
             targetSquareLoc.X = 1; //NOT A TYPO!!! YES IT IS ACTUALLY 1, NOT 0

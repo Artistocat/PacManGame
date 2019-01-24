@@ -62,14 +62,18 @@ namespace PacMan
             rect.Y = (int)y;
             //centerRect.X = (int)x;
             //centerRect.Y = (int)y;
-            if (scatter)
-            {
-                CheckScatter();
-            }
-            else if (counter == 6)
+            //if (scatter)
+            //{
+            //    CheckScatter();
+            //}
+            //else
+            if (counter == 6)
             {
                 counter = 0;
-                UpdateTarget(pacman, blinky, board);
+                if (scatter)
+                    UpdateDirection(board);
+                else
+                    UpdateTarget(pacman, blinky, board);
             }
 
             sourceRect.X = 4;
@@ -130,11 +134,30 @@ namespace PacMan
                 if (distsOff[i] != null)
                     validDirs.Add((Direction)(i));
             }
-
-            closestDir = GetClosestDir(validDirs, distsOff);
-
-            dir = closestDir;
+            if (!run)
+            {
+                closestDir = GetClosestDir(validDirs, distsOff);
+                dir = closestDir;
+            }
+            else
+            {
+                dir = RandomDir(validDirs);
+            }
             UpdateVelocity();
+        }
+
+        private Direction RandomDir(HashSet<Direction> validDirs)
+        {
+            Random rand = new Random();
+            int choice = rand.Next(validDirs.Count);
+            try
+            {
+                return validDirs.ElementAt(choice);
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                return dir;
+            }
         }
 
         private Direction GetClosestDir(HashSet<Direction> validDirs, double?[] distsOff)
@@ -152,42 +175,42 @@ namespace PacMan
             return GetClosestDir(validDirs, distsOff);
         }
 
-        protected void Scatter()
+        public virtual void Scatter()
         {
-            scatter = true;
-            if (name == Name.Inky)
-            {
-                targetSquareLoc.X = 27;
-                targetSquareLoc.Y = 35;
-            }
+            //scatter = true;
+            //if (name == Name.Inky)
+            //{
+            //    targetSquareLoc.X = 27;
+            //    targetSquareLoc.Y = 35;
+            //}
 
-            if (name == Name.Blinky)
-            {
-                targetSquareLoc.X = 26; //NOT A TYPO!! YES IT IS ACTUALLY 1 OFF THE EDGE. IDK HOW IT WORKS BUT IT DOES
-                targetSquareLoc.Y = 0;
-            }
+            //if (name == Name.Blinky)
+            //{
+            //    targetSquareLoc.X = 26; //NOT A TYPO!! YES IT IS ACTUALLY 1 OFF THE EDGE. IDK HOW IT WORKS BUT IT DOES
+            //    targetSquareLoc.Y = 0;
+            //}
 
-            if (name == Name.Pinky)
-            {
-                targetSquareLoc.X = 1; //NOT A TYPO!!! YES IT IS ACTUALLY 1, NOT 0
-                targetSquareLoc.Y = 0;
-            }
+            //if (name == Name.Pinky)
+            //{
+            //    targetSquareLoc.X = 1; //NOT A TYPO!!! YES IT IS ACTUALLY 1, NOT 0
+            //    targetSquareLoc.Y = 0;
+            //}
 
-            if (name == Name.Clyde)
-            {
-                targetSquareLoc.X = 0;
-                targetSquareLoc.Y = 35;//height;
-            }
+            //if (name == Name.Clyde)
+            //{
+            //    targetSquareLoc.X = 0;
+            //    targetSquareLoc.Y = 35;//height;
+            //}
         }
 
         //TODO
-        protected void CheckScatter()
-        {
-            if (name == Name.Clyde)
-            {
-                scatter = false; //TODO
-            }
-        }
+        //protected void CheckScatter()
+        //{
+        //    if (name == Name.Clyde)
+        //    {
+        //        scatter = false; //TODO
+        //    }
+        //}
 
         public void StopScatter()
         {

@@ -50,6 +50,7 @@ namespace Pacman
         int score;
         Rectangle lifesource;
         Pacboi boi;
+        Direction nextInQueue;
 
         Ghost[] ghosts;
         public Game1()
@@ -81,6 +82,7 @@ namespace Pacman
             //25.625 y
             //13 x
             pacMoved = false;
+            nextInQueue = Direction.Up;
 
             int screenWidth = graphics.GraphicsDevice.Viewport.Width;
             int screenHeight = graphics.GraphicsDevice.Viewport.Height;
@@ -144,6 +146,7 @@ namespace Pacman
                 new Pinky(24 * 14, 24 * 17),
                 new Clyde(24 * 16, 24 * 17)
             };
+            foreach (Ghost g in ghosts) g.Run();
 
             Oldkb = Keyboard.GetState();
 
@@ -229,38 +232,111 @@ namespace Pacman
                 boi.rec.X = graphics.GraphicsDevice.Viewport.Width;
 
             //Pacman movement
+            /*
+             * get new Direction
+             * check new direction
+             * if new direction is legit, go in that direction
+             */
+
             if (dead == false)
             {
-                if (kb.IsKeyDown(Keys.A) || gp.DPad.Left == ButtonState.Pressed)
+                for (int r = 0; r < 28; r++)
                 {
-                    boi.velocities.X = -4;
-                    boi.velocities.Y = 0;
-                    pacMoved = true;
+                    for (int c = 0; c < 36; c++)
+                    {
+                        if (map.space[r, c].Pdead)
+                            if (map.space[r, c].rect.Intersects(boi.hitbox))
+                                test = true;
+
+                    }
                 }
-                if (kb.IsKeyDown(Keys.D) || gp.DPad.Right == ButtonState.Pressed)
+
+                if (test == false)
                 {
-                    boi.velocities.X = 4;
+                    boi.velocities.X = 0;
                     boi.velocities.Y = 0;
-                    pacMoved = true;
                 }
                 if (kb.IsKeyDown(Keys.W) || gp.DPad.Up == ButtonState.Pressed)
                 {
-                    boi.velocities.Y = -4;
-                    boi.velocities.X = 0;
                     pacMoved = true;
+                    boi.dir = Direction.Up;
+                    nextInQueue = Direction.Up;
+                }
+                if (kb.IsKeyDown(Keys.A) || gp.DPad.Left == ButtonState.Pressed)
+                {
+                    pacMoved = true;
+                    boi.dir = Direction.Left;
+                    nextInQueue = Direction.Left;
                 }
                 if (kb.IsKeyDown(Keys.S) || gp.DPad.Down == ButtonState.Pressed)
                 {
-                    boi.velocities.Y = 4;
-                    boi.velocities.X = 0;
                     pacMoved = true;
+                    boi.dir = Direction.Down;
+                    nextInQueue = Direction.Down;
+                }
+                if (kb.IsKeyDown(Keys.D) || gp.DPad.Right == ButtonState.Pressed)
+                {
+                    pacMoved = true;
+                    boi.dir = Direction.Right;
+                    nextInQueue = Direction.Right;
+                }
+
+                //check direction
+                Rectangle newRectHitBox = new Rectangle(boi.hitbox.X, boi.hitbox.Y, boi.hitbox.Width, boi.hitbox.Height);
+                bool canMove = true;
+                switch (boi.dir)
+                {
+                    case Direction.Up:
+                        newRectHitBox.Y -= 7;
+                        break;
+                    case Direction.Left:
+                        newRectHitBox.X -= 7;
+                        break;
+                    case Direction.Down:
+                        newRectHitBox.Y += 7;
+                        break;
+                    case Direction.Right:
+                        newRectHitBox.X += 7;
+                        break;
+                }
+
+                for (int r = 0; canMove && r < 28; r++)
+                {
+                    for (int c = 0; canMove && c < 36; c++)
+                    {
+                        if (map.space[r, c].Pdead)
+                            if (map.space[r, c].rect.Intersects(newRectHitBox))
+                                canMove = false;
+                    }
+                }
+                if (canMove)
+                {
+                    switch (boi.dir)
+                    {
+                        case Direction.Up:
+                            boi.velocities.Y = -4;
+                            boi.velocities.X = 0;
+                            break;
+                        case Direction.Left:
+                            boi.velocities.Y = 0;
+                            boi.velocities.X = -4;
+                            break;
+                        case Direction.Down:
+                            boi.velocities.Y = 4;
+                            boi.velocities.X = 0;
+                            break;
+                        case Direction.Right:
+                            boi.velocities.Y = 0;
+                            boi.velocities.X = 4;
+                            break;
+                    }
                 }
                 boi.Update();
-
-            foreach (Ghost g in ghosts)
+                foreach (Ghost g in ghosts)
             {
                 if (pacMoved)
                     g.Update(boi, ghosts[1], map); //ghosts[1] 
+                //collisions with ghosts and pacboi
                     if (g.getRect().Intersects(boi.rec))
                     {
                         Console.WriteLine("Lose a life");
@@ -284,28 +360,9 @@ namespace Pacman
 
                 if (isPowerMode)
                 {
-
-
-
-
-
-
-
                 }
 
-            for (int r = 0; r < 28; r++)
-            {
-                for (int c = 0; c < 36; c++)
-                    {
-                        if (map.space[r, c].Pdead)
-                            if (map.space[r, c].rect.Intersects(boi.hitbox))
-                                test = true;
 
-                    }
-            }
-                
-                if (test == false)
-                    boi.Update();
                 //else
                 //{
                 //    if (boi.velocities.Y > 0)
@@ -373,7 +430,7 @@ namespace Pacman
                     {
                         if (tester[r, c] != null)
                         {
-                            if(map.space[r,c].Pdead == true)
+                            //if(map.space[r,c].Pdead == true)
                                 //spriteBatch.Draw(whiteBoxTexture, new Rectangle(r *24,c*24,24,24), Color.Green);
                             if (tester[r, c].isPowerPellet == false)
                                 spriteBatch.Draw(whiteBoxTexture, tester[r, c].rect, Color.White);
@@ -385,7 +442,7 @@ namespace Pacman
                 //each ghost drawing
                 foreach (Ghost g in ghosts)
                 {
-                    Rectangle otherRect = new Rectangle(g.getRect().X - 18, g.getRect().Y - 12, g.getRect().Width, g.getRect().Height);
+                    Rectangle otherRect = new Rectangle(g.getRect().X - 16, g.getRect().Y - 12, g.getRect().Width, g.getRect().Height);
                     spriteBatch.Draw(spritesheet, otherRect, g.getSource(), Color.White);
                 }
                 //pacman drawing
