@@ -40,9 +40,9 @@ namespace Pacman
         Boolean isPowerMode;
         Texture2D spritesheet;
 
-        int[,] mapsquare = new int[28,36];
+        int[,] mapsquare = new int[28, 36];
         Board map;
- 
+
         String text;
         Vector2 pos;
         Boolean dead = false;
@@ -94,7 +94,7 @@ namespace Pacman
             //Isaiahs Stuff \______________________
             pellets = new Pellet[244];
 
-            pelletPositionsX = new int[] { 50, 100, 150};
+            pelletPositionsX = new int[] { 50, 100, 150 };
             pelletPositionsY = new int[] { 50, 100, 150 };
             //setPellets();
 
@@ -128,10 +128,10 @@ namespace Pacman
                 {
                     if (map.space[r, c].pellet == true)
                         tester[r, c] = new Pellet(r, c, false);
-                    else if(map.space[r, c].powerPellet == true)
+                    else if (map.space[r, c].powerPellet == true)
                         tester[r, c] = new Pellet(r, c, true);
                     else
-                        tester[r, c] = new Pellet(10000, 100000,false);
+                        tester[r, c] = new Pellet(10000, 100000, false);
 
                 }
             }
@@ -139,16 +139,10 @@ namespace Pacman
 
             ghosts = new Ghost[]
             {
-                ///aaron, i commented out your old pos and put in new ones, see if you like them more or less. we still need to implement the detection of whether
-                ///or not its legal space or dead space.
-                ////new Inky(24 * 12 + 12, 24 * 17 + 12),
-                //new Inky(24 * 11, 24 * 17 ),
-                //new Blinky(24 * 14 + 12, 24 * 14 + 12),
-                new Blinky(24 * 13 - 12, 24 * 14 - 12),
-                //new Pinky(24 * 14 + 12, 24 * 17 + 12), 
-                //new Pinky(24 * 13 - 12, 24 * 17 - 12),
-                ////new Clyde(24 * 16 + 12, 24 * 17 + 12)
-                //new Clyde(24 * 15 - 12, 24 * 17 - 12)
+                new Inky(24 * 12, 24 * 17 ),
+                new Blinky(24 * 14, 24 * 14),
+                new Pinky(24 * 14, 24 * 17),
+                new Clyde(24 * 16, 24 * 17)
             };
 
             Oldkb = Keyboard.GetState();
@@ -167,7 +161,7 @@ namespace Pacman
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             spritesheet = Content.Load<Texture2D>("spritesheet");
-            
+
             arcadeNormal = Content.Load<SpriteFont>("SpriteFont1");
 
             whiteBoxTexture = Content.Load<Texture2D>("white box");
@@ -213,11 +207,11 @@ namespace Pacman
 
             if (map.start == false)
                 map.screen = Content.Load<Texture2D>("pacman board");
-            for(int r = 0; r < 28; r++)
+            for (int r = 0; r < 28; r++)
             {
-                for(int c = 0; c<36;c++)
+                for (int c = 0; c < 36; c++)
                 {
-                    if(tester[r,c] != null && tester[r,c].rect.Intersects(boi.rec))
+                    if (tester[r, c] != null && tester[r, c].rect.Intersects(boi.rec))
                     {
                         score += 10;
                         tester[r, c] = null;
@@ -240,51 +234,41 @@ namespace Pacman
                 {
                     boi.velocities.X = -4;
                     boi.velocities.Y = 0;
+                    pacMoved = true;
                 }
                 if (kb.IsKeyDown(Keys.D) || gp.DPad.Right == ButtonState.Pressed)
                 {
                     boi.velocities.X = 4;
                     boi.velocities.Y = 0;
+                    pacMoved = true;
                 }
                 if (kb.IsKeyDown(Keys.W) || gp.DPad.Up == ButtonState.Pressed)
                 {
                     boi.velocities.Y = -4;
                     boi.velocities.X = 0;
+                    pacMoved = true;
                 }
                 if (kb.IsKeyDown(Keys.S) || gp.DPad.Down == ButtonState.Pressed)
                 {
                     boi.velocities.Y = 4;
                     boi.velocities.X = 0;
+                    pacMoved = true;
+                }
+                boi.Update();
+
+                foreach (Ghost g in ghosts)
+                {
+                    if (pacMoved)
+                        g.Update(boi, ghosts[1], map);
+                    if (g.getRect().Intersects(boi.rec))
+                        Console.WriteLine("Lose a life");
                 }
 
-            foreach (Ghost g in ghosts)
-            {
-                if (pacMoved)
-                    g.Update(boi, ghosts[0], map); 
-                if (g.getRect().Intersects(boi.rec))
-                    Console.WriteLine("Lose a life");
-            }
-
-
-            if(isPowerMode)
-            {
-
-
-
-
-
-
-
-            }
-
-
-
-            boi.Update();
             }
             //Death test
             if (kb.IsKeyDown(Keys.E) && kb.IsKeyDown(Keys.R) || dead == true)
             {
-                if(dead == false)
+                if (dead == false)
                 {
                     boi.lives--;
                     boi.source.Y = 0;
@@ -317,13 +301,6 @@ namespace Pacman
             {
                 //refreshing the map
                 spriteBatch.Draw(map.screen, map.screenSize, Color.White);
-                //each ghost drawing
-                foreach (Ghost g in ghosts)
-                {
-                    spriteBatch.Draw(spritesheet, g.getRect(), g.getSource(), Color.White);
-                }
-                //pacman drawing
-                spriteBatch.Draw(boi.tex, boi.rec, boi.source, boi.colour);
                 //pellet drawing
                 for (int r = 0; r < 28; r++)
                 {
@@ -338,6 +315,14 @@ namespace Pacman
                         }
                     }
                 }
+                //each ghost drawing
+                foreach (Ghost g in ghosts)
+                {
+                    Rectangle otherRect = new Rectangle(g.getRect().X - 18, g.getRect().Y - 12, g.getRect().Width, g.getRect().Height);
+                    spriteBatch.Draw(spritesheet, otherRect, g.getSource(), Color.White);
+                }
+                //pacman drawing
+                spriteBatch.Draw(boi.tex, boi.rec, boi.source, boi.colour);
 
             }
             //lives
@@ -349,6 +334,19 @@ namespace Pacman
             }
             spriteBatch.DrawString(arcadeNormal, topText, posOfTopText, Color.White);
 
+            //foreach (MapSquares ms in map.space)
+            //{
+            //    spriteBatch.Draw(whiteBoxTexture, ms.rect, Color.Red);
+            //}
+
+            //for (int r = 0; r < 28; r++)
+            //{
+            //    for (int c = 0; c < 36; c++)
+            //    {
+            //        if(map.space[r,c].Pdead == true)
+            //            spriteBatch.Draw(whiteBoxTexture, map.space[r,c].rect, Color.Red);
+            //    }
+            //}
 
 
 
@@ -372,6 +370,15 @@ namespace Pacman
             base.Draw(gameTime);
         }
 
+        //public Pellet MakePellet(double a, double b, int n, Boolean i)
+        //{
+        //    //At start of every round game, pellet objects are made
+        //    //
+        //    Pellet asdf = new Pellet(a, b, n, i);
+
+        //    return asdf;
+        //}
+
         //public void setPellets()
         //{
         //    //Pellet[] pellets;
@@ -385,7 +392,7 @@ namespace Pacman
         //    //28 a = rows
         //    //36 b = collumns
         //    //read from the 2D array
-        //    for(int a = 0; a < 28; a++)
+        //    for (int a = 0; a < 28; a++)
         //    {
         //        for (int b = 0; b < 36; b++)
         //        {
@@ -394,25 +401,24 @@ namespace Pacman
         //    }
 
 
-        //        if (a == 0)
+        //    if (a == 0)
+        //    {
+        //        if (b != 15 || b != 14)
         //        {
-        //            if (b != 15 || b != 14)
-        //            {
-        //                //dont add pellet
-        //            }
-        //        }
-        //        if (a == 1)
-        //        {
-
+        //            //dont add pellet
         //        }
         //    }
-        //    //Pellet asdf = new Pellet(a, b, n);
-        //    //addPellettTexture here
+        //    if (a == 1)
+        //    {
+
+        //    }
+        //}
+        //Pellet asdf = new Pellet(a, b, n);
+        //addPellettTexture here
         //}
 
         /*public void addPelletTexture(Pellet myPellet)
         {
-
         }*/
         // This function will take a file's data and separate it by ',' found in the
         // file. This is not my function but I will try to explain it's code.
@@ -439,8 +445,5 @@ namespace Pacman
             myFileC.Close();
             return mapSquares;
         }
-
-
-
     }
 }
