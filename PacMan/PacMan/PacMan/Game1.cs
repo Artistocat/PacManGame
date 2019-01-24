@@ -265,34 +265,36 @@ namespace Pacman
                 }
 
 
-            if(isPowerMode)
-            {
-
-
-
-
-
-
-
-            }
-            //Death test
-            if (kb.IsKeyDown(Keys.E) && kb.IsKeyDown(Keys.R) || dead == true)
-            {
-                if (dead == false)
+                if (isPowerMode)
                 {
-                    boi.lives--;
-                    boi.source.Y = 0;
-                    boi.counter = 0;
-                    dead = true;
+
+
+
+
+
+
+
                 }
-                boi.death();
-                if (boi.counter >= 150)
+
+                //Death test
+                if (kb.IsKeyDown(Keys.E) && kb.IsKeyDown(Keys.R) || dead == true)
                 {
-                    boi.respawn();
-                    dead = false;
+                    if (dead == false)
+                    {
+                        boi.lives--;
+                        boi.source.Y = 0;
+                        boi.counter = 0;
+                        dead = true;
+                    }
+                    boi.death();
+                    if (boi.counter >= 150)
+                    {
+                        boi.respawn();
+                        dead = false;
+                    }
                 }
+                base.Update(gameTime);
             }
-            base.Update(gameTime);
         }
 
         /// <summary>

@@ -26,6 +26,7 @@ namespace PacMan
         protected bool scatter;
         protected Rectangle sourceRect;
         protected Direction dir;
+        protected bool run;
 
         //88 * 3 pixels per second
         //each second is 60 fps
@@ -45,6 +46,7 @@ namespace PacMan
             this.name = n;
             velocity = new Vector2(0, speed);
             scatter = false;
+            run = false;
             sourceRect = source;
         }
 
@@ -185,6 +187,17 @@ namespace PacMan
             {
                 scatter = false; //TODO
             }
+        }
+
+        public void StopScatter()
+        {
+            scatter = false;
+        }
+
+        public void Run()
+        {
+            run = true;
+            scatter = false;
         }
         
         protected void UpdateVelocity()
