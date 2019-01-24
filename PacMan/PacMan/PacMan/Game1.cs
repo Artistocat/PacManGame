@@ -75,7 +75,7 @@ namespace Pacman
 
             // TODO: Add your initialization logic here
             boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(312, 615, 45, 45),
-                new Rectangle(3, 0, 15, 15), new Vector2(0, 0));
+                new Rectangle(3, 0, 15, 15), new Vector2(0, 0), new Rectangle(327,630,14,14));
             lifesource = new Rectangle(132, 17, 15, 15);
             //pacboi's starting location based off of map tiles    
             //25.625 y
@@ -141,10 +141,10 @@ namespace Pacman
             {
                 ///aaron, i commented out your old pos and put in new ones, see if you like them more or less. we still need to implement the detection of whether
                 /////or not its legal space or dead space.
-                //new Inky(24 * 11, 24 * 17 ),
+                new Inky(24 * 11, 24 * 17 ),
                 new Blinky(24 * 13 - 12, 24 * 14 - 12),
-                //new Pinky(24 * 13 - 12, 24 * 17 - 12),
-                //new Clyde(24 * 15 - 12, 24 * 17 - 12)
+                new Pinky(24 * 13 - 12, 24 * 17 - 12),
+                new Clyde(24 * 15 - 12, 24 * 17 - 12)
             };
 
             Oldkb = Keyboard.GetState();
@@ -199,6 +199,7 @@ namespace Pacman
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            Boolean test = false;
             KeyboardState kb = Keyboard.GetState();
             GamePadState gp = GamePad.GetState(PlayerIndex.One);
             if (kb.IsKeyDown(Keys.Escape) || gp.Buttons.Back == ButtonState.Pressed)
@@ -256,9 +257,25 @@ namespace Pacman
             foreach (Ghost g in ghosts)
             {
                 if (pacMoved)
-                    g.Update(boi, ghosts[0], map); //ghosts[1] 
-                if (g.getRect().Intersects(boi.rec))
-                    Console.WriteLine("Lose a life");
+                    g.Update(boi, ghosts[1], map); //ghosts[1] 
+                    if (g.getRect().Intersects(boi.rec))
+                    {
+                        Console.WriteLine("Lose a life");
+                        ///kelby added following. testing death
+                        if (dead == false)
+                        {
+                            boi.lives--;
+                            boi.source.Y = 0;
+                            boi.counter = 0;
+                            dead = true;
+                        }
+                        boi.death();
+                        if (boi.counter >= 150)
+                        {
+                            boi.respawn();
+                            dead = false;
+                        }
+                    }
             }
 
 
@@ -273,9 +290,42 @@ namespace Pacman
 
             }
 
+            for (int r = 0; r < 28; r++)
+            {
+                for (int c = 0; c < 36; c++)
+                    {
+                        if (map.space[r, c].Pdead)
+                            if (map.space[r, c].rect.Intersects(boi.hitbox))
+                                test = true;
 
-
-            boi.Update();
+                    }
+            }
+                
+                if (test == false)
+                    boi.Update();
+                //else
+                //{
+                //    if (boi.velocities.Y > 0)
+                //    {
+                //        boi.rec.Y -= 4;
+                //        boi.hitbox.Y -= 4;
+                //    }
+                //    if (boi.velocities.Y < 0)
+                //    {
+                //        boi.rec.Y += 4;
+                //        boi.hitbox.Y += 4;
+                //    }
+                //    if (boi.velocities.X > 0)
+                //    {
+                //        boi.rec.X -= 4;
+                //        boi.hitbox.X -= 4;
+                //    }
+                //    if (boi.velocities.X < 0)
+                //    {
+                //        boi.rec.X += 4;
+                //        boi.hitbox.X += 4;
+                //    }
+                //}
             }
             //Death test
             if (kb.IsKeyDown(Keys.E) && kb.IsKeyDown(Keys.R) || dead == true)
@@ -320,6 +370,7 @@ namespace Pacman
                 }
                 //pacman drawing
                 spriteBatch.Draw(boi.tex, boi.rec, boi.source, boi.colour);
+                spriteBatch.Draw(whiteBoxTexture, boi.hitbox, Color.White);
                 //pellet drawing
                 for (int r = 0; r < 28; r++)
                 {
@@ -327,6 +378,8 @@ namespace Pacman
                     {
                         if (tester[r, c] != null)
                         {
+                            if(map.space[r,c].Pdead == true)
+                                //spriteBatch.Draw(whiteBoxTexture, new Rectangle(r *24,c*24,24,24), Color.Green);
                             if (tester[r, c].isPowerPellet == false)
                                 spriteBatch.Draw(whiteBoxTexture, tester[r, c].rect, Color.White);
                             else
