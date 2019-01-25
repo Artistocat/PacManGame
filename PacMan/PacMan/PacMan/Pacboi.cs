@@ -33,6 +33,7 @@ namespace PacMan
             rec = r;
             hitbox = h;
             source = s;
+            hitbox = h;
             velocities = vel;
             colour = Color.White;
             dir = Direction.Up;

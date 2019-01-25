@@ -350,7 +350,7 @@ namespace Pacman
                 if (pacMoved)
                     g.Update(boi, ghosts[1], map); //ghosts[1] 
                 //collisions with ghosts and pacboi
-                    if (g.getRect().Intersects(boi.rec))
+                    if (g.getRect().Intersects(boi.hitbox))
                     {
                         Console.WriteLine("Lose a life");
                         ///kelby added following. testing death
@@ -369,6 +369,12 @@ namespace Pacman
                         }
                     }
             }
+                if (boi.lives == 0)
+                {
+                    map.screen = Content.Load<Texture2D>("game over");
+                    
+
+                }
 
 
                 if (isPowerMode)
@@ -463,6 +469,7 @@ namespace Pacman
                 spriteBatch.Draw(boi.tex, boi.rec, boi.source, boi.colour);
 
             }
+            
             //lives
             int l = 0;
             while (l < boi.lives)
@@ -472,7 +479,10 @@ namespace Pacman
             }
             spriteBatch.DrawString(arcadeNormal, topText, posOfTopText, Color.White);
 
-
+            if(boi.lives <= 0)
+            {
+                spriteBatch.Draw(map.screen, map.screenSize, Color.White);
+            }
 
 
             //foreach (Pellet p in pellets)
