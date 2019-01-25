@@ -234,7 +234,7 @@ namespace Pacman
                 boi.rec.X = graphics.GraphicsDevice.Viewport.Width;
 
             //Pacman movement
-            if (dead == false)
+            if (dead == false && map.start == false)
             {
                 if (kb.IsKeyDown(Keys.A) || gp.DPad.Left == ButtonState.Pressed)
                 {

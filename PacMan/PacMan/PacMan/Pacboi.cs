@@ -19,7 +19,7 @@ namespace PacMan
         public Vector2 velocities = new Vector2(0, 0);
         public Color colour;
         public int counter = 0;
-        public int lives = 3;
+        public int lives = 26;
 
         public Pacboi()
         {
