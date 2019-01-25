@@ -148,7 +148,7 @@ namespace Pacman
                 new Pinky(24 * 14, 24 * 17),
                 new Clyde(24 * 16, 24 * 17)
             };
-            foreach (Ghost g in ghosts) g.Run();
+            //foreach (Ghost g in ghosts) g.Run();
 
             Oldkb = Keyboard.GetState();
 
