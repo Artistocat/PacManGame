@@ -22,6 +22,7 @@ namespace Pacman
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
 
+        bool pacJustDied;
         bool pacMoved;
 
         SpriteFont arcadeNormal;
@@ -82,6 +83,7 @@ namespace Pacman
             //25.625 y
             //13 x
             pacMoved = false;
+            pacJustDied = false;
             nextInQueue = Direction.Up;
 
             int screenWidth = graphics.GraphicsDevice.Viewport.Width;
@@ -240,6 +242,18 @@ namespace Pacman
 
             if (dead == false)
             {
+                if (pacJustDied)
+                {
+                    pacJustDied = false;
+                    ghosts[0].x = 24 * 12;
+                    ghosts[0].y = 24 * 17;
+                    ghosts[1].x = 24 * 14;
+                    ghosts[1].y = 24 * 14;
+                    ghosts[2].x = 24 * 14;
+                    ghosts[2].y = 24 * 17;
+                    ghosts[3].x = 24 * 16;
+                    ghosts[3].y = 24 * 17;
+                }
                 for (int r = 0; r < 28; r++)
                 {
                     for (int c = 0; c < 36; c++)
@@ -396,6 +410,7 @@ namespace Pacman
             //Death test
             if (kb.IsKeyDown(Keys.E) && kb.IsKeyDown(Keys.R) || dead == true)
             {
+                pacJustDied = true;
                 if(dead == false)
                 {
                     boi.lives--;
