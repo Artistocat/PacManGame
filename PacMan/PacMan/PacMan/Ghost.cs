@@ -17,6 +17,7 @@ namespace PacMan
         public double x;
         public double y;
         protected Rectangle rect;
+        //protected Rectangle centerRect;
         private Name name;
         protected Vector2 velocity;
         protected Vector2 targetSquareLoc;
@@ -25,6 +26,7 @@ namespace PacMan
         protected bool scatter;
         protected Rectangle sourceRect;
         protected Direction dir;
+        protected bool run;
 
         //88 * 3 pixels per second
         //each second is 60 fps
@@ -40,9 +42,11 @@ namespace PacMan
             rect.X = x;
             rect.Y = y;
             rect.Width = rect.Height = 45;
+            //centerRect = new Rectangle(x + 10, y + 10, 24, 24);
             this.name = n;
             velocity = new Vector2(0, speed);
             scatter = false;
+            run = false;
             sourceRect = source;
         }
 
@@ -52,16 +56,24 @@ namespace PacMan
             animateCounter++;
             x += velocity.X;
             y += velocity.Y;
+            if (x + rect.Width < 0) x += board.screenSize.Width;
+            if (x > board.screenSize.Width) x -= board.screenSize.Width;
             rect.X = (int)x;
             rect.Y = (int)y;
-            if (scatter)
-            {
-                CheckScatter();
-            }
-            else if (counter == 12)
+            //centerRect.X = (int)x;
+            //centerRect.Y = (int)y;
+            //if (scatter)
+            //{
+            //    CheckScatter();
+            //}
+            //else
+            if (counter == 6)
             {
                 counter = 0;
-                UpdateTarget(pacman, blinky, board);
+                if (scatter)
+                    UpdateDirection(board);
+                else
+                    UpdateTarget(pacman, blinky, board);
             }
 
             sourceRect.X = 4;
@@ -122,60 +134,93 @@ namespace PacMan
                 if (distsOff[i] != null)
                     validDirs.Add((Direction)(i));
             }
-
-            closestDir = GetClosestDir(validDirs, distsOff);
-
-            dir = closestDir;
+            if (!run)
+            {
+                closestDir = GetClosestDir(validDirs, distsOff);
+                dir = closestDir;
+            }
+            else
+            {
+                dir = RandomDir(validDirs);
+            }
             UpdateVelocity();
+        }
+
+        private Direction RandomDir(HashSet<Direction> validDirs)
+        {
+            Random rand = new Random();
+            int choice = rand.Next(validDirs.Count);
+            try
+            {
+                return validDirs.ElementAt(choice);
+            }
+            catch (ArgumentOutOfRangeException e)
+            {
+                return dir;
+            }
         }
 
         private Direction GetClosestDir(HashSet<Direction> validDirs, double?[] distsOff)
         {
-            if (validDirs.Count == 1) return validDirs.ElementAt(0);
-            if (distsOff[(int)validDirs.ElementAt(0)] > distsOff[(int)validDirs.ElementAt(1)])
+            try
             {
-                validDirs.Remove(validDirs.ElementAt(1));
-                return GetClosestDir(validDirs, distsOff);
-            }
-            validDirs.Remove(validDirs.ElementAt(0));
+                if (validDirs.Count == 1) return validDirs.ElementAt(0);
+                if (distsOff[(int)validDirs.ElementAt(0)] > distsOff[(int)validDirs.ElementAt(1)])
+                {
+                    validDirs.Remove(validDirs.ElementAt(1));
+                    return GetClosestDir(validDirs, distsOff);
+                }
+                validDirs.Remove(validDirs.ElementAt(0));
+            } catch (ArgumentOutOfRangeException e) { return dir; }
             return GetClosestDir(validDirs, distsOff);
         }
 
-        protected void Scatter()
+        public virtual void Scatter()
         {
-            scatter = true;
-            if (name == Name.Inky)
-            {
-                targetSquareLoc.X = 27;
-                targetSquareLoc.Y = 35;
-            }
+            //scatter = true;
+            //if (name == Name.Inky)
+            //{
+            //    targetSquareLoc.X = 27;
+            //    targetSquareLoc.Y = 35;
+            //}
 
-            if (name == Name.Blinky)
-            {
-                targetSquareLoc.X = 26; //NOT A TYPO!! YES IT IS ACTUALLY 1 OFF THE EDGE. IDK HOW IT WORKS BUT IT DOES
-                targetSquareLoc.Y = 0;
-            }
+            //if (name == Name.Blinky)
+            //{
+            //    targetSquareLoc.X = 26; //NOT A TYPO!! YES IT IS ACTUALLY 1 OFF THE EDGE. IDK HOW IT WORKS BUT IT DOES
+            //    targetSquareLoc.Y = 0;
+            //}
 
-            if (name == Name.Pinky)
-            {
-                targetSquareLoc.X = 1; //NOT A TYPO!!! YES IT IS ACTUALLY 1, NOT 0
-                targetSquareLoc.Y = 0;
-            }
+            //if (name == Name.Pinky)
+            //{
+            //    targetSquareLoc.X = 1; //NOT A TYPO!!! YES IT IS ACTUALLY 1, NOT 0
+            //    targetSquareLoc.Y = 0;
+            //}
 
-            if (name == Name.Clyde)
-            {
-                targetSquareLoc.X = 0;
-                targetSquareLoc.Y = 35;//height;
-            }
+            //if (name == Name.Clyde)
+            //{
+            //    targetSquareLoc.X = 0;
+            //    targetSquareLoc.Y = 35;//height;
+            //}
         }
 
         //TODO
-        protected void CheckScatter()
+        //protected void CheckScatter()
+        //{
+        //    if (name == Name.Clyde)
+        //    {
+        //        scatter = false; //TODO
+        //    }
+        //}
+
+        public void StopScatter()
         {
-            if (name == Name.Clyde)
-            {
-                scatter = false; //TODO
-            }
+            scatter = false;
+        }
+
+        public void Run()
+        {
+            run = true;
+            scatter = false;
         }
         
         protected void UpdateVelocity()
@@ -209,6 +254,7 @@ namespace PacMan
                 {
                     return null;
                 }
+
             } catch (IndexOutOfRangeException e)
             {
                 return null;

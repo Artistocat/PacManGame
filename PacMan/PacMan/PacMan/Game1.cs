@@ -48,8 +48,9 @@ namespace Pacman
         Boolean dead = false;
         KeyboardState Oldkb;
         int score;
-
+        Rectangle lifesource;
         Pacboi boi;
+        Direction nextInQueue;
 
         Ghost[] ghosts;
         public Game1()
@@ -74,23 +75,14 @@ namespace Pacman
         {
 
             // TODO: Add your initialization logic here
-            int[,] test = new int[28, 36];
-            test = GetTiles();
-
-            for (int i = 0; i < 28; i++)
-            {
-                for (int j = 0; j < 36; j++)
-                {
-                    Console.Write(test[i, j]);
-                }
-                Console.WriteLine();
-            }
             boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(312, 615, 45, 45),
-                new Rectangle(3, 0, 15, 15), new Vector2(0, 0), new Rectangle(324,627,22,22));
-            //pacboi's starting location based off of map tiles
+                new Rectangle(3, 0, 15, 15), new Vector2(0, 0), new Rectangle(327,630,14,14));
+            lifesource = new Rectangle(132, 17, 15, 15);
+            //pacboi's starting location based off of map tiles    
             //25.625 y
             //13 x
             pacMoved = false;
+            nextInQueue = Direction.Up;
 
             int screenWidth = graphics.GraphicsDevice.Viewport.Width;
             int screenHeight = graphics.GraphicsDevice.Viewport.Height;
@@ -149,17 +141,12 @@ namespace Pacman
 
             ghosts = new Ghost[]
             {
-                ///aaron, i commented out your old pos and put in new ones, see if you like them more or less. we still need to implement the detection of whether
-                ///or not its legal space or dead space.
-                ////new Inky(24 * 12 + 12, 24 * 17 + 12),
-                //new Inky(24 * 11, 24 * 17 ),
-                //new Blinky(24 * 14 + 12, 24 * 14 + 12),
-                new Blinky(24 * 13 - 12, 24 * 14 - 12),
-                //new Pinky(24 * 14 + 12, 24 * 17 + 12), 
-                //new Pinky(24 * 13 - 12, 24 * 17 - 12),
-                ////new Clyde(24 * 16 + 12, 24 * 17 + 12)
-                //new Clyde(24 * 15 - 12, 24 * 17 - 12)
+                new Inky(24 * 12, 24 * 17 ),
+                new Blinky(24 * 14, 24 * 14),
+                new Pinky(24 * 14, 24 * 17),
+                new Clyde(24 * 16, 24 * 17)
             };
+            foreach (Ghost g in ghosts) g.Run();
 
             Oldkb = Keyboard.GetState();
 
@@ -177,7 +164,7 @@ namespace Pacman
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             spritesheet = Content.Load<Texture2D>("spritesheet");
-
+            
             arcadeNormal = Content.Load<SpriteFont>("SpriteFont1");
 
             whiteBoxTexture = Content.Load<Texture2D>("white box");
@@ -213,7 +200,7 @@ namespace Pacman
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
-            Boolean testr = false;
+            Boolean test = false;
             KeyboardState kb = Keyboard.GetState();
             GamePadState gp = GamePad.GetState(PlayerIndex.One);
             if (kb.IsKeyDown(Keys.Escape) || gp.Buttons.Back == ButtonState.Pressed)
@@ -245,68 +232,167 @@ namespace Pacman
                 boi.rec.X = graphics.GraphicsDevice.Viewport.Width;
 
             //Pacman movement
-            if (dead == false && map.start == false)
+            /*
+             * get new Direction
+             * check new direction
+             * if new direction is legit, go in that direction
+             */
+
+            if (dead == false)
             {
-                if (kb.IsKeyDown(Keys.A) || gp.DPad.Left == ButtonState.Pressed)
+                for (int r = 0; r < 28; r++)
                 {
-                    boi.velocities.X = -4;
-                    boi.velocities.Y = 0;
+                    for (int c = 0; c < 36; c++)
+                    {
+                        if (map.space[r, c].Pdead)
+                            if (map.space[r, c].rect.Intersects(boi.hitbox))
+                                test = true;
+
+                    }
                 }
-                if (kb.IsKeyDown(Keys.D) || gp.DPad.Right == ButtonState.Pressed)
+
+                if (test == false)
                 {
-                    boi.velocities.X = 4;
+                    boi.velocities.X = 0;
                     boi.velocities.Y = 0;
                 }
                 if (kb.IsKeyDown(Keys.W) || gp.DPad.Up == ButtonState.Pressed)
                 {
-                    boi.velocities.Y = -4;
-                    boi.velocities.X = 0;
+                    pacMoved = true;
+                    boi.dir = Direction.Up;
+                    nextInQueue = Direction.Up;
+                }
+                if (kb.IsKeyDown(Keys.A) || gp.DPad.Left == ButtonState.Pressed)
+                {
+                    pacMoved = true;
+                    boi.dir = Direction.Left;
+                    nextInQueue = Direction.Left;
                 }
                 if (kb.IsKeyDown(Keys.S) || gp.DPad.Down == ButtonState.Pressed)
                 {
-                    boi.velocities.Y = 4;
-                    boi.velocities.X = 0;
+                    pacMoved = true;
+                    boi.dir = Direction.Down;
+                    nextInQueue = Direction.Down;
+                }
+                if (kb.IsKeyDown(Keys.D) || gp.DPad.Right == ButtonState.Pressed)
+                {
+                    pacMoved = true;
+                    boi.dir = Direction.Right;
+                    nextInQueue = Direction.Right;
                 }
 
-                foreach (Ghost g in ghosts)
+                //check direction
+                Rectangle newRectHitBox = new Rectangle(boi.hitbox.X, boi.hitbox.Y, boi.hitbox.Width, boi.hitbox.Height);
+                bool canMove = true;
+                switch (boi.dir)
                 {
-                    if (pacMoved)
-                        g.Update(boi, ghosts[0], map);
-                    if (g.getRect().Intersects(boi.rec))
-                        Console.WriteLine("Lose a life");
+                    case Direction.Up:
+                        newRectHitBox.Y -= 7;
+                        break;
+                    case Direction.Left:
+                        newRectHitBox.X -= 7;
+                        break;
+                    case Direction.Down:
+                        newRectHitBox.Y += 7;
+                        break;
+                    case Direction.Right:
+                        newRectHitBox.X += 7;
+                        break;
                 }
+
+                for (int r = 0; canMove && r < 28; r++)
+                {
+                    for (int c = 0; canMove && c < 36; c++)
+                    {
+                        if (map.space[r, c].Pdead)
+                            if (map.space[r, c].rect.Intersects(newRectHitBox))
+                                canMove = false;
+                    }
+                }
+                if (canMove)
+                {
+                    switch (boi.dir)
+                    {
+                        case Direction.Up:
+                            boi.velocities.Y = -4;
+                            boi.velocities.X = 0;
+                            break;
+                        case Direction.Left:
+                            boi.velocities.Y = 0;
+                            boi.velocities.X = -4;
+                            break;
+                        case Direction.Down:
+                            boi.velocities.Y = 4;
+                            boi.velocities.X = 0;
+                            break;
+                        case Direction.Right:
+                            boi.velocities.Y = 0;
+                            boi.velocities.X = 4;
+                            break;
+                    }
+                }
+                boi.Update();
+                foreach (Ghost g in ghosts)
+            {
+                if (pacMoved)
+                    g.Update(boi, ghosts[1], map); //ghosts[1] 
+                //collisions with ghosts and pacboi
+                    if (g.getRect().Intersects(boi.rec))
+                    {
+                        Console.WriteLine("Lose a life");
+                        ///kelby added following. testing death
+                        if (dead == false)
+                        {
+                            boi.lives--;
+                            boi.source.Y = 0;
+                            boi.counter = 0;
+                            dead = true;
+                        }
+                        boi.death();
+                        if (boi.counter >= 150)
+                        {
+                            boi.respawn();
+                            dead = false;
+                        }
+                    }
+            }
 
 
                 if (isPowerMode)
                 {
-
-
-
-
-
-
-
                 }
 
-                //for (int r = 0; r < 28; r++)
-                //{
-                //    for (int c = 0; c < 36; c++)
-                //    {
-                //        if (map.space[r,c].Pdead == true)
-                //            if (boi.hitbox.Intersects(map.space[r, c].rect))
-                //                testr = true;
 
+                //else
+                //{
+                //    if (boi.velocities.Y > 0)
+                //    {
+                //        boi.rec.Y -= 4;
+                //        boi.hitbox.Y -= 4;
+                //    }
+                //    if (boi.velocities.Y < 0)
+                //    {
+                //        boi.rec.Y += 4;
+                //        boi.hitbox.Y += 4;
+                //    }
+                //    if (boi.velocities.X > 0)
+                //    {
+                //        boi.rec.X -= 4;
+                //        boi.hitbox.X -= 4;
+                //    }
+                //    if (boi.velocities.X < 0)
+                //    {
+                //        boi.rec.X += 4;
+                //        boi.hitbox.X += 4;
                 //    }
                 //}
-                if (testr == false)
-                    boi.Update();
-
             }
             //Death test
             if (kb.IsKeyDown(Keys.E) && kb.IsKeyDown(Keys.R) || dead == true)
             {
-                if (dead == false)
+                if(dead == false)
                 {
+                    boi.lives--;
                     boi.source.Y = 0;
                     boi.counter = 0;
                     dead = true;
@@ -337,22 +423,15 @@ namespace Pacman
             {
                 //refreshing the map
                 spriteBatch.Draw(map.screen, map.screenSize, Color.White);
-                //each ghost drawing
-                foreach (Ghost g in ghosts)
-                {
-                    spriteBatch.Draw(spritesheet, g.getRect(), g.getSource(), Color.White);
-                }
-                //pacman drawing
-                spriteBatch.Draw(boi.tex, boi.rec, boi.source, boi.colour);
                 //pellet drawing
                 for (int r = 0; r < 28; r++)
                 {
                     for (int c = 0; c < 36; c++)
                     {
-                        if (map.space[r, c].Pdead == true)
-                            spriteBatch.Draw(whiteBoxTexture, map.space[r, c].rect, Color.White);
                         if (tester[r, c] != null)
                         {
+                            //if(map.space[r,c].Pdead == true)
+                                //spriteBatch.Draw(whiteBoxTexture, new Rectangle(r *24,c*24,24,24), Color.Green);
                             if (tester[r, c].isPowerPellet == false)
                                 spriteBatch.Draw(whiteBoxTexture, tester[r, c].rect, Color.White);
                             else
@@ -360,11 +439,26 @@ namespace Pacman
                         }
                     }
                 }
+                //each ghost drawing
+                foreach (Ghost g in ghosts)
+                {
+                    Rectangle otherRect = new Rectangle(g.getRect().X - 16, g.getRect().Y - 12, g.getRect().Width, g.getRect().Height);
+                    spriteBatch.Draw(spritesheet, otherRect, g.getSource(), Color.White);
+                }
+                //pacman drawing
+                spriteBatch.Draw(boi.tex, boi.rec, boi.source, boi.colour);
 
             }
-            
+            //lives
+            int l = 0;
+            while (l < boi.lives)
+            {
+                l++;
+                spriteBatch.Draw(boi.tex, new Rectangle((l * 48) + (2 * 24), 34 * 24, 48, 48), lifesource, Color.White);
+            }
+            spriteBatch.DrawString(arcadeNormal, topText, posOfTopText, Color.White);
 
-           
+
 
 
             //foreach (Pellet p in pellets)
@@ -387,69 +481,18 @@ namespace Pacman
             base.Draw(gameTime);
         }
 
-        //public Pellet MakePellet(double a, double b, int n, Boolean i)
-        //{
-        //    //At start of every round game, pellet objects are made
-        //    //
-        //    Pellet asdf = new Pellet(a,b,n,i);
-
-        //    return asdf;
-        //}
-
-        //public void setPellets()
-        //{
-        //    //Pellet[] pellets;
-        //    //double[] pelletPositionsX;
-        //    //double[] pelletPositionsY;
 
 
-        //    //call getTiles() and make map
-        //    //fill up the pelletPositionsX and pelletPositionsY using nested for loops
 
-        //    //28 a = rows
-        //    //36 b = collumns
-        //    //read from the 2D array
-        //    for(int a = 0; a < 28; a++)
-        //    {
-        //        for (int b = 0; b < 36; b++)
-        //        {
-
-        //        }
-        //    }
-
-
-        //        if (a == 0)
-        //        {
-        //            if (b != 15 || b != 14)
-        //            {
-        //                //dont add pellet
-        //            }
-        //        }
-        //        if (a == 1)
-        //        {
-
-        //        }
-        //    }
-        //    //Pellet asdf = new Pellet(a, b, n);
-        //    //addPellettTexture here
-        //}
-
-        /*public void addPelletTexture(Pellet myPellet)
-        {
-
-        }*/
         // This function will take a file's data and separate it by ',' found in the
         // file. This is not my function but I will try to explain it's code.
 
         private static int[,] GetTiles()
         {
-
-
             int width = 28;
             int height = 36;
 
             int[,] mapSquares = new int[28, 36];
-
 
             StreamReader myFileC = new StreamReader("Pacman.txt");
 
@@ -464,9 +507,5 @@ namespace Pacman
             myFileC.Close();
             return mapSquares;
         }
-
-
-
     }
 }
-
