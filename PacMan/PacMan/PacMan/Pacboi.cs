@@ -16,6 +16,7 @@ namespace PacMan
         public Texture2D tex;
         public Rectangle rec;
         public Rectangle source;
+        public Rectangle hitbox;
         public Vector2 velocities = new Vector2(0, 0);
         public Color colour;
         public int counter = 0;
@@ -23,11 +24,12 @@ namespace PacMan
         {
 
         }
-        public Pacboi(Texture2D t, Rectangle r, Rectangle s, Vector2 vel)
+        public Pacboi(Texture2D t, Rectangle r, Rectangle s, Vector2 vel, Rectangle h)
         {
             tex = t;
             rec = r;
             source = s;
+            hitbox = h;
             velocities = vel;
             colour = Color.White;
         }
@@ -64,7 +66,9 @@ namespace PacMan
             }
 
             rec.X += (int) velocities.X;
+            hitbox.X += (int)velocities.X;
             rec.Y += (int) velocities.Y;
+            hitbox.Y += (int)velocities.Y;
             counter++;
         }
 

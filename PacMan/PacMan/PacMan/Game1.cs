@@ -37,14 +37,12 @@ namespace Pacman
 
         int[] pelletPositionsX;
         int[] pelletPositionsY;
-        double[] pelletPositionsX;
-        double[] pelletPositionsY;
         Boolean isPowerMode;
         Texture2D spritesheet;
 
-        int[,] mapsquare = new int[28,36];
+        int[,] mapsquare = new int[28, 36];
         Board map;
- 
+
         String text;
         Vector2 pos;
         Boolean dead = false;
@@ -87,8 +85,8 @@ namespace Pacman
                 }
                 Console.WriteLine();
             }
-            boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(300, 400, 45, 45),
-                new Rectangle(3, 0, 15, 15), new Vector2(0, 0));
+            boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(312, 615, 45, 45),
+                new Rectangle(3, 0, 15, 15), new Vector2(0, 0), new Rectangle(324,627,22,22));
             //pacboi's starting location based off of map tiles
             //25.625 y
             //13 x
@@ -106,9 +104,9 @@ namespace Pacman
             //Isaiahs Stuff \______________________
             pellets = new Pellet[244];
 
-            pelletPositionsX = new int[] { 50, 100, 150};
+            pelletPositionsX = new int[] { 50, 100, 150 };
             pelletPositionsY = new int[] { 50, 100, 150 };
-            setPellets();
+            //setPellets();
 
             topText = "1UP     HIGH SCORE";
             posOfTopText = new Vector2(100, 0);
@@ -140,10 +138,10 @@ namespace Pacman
                 {
                     if (map.space[r, c].pellet == true)
                         tester[r, c] = new Pellet(r, c, false);
-                    else if(map.space[r, c].powerPellet == true)
+                    else if (map.space[r, c].powerPellet == true)
                         tester[r, c] = new Pellet(r, c, true);
                     else
-                        tester[r, c] = new Pellet(10000, 100000,false);
+                        tester[r, c] = new Pellet(10000, 100000, false);
 
                 }
             }
@@ -179,7 +177,7 @@ namespace Pacman
             spriteBatch = new SpriteBatch(GraphicsDevice);
 
             spritesheet = Content.Load<Texture2D>("spritesheet");
-            
+
             arcadeNormal = Content.Load<SpriteFont>("SpriteFont1");
 
             whiteBoxTexture = Content.Load<Texture2D>("white box");
@@ -215,6 +213,7 @@ namespace Pacman
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            Boolean testr = false;
             KeyboardState kb = Keyboard.GetState();
             GamePadState gp = GamePad.GetState(PlayerIndex.One);
             if (kb.IsKeyDown(Keys.Escape) || gp.Buttons.Back == ButtonState.Pressed)
@@ -225,11 +224,11 @@ namespace Pacman
 
             if (map.start == false)
                 map.screen = Content.Load<Texture2D>("pacman board");
-            for(int r = 0; r < 28; r++)
+            for (int r = 0; r < 28; r++)
             {
-                for(int c = 0; c<36;c++)
+                for (int c = 0; c < 36; c++)
                 {
-                    if(tester[r,c] != null && tester[r,c].rect.Intersects(boi.rec))
+                    if (tester[r, c] != null && tester[r, c].rect.Intersects(boi.rec))
                     {
                         score += 10;
                         tester[r, c] = null;
@@ -246,7 +245,7 @@ namespace Pacman
                 boi.rec.X = graphics.GraphicsDevice.Viewport.Width;
 
             //Pacman movement
-            if (dead == false)
+            if (dead == false && map.start == false)
             {
                 if (kb.IsKeyDown(Keys.A) || gp.DPad.Left == ButtonState.Pressed)
                 {
@@ -269,34 +268,44 @@ namespace Pacman
                     boi.velocities.X = 0;
                 }
 
-            foreach (Ghost g in ghosts)
-            {
-                if (pacMoved)
-                    g.Update(boi, ghosts[0], map); 
-                if (g.getRect().Intersects(boi.rec))
-                    Console.WriteLine("Lose a life");
-            }
+                foreach (Ghost g in ghosts)
+                {
+                    if (pacMoved)
+                        g.Update(boi, ghosts[0], map);
+                    if (g.getRect().Intersects(boi.rec))
+                        Console.WriteLine("Lose a life");
+                }
 
 
-            if(isPowerMode)
-            {
-
-
-
+                if (isPowerMode)
+                {
 
 
 
 
-            }
 
 
 
-            boi.Update();
+                }
+
+                //for (int r = 0; r < 28; r++)
+                //{
+                //    for (int c = 0; c < 36; c++)
+                //    {
+                //        if (map.space[r,c].Pdead == true)
+                //            if (boi.hitbox.Intersects(map.space[r, c].rect))
+                //                testr = true;
+
+                //    }
+                //}
+                if (testr == false)
+                    boi.Update();
+
             }
             //Death test
             if (kb.IsKeyDown(Keys.E) && kb.IsKeyDown(Keys.R) || dead == true)
             {
-                if(dead == false)
+                if (dead == false)
                 {
                     boi.source.Y = 0;
                     boi.counter = 0;
@@ -340,6 +349,8 @@ namespace Pacman
                 {
                     for (int c = 0; c < 36; c++)
                     {
+                        if (map.space[r, c].Pdead == true)
+                            spriteBatch.Draw(whiteBoxTexture, map.space[r, c].rect, Color.White);
                         if (tester[r, c] != null)
                         {
                             if (tester[r, c].isPowerPellet == false)
@@ -351,14 +362,9 @@ namespace Pacman
                 }
 
             }
-            spriteBatch.DrawString(arcadeNormal,topText,posOfTopText,Color.White);
-
-            spriteBatch.Draw(boi.tex, boi.rec, boi.source, boi.colour);
-            foreach (Ghost g in ghosts){
-                spriteBatch.Draw(spritesheet, g.getRect(), g.getSource(), Color.White);
-            }
-
             
+
+           
 
 
             //foreach (Pellet p in pellets)
@@ -381,52 +387,52 @@ namespace Pacman
             base.Draw(gameTime);
         }
 
-        public Pellet MakePellet(double a, double b, int n, Boolean i)
-        {
-            //At start of every round game, pellet objects are made
-            //
-            Pellet asdf = new Pellet(a,b,n,i);
+        //public Pellet MakePellet(double a, double b, int n, Boolean i)
+        //{
+        //    //At start of every round game, pellet objects are made
+        //    //
+        //    Pellet asdf = new Pellet(a,b,n,i);
 
-            return asdf;
-        }
+        //    return asdf;
+        //}
 
-        public void setPellets()
-        {
-            //Pellet[] pellets;
-            //double[] pelletPositionsX;
-            //double[] pelletPositionsY;
-
-
-            //call getTiles() and make map
-            //fill up the pelletPositionsX and pelletPositionsY using nested for loops
-
-            //28 a = rows
-            //36 b = collumns
-            //read from the 2D array
-            for(int a = 0; a < 28; a++)
-            {
-                for (int b = 0; b < 36; b++)
-                {
-
-                }
-            }
+        //public void setPellets()
+        //{
+        //    //Pellet[] pellets;
+        //    //double[] pelletPositionsX;
+        //    //double[] pelletPositionsY;
 
 
-                if (a == 0)
-                {
-                    if (b != 15 || b != 14)
-                    {
-                        //dont add pellet
-                    }
-                }
-                if (a == 1)
-                {
+        //    //call getTiles() and make map
+        //    //fill up the pelletPositionsX and pelletPositionsY using nested for loops
 
-                }
-            }
-            //Pellet asdf = new Pellet(a, b, n);
-            //addPellettTexture here
-        }
+        //    //28 a = rows
+        //    //36 b = collumns
+        //    //read from the 2D array
+        //    for(int a = 0; a < 28; a++)
+        //    {
+        //        for (int b = 0; b < 36; b++)
+        //        {
+
+        //        }
+        //    }
+
+
+        //        if (a == 0)
+        //        {
+        //            if (b != 15 || b != 14)
+        //            {
+        //                //dont add pellet
+        //            }
+        //        }
+        //        if (a == 1)
+        //        {
+
+        //        }
+        //    }
+        //    //Pellet asdf = new Pellet(a, b, n);
+        //    //addPellettTexture here
+        //}
 
         /*public void addPelletTexture(Pellet myPellet)
         {
@@ -443,8 +449,6 @@ namespace Pacman
             int height = 36;
 
             int[,] mapSquares = new int[28, 36];
-
-            // Split the row of data into the string array
 
 
             StreamReader myFileC = new StreamReader("Pacman.txt");
@@ -465,3 +469,4 @@ namespace Pacman
 
     }
 }
+
