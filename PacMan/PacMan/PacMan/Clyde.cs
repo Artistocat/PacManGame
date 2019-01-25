@@ -30,6 +30,13 @@ namespace PacMan
 
             UpdateDirection(board);
         }
+
+        public override void Scatter()
+        {
+            scatter = true;
+            targetSquareLoc.X = 0;
+            targetSquareLoc.Y = 35; //height;
+        }
     }
 
 

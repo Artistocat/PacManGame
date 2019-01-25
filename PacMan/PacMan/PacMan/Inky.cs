@@ -29,11 +29,11 @@ namespace PacMan
             UpdateDirection(board);
         }
 
-        protected new void Scatter()
+        public override void Scatter()
         {
-            //scatter = true;
-            //targetSquareLoc.X = 27;
-            //targetSquareLoc.Y = 35;
+            scatter = true;
+            targetSquareLoc.X = 27;
+            targetSquareLoc.Y = 35;
         }
 
     }
