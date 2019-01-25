@@ -17,7 +17,6 @@ namespace PacMan
         public Rectangle rec;
         public Rectangle hitbox;
         public Rectangle source;
-        public Rectangle hitbox;
         public Vector2 velocities = new Vector2(0, 0);
         public Color colour;
         public int counter = 0;

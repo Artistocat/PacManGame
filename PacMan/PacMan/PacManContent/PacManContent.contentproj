@@ -78,6 +78,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="game over.jpg">
+      <Name>game over</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
     <Content Include="Pacman.txt">
       <Name>Pacman</Name>
     </Content>
