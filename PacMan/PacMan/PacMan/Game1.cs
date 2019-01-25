@@ -211,7 +211,7 @@ namespace Pacman
                 if (kb.IsKeyDown(Keys.Space) || gp.Buttons.Start == ButtonState.Pressed)
                     map.start = false;
 
-            if (map.start == false)
+            if (map.start == false && boi.lives > 0)
                 map.screen = Content.Load<Texture2D>("pacman board");
             for (int r = 0; r < 28; r++)
             {
@@ -439,7 +439,7 @@ namespace Pacman
             // this entire if else statement sets up whether or not its the start screen or not.
             if (map.start == true)
                 spriteBatch.Draw(map.screen, map.screenSize, Color.White);
-            else
+            else if(map.start == false && boi.lives > 0)
             {
                 //refreshing the map
                 spriteBatch.Draw(map.screen, map.screenSize, Color.White);
@@ -478,8 +478,8 @@ namespace Pacman
                 spriteBatch.Draw(boi.tex, new Rectangle((l * 48) + (2 * 24), 34 * 24, 48, 48), lifesource, Color.White);
             }
             spriteBatch.DrawString(arcadeNormal, topText, posOfTopText, Color.White);
-
-            if(boi.lives <= 0)
+            spriteBatch.DrawString(arcadeNormal, "" + score, new Vector2(50,0), Color.White);
+            if (boi.lives <= 0)
             {
                 spriteBatch.Draw(map.screen, map.screenSize, Color.White);
             }
