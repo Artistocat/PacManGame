@@ -261,7 +261,6 @@ namespace Pacman
                         if (map.space[r, c].Pdead)
                             if (map.space[r, c].rect.Intersects(boi.hitbox))
                                 test = true;
-
                     }
                 }
 
