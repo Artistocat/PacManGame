@@ -12,12 +12,15 @@ namespace PacMan
 
         protected override void UpdateTarget(Pacboi pacman, Ghost Blinky, Board board)
         {
-            targetSquareLoc.X = pacman.rec.X / 24;
-            targetSquareLoc.Y = pacman.rec.Y / 24;
+            if (!scatter)
+            {
+                targetSquareLoc.X = pacman.rec.X / 24;
+                targetSquareLoc.Y = pacman.rec.Y / 24;
+            }
             UpdateDirection(board);
         }
 
-        protected new void Scatter()
+        public override void Scatter()
         {
             scatter = true;
             targetSquareLoc.X = 26; //NOT A TYPO!! YES IT IS ACTUALLY 1 OFF THE EDGE. IDK HOW IT WORKS BUT IT DOES

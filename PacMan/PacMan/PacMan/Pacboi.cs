@@ -21,6 +21,7 @@ namespace PacMan
         public Color colour;
         public int counter = 0;
         public int lives = 3;
+        public Direction dir;
 
         public Pacboi()
         {
@@ -32,8 +33,10 @@ namespace PacMan
             rec = r;
             hitbox = h;
             source = s;
+            hitbox = h;
             velocities = vel;
             colour = Color.White;
+            dir = Direction.Up;
         }
         public void Update()
         {
