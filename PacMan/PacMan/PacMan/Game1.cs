@@ -24,6 +24,8 @@ namespace Pacman
 
         bool pacMoved;
 
+        
+
         SpriteFont arcadeNormal;
 
         Texture2D whiteBoxTexture;
@@ -253,7 +255,7 @@ namespace Pacman
                     boi.velocities.Y = 4;
                     boi.velocities.X = 0;
                 }
-
+            }
             foreach (Ghost g in ghosts)
             {
                 if (pacMoved)
@@ -293,40 +295,44 @@ namespace Pacman
             for (int r = 0; r < 28; r++)
             {
                 for (int c = 0; c < 36; c++)
-                    {
-                        if (map.space[r, c].Pdead)
-                            if (map.space[r, c].rect.Intersects(boi.hitbox))
-                                test = true;
+                {
+                    if (map.space[r, c].Pdead)
+                        if (map.space[r, c].rect.Intersects(boi.hitbox))
+                            test = true;
 
-                    }
+                }
             }
-                
-                if (test == false)
-                    boi.Update();
-                //else
-                //{
-                //    if (boi.velocities.Y > 0)
-                //    {
-                //        boi.rec.Y -= 4;
-                //        boi.hitbox.Y -= 4;
-                //    }
-                //    if (boi.velocities.Y < 0)
-                //    {
-                //        boi.rec.Y += 4;
-                //        boi.hitbox.Y += 4;
-                //    }
-                //    if (boi.velocities.X > 0)
-                //    {
-                //        boi.rec.X -= 4;
-                //        boi.hitbox.X -= 4;
-                //    }
-                //    if (boi.velocities.X < 0)
-                //    {
-                //        boi.rec.X += 4;
-                //        boi.hitbox.X += 4;
-                //    }
-                //}
+
+            if (test == false)
+                boi.Update();
+            else
+            {
+                if (boi.velocities.Y > 0)
+                {
+                    boi.rec.Y -= 1;
+                    boi.hitbox.Y -= 1;
+                    test = false;
+                }
+                if (boi.velocities.Y < 0)
+                {
+                    boi.rec.Y += 1;
+                    boi.hitbox.Y += 1;
+                    test = false;
+                }
+                if (boi.velocities.X > 0)
+                {
+                    boi.rec.X -= 1;
+                    boi.hitbox.X -= 1;
+                    test = false;
+                }
+                if (boi.velocities.X < 0)
+                {
+                    boi.rec.X += 1;
+                    boi.hitbox.X += 1;
+                    test = false;
+                }
             }
+        
             //Death test
             if (kb.IsKeyDown(Keys.E) && kb.IsKeyDown(Keys.R) || dead == true)
             {
@@ -378,8 +384,8 @@ namespace Pacman
                     {
                         if (tester[r, c] != null)
                         {
-                            if(map.space[r,c].Pdead == true)
-                                //spriteBatch.Draw(whiteBoxTexture, new Rectangle(r *24,c*24,24,24), Color.Green);
+                            //if(map.space[r,c].Pdead == true)
+                            //    //spriteBatch.Draw(whiteBoxTexture, new Rectangle(r *24,c*24,24,24), Color.Green);
                             if (tester[r, c].isPowerPellet == false)
                                 spriteBatch.Draw(whiteBoxTexture, tester[r, c].rect, Color.White);
                             else
