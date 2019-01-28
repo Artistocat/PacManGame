@@ -41,6 +41,8 @@ namespace Pacman
         Boolean isPowerMode;
         Texture2D spritesheet;
 
+        Rectangle newRectHitBox;
+
         int[,] mapsquare = new int[28, 36];
         Board map;
 
@@ -226,12 +228,18 @@ namespace Pacman
             }
 
             // TODO: Add your update logic here
-
+            newRectHitBox = new Rectangle(boi.hitbox.X, boi.hitbox.Y, boi.hitbox.Width, boi.hitbox.Height);
             //Warps (Left and right sides)
             if (boi.rec.X > graphics.GraphicsDevice.Viewport.Width)
+            {
+                boi.hitbox.X = -30;
                 boi.rec.X = -45;
+            }
             if (boi.rec.X < -45)
+            {
+                boi.hitbox.X = graphics.GraphicsDevice.Viewport.Width + 15;
                 boi.rec.X = graphics.GraphicsDevice.Viewport.Width;
+            }
 
             //Pacman movement
             /*
@@ -263,8 +271,8 @@ namespace Pacman
                                 test = true;
                     }
                 }
-
-                if (test == false)
+                Direction oldDR = Direction.Up;
+                if (test == true)
                 {
                     boi.velocities.X = 0;
                     boi.velocities.Y = 0;
@@ -274,42 +282,46 @@ namespace Pacman
                     pacMoved = true;
                     boi.dir = Direction.Up;
                     nextInQueue = Direction.Up;
+                    
                 }
                 if (kb.IsKeyDown(Keys.A) || gp.DPad.Left == ButtonState.Pressed)
                 {
                     pacMoved = true;
                     boi.dir = Direction.Left;
                     nextInQueue = Direction.Left;
+                    
                 }
                 if (kb.IsKeyDown(Keys.S) || gp.DPad.Down == ButtonState.Pressed)
                 {
                     pacMoved = true;
                     boi.dir = Direction.Down;
                     nextInQueue = Direction.Down;
+                    
                 }
                 if (kb.IsKeyDown(Keys.D) || gp.DPad.Right == ButtonState.Pressed)
                 {
                     pacMoved = true;
                     boi.dir = Direction.Right;
                     nextInQueue = Direction.Right;
+                    
                 }
 
                 //check direction
-                Rectangle newRectHitBox = new Rectangle(boi.hitbox.X, boi.hitbox.Y, boi.hitbox.Width, boi.hitbox.Height);
+                
                 bool canMove = true;
                 switch (boi.dir)
                 {
                     case Direction.Up:
-                        newRectHitBox.Y -= 7;
+                        newRectHitBox.Y -= 24;
                         break;
                     case Direction.Left:
-                        newRectHitBox.X -= 7;
+                        newRectHitBox.X -= 24;
                         break;
                     case Direction.Down:
-                        newRectHitBox.Y += 7;
+                        newRectHitBox.Y += 24;
                         break;
                     case Direction.Right:
-                        newRectHitBox.X += 7;
+                        newRectHitBox.X += 24;
                         break;
                 }
 
@@ -329,46 +341,79 @@ namespace Pacman
                         case Direction.Up:
                             boi.velocities.Y = -4;
                             boi.velocities.X = 0;
+                            oldDR = Direction.Up;
                             break;
                         case Direction.Left:
                             boi.velocities.Y = 0;
                             boi.velocities.X = -4;
+                            oldDR = Direction.Left;
                             break;
                         case Direction.Down:
                             boi.velocities.Y = 4;
                             boi.velocities.X = 0;
+                            oldDR = Direction.Down;
                             break;
                         case Direction.Right:
                             boi.velocities.Y = 0;
                             boi.velocities.X = 4;
+                            oldDR = Direction.Right;
                             break;
                     }
                 }
+
+                //if(pacMoved)
+                //    if (boi.velocities.X == 0 && boi.velocities.Y == 0)
+                //    {
+                //        switch (oldDR)
+                //        {
+                //            case Direction.Up:
+                //                boi.rec.X -= 3;
+                //                boi.hitbox.X -= 3;
+                //                newRectHitBox.X -= 3;
+                //                break;
+                //            case Direction.Left:
+                //                boi.rec.Y += 3;
+                //                boi.hitbox.Y += 3;
+                //                newRectHitBox.Y += 3;
+                //                break;
+                //            case Direction.Right:
+                //                boi.rec.Y -= 3;
+                //                boi.hitbox.Y -= 3;
+                //                newRectHitBox.Y -= 3;
+                //                break;
+                //            case Direction.Down:
+                //                boi.rec.X += 3;
+                //                boi.hitbox.X += 3;
+                //                newRectHitBox.X += 3;
+                //                break;
+                //        }
+                //    }
                 boi.Update();
+                // remember this fucker
                 foreach (Ghost g in ghosts)
-            {
-                if (pacMoved)
-                    g.Update(boi, ghosts[1], map); //ghosts[1] 
-                //collisions with ghosts and pacboi
-                    if (g.getRect().Intersects(boi.hitbox))
-                    {
-                        Console.WriteLine("Lose a life");
-                        ///kelby added following. testing death
-                        if (dead == false)
-                        {
-                            boi.lives--;
-                            boi.source.Y = 0;
-                            boi.counter = 0;
-                            dead = true;
-                        }
-                        boi.death();
-                        if (boi.counter >= 150)
-                        {
-                            boi.respawn();
-                            dead = false;
-                        }
-                    }
-            }
+                {
+                    if (pacMoved)
+                        g.Update(boi, ghosts[1], map); //ghosts[1] 
+                                                       //collisions with ghosts and pacboi
+                    //if (g.getRect().Intersects(boi.hitbox))
+                    //{
+                    //    Console.WriteLine("Lose a life");
+                    //    ///kelby added following. testing death
+                    //    if (dead == false)
+                    //    {
+                    //        boi.lives--;
+                    //        boi.source.Y = 0;
+                    //        boi.counter = 0;
+                    //        dead = true;
+                    //    }
+                    //    boi.death();
+                    //    if (boi.counter >= 150)
+                    //    {
+                    //        boi.respawn();
+                    //        dead = false;
+                    //    }
+                    //}
+                }
                 if (boi.lives == 0)
                 {
                     map.screen = Content.Load<Texture2D>("game over");
@@ -450,12 +495,19 @@ namespace Pacman
                     {
                         if (tester[r, c] != null)
                         {
-                            //if(map.space[r,c].Pdead == true)
-                                //spriteBatch.Draw(whiteBoxTexture, new Rectangle(r *24,c*24,24,24), Color.Green);
+                            //if (map.space[r, c].Pdead == true)
+                            //    spriteBatch.Draw(whiteBoxTexture, new Rectangle(r * 24, c * 24, 24, 24), Color.White);
                             if (tester[r, c].isPowerPellet == false)
                                 spriteBatch.Draw(whiteBoxTexture, tester[r, c].rect, Color.White);
                             else
                                 spriteBatch.Draw(powerPelletTexture, tester[r, c].rect, Color.White);
+                            spriteBatch.Draw(whiteBoxTexture, boi.hitbox, Color.White);
+                            spriteBatch.Draw(whiteBoxTexture, newRectHitBox, Color.Green);
+
+                            foreach (Ghost g in ghosts)
+                            {
+                                spriteBatch.Draw(whiteBoxTexture, g.getRect(), Color.Red);
+                            }
                         }
                     }
                 }
