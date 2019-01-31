@@ -30,6 +30,8 @@ namespace Pacman
         Texture2D whiteBoxTexture;
         Texture2D powerPelletTexture;
 
+        
+
         String topText;
         Vector2 posOfTopText;
         Pellet[] pellets;
@@ -42,6 +44,7 @@ namespace Pacman
         Texture2D spritesheet;
 
         Rectangle newRectHitBox;
+        Rectangle collision;
 
         int[,] mapsquare = new int[28, 36];
         Board map;
@@ -80,6 +83,7 @@ namespace Pacman
             // TODO: Add your initialization logic here
             boi = new Pacboi(Content.Load<Texture2D>("spritesheet"), new Rectangle(312, 615, 45, 45),
                 new Rectangle(3, 0, 15, 15), new Vector2(0, 0), new Rectangle(327,630,14,14));
+            
             lifesource = new Rectangle(132, 17, 15, 15);
             //pacboi's starting location based off of map tiles    
             //25.625 y
@@ -229,6 +233,7 @@ namespace Pacman
 
             // TODO: Add your update logic here
             newRectHitBox = new Rectangle(boi.hitbox.X, boi.hitbox.Y, boi.hitbox.Width, boi.hitbox.Height);
+            collision = new Rectangle(boi.hitbox.X, boi.hitbox.Y, boi.hitbox.Width, boi.hitbox.Height);
             //Warps (Left and right sides)
             if (boi.rec.X > graphics.GraphicsDevice.Viewport.Width)
             {
@@ -267,11 +272,10 @@ namespace Pacman
                     for (int c = 0; c < 36; c++)
                     {
                         if (map.space[r, c].Pdead)
-                            if (map.space[r, c].rect.Intersects(boi.hitbox))
+                            if (map.space[r, c].rect.Intersects(collision))
                                 test = true;
                     }
                 }
-                Direction oldDR = Direction.Up;
                 if (test == true)
                 {
                     boi.velocities.X = 0;
@@ -341,79 +345,53 @@ namespace Pacman
                         case Direction.Up:
                             boi.velocities.Y = -4;
                             boi.velocities.X = 0;
-                            oldDR = Direction.Up;
+                            collision.Y -= 10;
                             break;
                         case Direction.Left:
                             boi.velocities.Y = 0;
                             boi.velocities.X = -4;
-                            oldDR = Direction.Left;
+                            collision.X -= 10;
                             break;
                         case Direction.Down:
                             boi.velocities.Y = 4;
                             boi.velocities.X = 0;
-                            oldDR = Direction.Down;
+                            collision.Y += 10;
                             break;
                         case Direction.Right:
                             boi.velocities.Y = 0;
                             boi.velocities.X = 4;
-                            oldDR = Direction.Right;
+                            collision.X += 10;
                             break;
                     }
                 }
 
-                //if(pacMoved)
-                //    if (boi.velocities.X == 0 && boi.velocities.Y == 0)
-                //    {
-                //        switch (oldDR)
-                //        {
-                //            case Direction.Up:
-                //                boi.rec.X -= 3;
-                //                boi.hitbox.X -= 3;
-                //                newRectHitBox.X -= 3;
-                //                break;
-                //            case Direction.Left:
-                //                boi.rec.Y += 3;
-                //                boi.hitbox.Y += 3;
-                //                newRectHitBox.Y += 3;
-                //                break;
-                //            case Direction.Right:
-                //                boi.rec.Y -= 3;
-                //                boi.hitbox.Y -= 3;
-                //                newRectHitBox.Y -= 3;
-                //                break;
-                //            case Direction.Down:
-                //                boi.rec.X += 3;
-                //                boi.hitbox.X += 3;
-                //                newRectHitBox.X += 3;
-                //                break;
-                //        }
-                //    }
+
                 boi.Update();
                 // remember this fucker
-                foreach (Ghost g in ghosts)
-                {
-                    if (pacMoved)
-                        g.Update(boi, ghosts[1], map); //ghosts[1] 
-                                                       //collisions with ghosts and pacboi
-                    //if (g.getRect().Intersects(boi.hitbox))
-                    //{
-                    //    Console.WriteLine("Lose a life");
-                    //    ///kelby added following. testing death
-                    //    if (dead == false)
-                    //    {
-                    //        boi.lives--;
-                    //        boi.source.Y = 0;
-                    //        boi.counter = 0;
-                    //        dead = true;
-                    //    }
-                    //    boi.death();
-                    //    if (boi.counter >= 150)
-                    //    {
-                    //        boi.respawn();
-                    //        dead = false;
-                    //    }
-                    //}
-                }
+                //foreach (Ghost g in ghosts)
+                //{
+                //    if (pacMoved)
+                //        g.Update(boi, ghosts[1], map); //ghosts[1] 
+                //                                       //collisions with ghosts and pacboi
+                //    //if (g.getRect().Intersects(boi.hitbox))
+                //    //{
+                //    //    Console.WriteLine("Lose a life");
+                //    //    ///kelby added following. testing death
+                //    //    if (dead == false)
+                //    //    {
+                //    //        boi.lives--;
+                //    //        boi.source.Y = 0;
+                //    //        boi.counter = 0;
+                //    //        dead = true;
+                //    //    }
+                //    //    boi.death();
+                //    //    if (boi.counter >= 150)
+                //    //    {
+                //    //        boi.respawn();
+                //    //        dead = false;
+                //    //    }
+                //    //}
+                //}
                 if (boi.lives == 0)
                 {
                     map.screen = Content.Load<Texture2D>("game over");
@@ -495,14 +473,15 @@ namespace Pacman
                     {
                         if (tester[r, c] != null)
                         {
-                            //if (map.space[r, c].Pdead == true)
-                            //    spriteBatch.Draw(whiteBoxTexture, new Rectangle(r * 24, c * 24, 24, 24), Color.White);
+                            if (map.space[r, c].Pdead == true)
+                                spriteBatch.Draw(whiteBoxTexture, new Rectangle(r * 24, c * 24, 24, 24), Color.White);
                             if (tester[r, c].isPowerPellet == false)
                                 spriteBatch.Draw(whiteBoxTexture, tester[r, c].rect, Color.White);
                             else
                                 spriteBatch.Draw(powerPelletTexture, tester[r, c].rect, Color.White);
                             spriteBatch.Draw(whiteBoxTexture, boi.hitbox, Color.White);
                             spriteBatch.Draw(whiteBoxTexture, newRectHitBox, Color.Green);
+                            spriteBatch.Draw(whiteBoxTexture, collision, Color.HotPink);
 
                             foreach (Ghost g in ghosts)
                             {
